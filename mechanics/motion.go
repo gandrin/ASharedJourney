@@ -1,61 +1,66 @@
 package mechanics
 
 import (
+	"github.com/faiface/pixel"
 	"github.com/gandrin/ASharedJourney/shared"
 	"github.com/gandrin/ASharedJourney/supervisor"
 	"github.com/gandrin/ASharedJourney/tiles"
-	"log"
 )
-
-
 
 //move function recives as input the data from a player direction channel
 func (gm *Mechanics) Move(playDir *supervisor.PlayerDirections) *tiles.World {
 	//log.Printf("Move called")
 
-	var nextPos1 shared.Position //next position for player 1 with current direction
-	var nextPos2 shared.Position // same for player 2
+	var nextPos1 pixel.Vec //next position for player 1 with current direction
+	var auxPos pixel.Vec
 
+	var canPlayer1Move bool = true
 	//Player 1
 	//check next position based on motions
-	nextPos1 = playDir.Player1.Next(gm.Player1.Pos)
-	//check if player can go on tile
-	if gm.move_player(gm.Player1.PType, nextPos1){
-		//check for movables here
-		gm.Player1.Pos = nextPos1
-	}
-	//check if player has triggered an event
-	//todo newMotion.Player1.PlayerEvent = gm.check_player_event(gm.Player1.PType, nextPos1, &newMotion.Player1)
 
-	//Player 2
-	nextPos2 = playDir.Player2.Next(gm.Player2.Pos)
-	//check if player can go on tile
-	if gm.move_player(gm.Player2.PType, nextPos1){
-		//check for movables here
-		gm.Player2.Pos = nextPos2
-	}
-	//todo check if player has triggered an event
-	//newMotion.Player2.PlayerEvent = gm.check_player_event(gm.Player2.PType, nextPos2, &newMotion.Player2)
+	nextPos1 = playDir.Player1.Next(gm.world.Players[0].Position)
 
-
-
-	//log debug
-	log.Print("Motion player 1 ", gm.Player1.Pos,"Motion player 2 ", gm.Player2.Pos)
-
-	//update map
-	gm.world.Players[0].Position.X = float64(gm.Player1.Pos.X) * 32
-	gm.world.Players[0].Position.Y = float64(gm.Player1.Pos.Y) * 32
-	if(len(gm.world.Players)>1){
-		gm.world.Players[1].Position.X = float64(gm.Player2.Pos.X) * 32
-		gm.world.Players[1].Position.X = float64(gm.Player2.Pos.Y) * 32
+	// Obstacles
+	for _, val := range gm.world.Obstacles {
+		if val.Position.X == nextPos1.X && val.Position.Y == nextPos1.Y {
+			canPlayer1Move = false
+		}
 	}
 
+	// Movables
+	if canPlayer1Move {
+		for n, val := range gm.world.Movables {
+			if val.Position.X == nextPos1.X && val.Position.Y == nextPos1.Y {
+				// There's a mouvable in that position
+
+				auxPos = playDir.Player1.Next(nextPos1)
+				for _, val := range gm.world.Obstacles {
+					if val.Position.X == auxPos.X && val.Position.Y == auxPos.Y {
+						canPlayer1Move = false
+					}
+				}
+				for _, val := range gm.world.Movables {
+					if val.Position.X == auxPos.X && val.Position.Y == auxPos.Y {
+						canPlayer1Move = false
+					}
+				}
+				//
+				if canPlayer1Move {
+					gm.world.Movables[n].Position = auxPos
+				}
+			}
+		}
+	}
+
+	if canPlayer1Move {
+		gm.world.Players[0].Position = nextPos1
+	}
 
 	return gm.copyToNewWorld()
 }
 
 //move player if hitmap permits
-func (gm *Mechanics) move_player(ptype PlayerType, nextPos shared.Position) bool{
+func (gm *Mechanics) move_player(ptype PlayerType, nextPos shared.Position) bool {
 	//log.Print("Moving player ", nextPos , " legth of hitmap ",len(gm.hitMap),":",len(gm.hitMap[0]))
 	//check if can move
 	var hitVal = gm.hitMap[nextPos.X][nextPos.Y]
@@ -81,8 +86,8 @@ func (gm *Mechanics) check_player_event(ptype PlayerType, nextPos shared.Positio
 	return nEvent
 }
 
-func (gm *Mechanics) copyToNewWorld() * tiles.World{
-	var newWorld *tiles.World =new(tiles.World)
+func (gm *Mechanics) copyToNewWorld() *tiles.World {
+	var newWorld *tiles.World = new(tiles.World)
 	//copy player locations
 
 	//copy world
@@ -92,7 +97,7 @@ func (gm *Mechanics) copyToNewWorld() * tiles.World{
 	newWorld.Movables = make([]tiles.SpriteWithPosition, len(gm.world.Movables))
 	newWorld.Players = make([]tiles.SpriteWithPosition, len(gm.world.Players))
 	copy(newWorld.BackgroundTiles, gm.world.BackgroundTiles)
-	copy(newWorld.Movables ,gm.world.Movables)
+	copy(newWorld.Movables, gm.world.Movables)
 	copy(newWorld.Players, gm.world.Players)
 
 	return newWorld
