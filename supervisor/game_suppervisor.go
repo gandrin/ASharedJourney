@@ -18,7 +18,7 @@ type GameSupervisor struct {
 
 var Sup *GameSupervisor
 
-//Init the game and specify the game mode
+//Start inits the game and specify the game mode
 func Start(gm GameMode) chan *PlayerDirections {
 	Sup = new(GameSupervisor)
 	Sup.Mode = gm
@@ -26,7 +26,7 @@ func Start(gm GameMode) chan *PlayerDirections {
 	return Sup.DirectionChannel
 }
 
-//launch game supervisor ( should be lauched last
+//Play launches game supervisor (should be lauched last)
 func (g *GameSupervisor) Play() {
 	for play := true; play; play = shared.Continue() {
 		time.Sleep(shared.KeyPressedDelay_ms * time.Millisecond)
