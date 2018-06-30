@@ -19,7 +19,11 @@ func (gm *Mechanics) Move(playDir *supervisor.PlayerDirections) *tiles.World {
 	//log.Printf("Move called")
 
 	if gm.world.Players[0].HasWon {
+<<<<<<< HEAD
 		gm.world = tiles.GenerateMap("forest") // TODO next level
+=======
+		gm.world = tiles.NextLevel()
+>>>>>>> Switch to next level on death
 	}
 
 	if gm.world.Players[0].InTheWater && gm.world.Players[1].InTheWater {
