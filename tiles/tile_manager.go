@@ -25,9 +25,9 @@ const mapWidth = 30
 const mapHeight = 30
 
 type World struct {
-	BackgroundTiles [mapWidth * mapHeight]SpriteWithPosition
-	Players         [1]SpriteWithPosition
-	Movables 		[1]SpriteWithPosition
+	BackgroundTiles []SpriteWithPosition
+	Players         []SpriteWithPosition
+	Movables        []SpriteWithPosition
 }
 
 //SpriteWithPosition holds the sprite and its position into the window
@@ -76,6 +76,26 @@ func getSpritePosition(spriteIndex int, origin pixel.Vec) pixel.Vec {
 	return pixel.V(spriteXPosition, spriteYPosition)
 }
 
+// extractAndPlaceSprites filters out empty tiles and positions them properly on the screen
+func extractAndPlaceSprites(
+	layerTiles []*tiled.LayerTile,
+	spritesheet pixel.Picture,
+	tilesFrames []pixel.Rect,
+	originPosition pixel.Vec,
+) (positionedSprites []SpriteWithPosition) {
+	for index, layerTile := range layerTiles {
+		if !layerTile.IsNil() {
+			sprite := pixel.NewSprite(spritesheet, tilesFrames[layerTile.ID])
+			spritePosition := getSpritePosition(index, originPosition)
+			positionedSprites = append(positionedSprites, SpriteWithPosition{
+				Sprite:   sprite,
+				Position: spritePosition,
+			})
+		}
+	}
+	return positionedSprites
+}
+
 // GenerateMap generates the map from a .tmx file
 func GenerateMap() (pixel.Picture, []pixel.Rect, World) {
 	//get path to file from current programme root
@@ -102,35 +122,19 @@ func GenerateMap() (pixel.Picture, []pixel.Rect, World) {
 
 	originPosition := getOrigin(shared.Win)
 
-	var positionedSprites [mapWidth * mapHeight]SpriteWithPosition
-	for index, layerTile := range gameMap.Layers[0].Tiles {
-		sprite := pixel.NewSprite(spritesheet, tilesFrames[layerTile.ID])
-		spritePosition := getSpritePosition(index, originPosition)
-		positionedSprites[index] = SpriteWithPosition{
-			Sprite:   sprite,
-			Position: spritePosition,
-		}
-	}
+	backgroundSprite := extractAndPlaceSprites(gameMap.Layers[0].Tiles, spritesheet, tilesFrames, originPosition)
 
 	// TODO iterate over objects to look for "player" object
 	// TODO make sure the given input is a multiple of tileSize
-	playerTiledObject := gameMap.ObjectGroups[0].Objects[0]
-	player1X := playerTiledObject.X + int(originPosition.X)
-	player1Y := -playerTiledObject.Y + int(originPosition.Y)
+	players := extractAndPlaceSprites(gameMap.Layers[2].Tiles, spritesheet, tilesFrames, originPosition)
 
-	fmt.Println(player1X)
-	fmt.Println(player1Y)
-
-	player1 := SpriteWithPosition{Sprite: pixel.NewSprite(spritesheet, tilesFrames[203]), Position: pixel.V(float64(player1X), float64(player1Y))}
-	var players [1]SpriteWithPosition
-	players[0] = player1
-	world := World{BackgroundTiles: positionedSprites, Players: players}
+	world := World{BackgroundTiles: backgroundSprite, Players: players}
 
 	return spritesheet, tilesFrames, world
 }
 
 //DrawMap draws into window the given sprites
-func DrawMap(positionedSprites [mapWidth * mapHeight]SpriteWithPosition) {
+func DrawMap(positionedSprites []SpriteWithPosition) {
 	for _, positionedSprite := range positionedSprites {
 		positionedSprite.Sprite.Draw(shared.Win, pixel.IM.Moved(positionedSprite.Position))
 	}
