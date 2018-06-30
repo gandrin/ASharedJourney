@@ -3,7 +3,7 @@
  <tileset firstgid="1" name="tileset" tilewidth="16" tileheight="16" tilecount="280" columns="10">
   <image source="tileset.png" width="160" height="448"/>
  </tileset>
- <layer name="Calque de Tile 1" width="30" height="30">
+ <layer name="background" width="30" height="30">
   <data encoding="csv">
 1,2,3,53,53,53,53,53,53,53,53,11,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,
 53,53,53,53,53,53,53,53,53,53,53,11,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,
@@ -37,7 +37,7 @@
 53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53
 </data>
  </layer>
- <layer name="Calque 2" width="30" height="30" visible="0">
+ <layer name="objects" width="30" height="30" visible="0">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -71,7 +71,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <layer name="Calque 3" width="30" height="30">
+ <layer name="players" width="30" height="30">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
