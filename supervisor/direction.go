@@ -8,7 +8,7 @@ import (
 )
 
 //call motion
-func (mode GameMode) Move() *PlayerDirections {
+func (mode GameMode) Move() *PlayerDirections{
 	var newDir *PlayerDirections = new(PlayerDirections)
 	if mode == OnePlayer {
 		newDir.Player1 = key()
