@@ -49,6 +49,7 @@ func run() {
 		tiles.DrawMap(upToDateWorld.Obstacles)
 		tiles.DrawMap(upToDateWorld.Water)
 		tiles.DrawMap(upToDateWorld.Movables)
+		tiles.DrawMap(upToDateWorld.WinStars)
 		tiles.DrawMap(upToDateWorld.Players)
 		tiles.DrawMap(upToDateWorld.Holes)
 		win.Update()

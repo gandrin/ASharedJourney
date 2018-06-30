@@ -32,6 +32,7 @@ type World struct {
 	Obstacles       []SpriteWithPosition
 	Water           []SpriteWithPosition
 	Holes           []SpriteWithPosition
+	WinStars        []SpriteWithPosition
 }
 
 //SpriteWithPosition holds the sprite and its position into the window
@@ -157,6 +158,7 @@ func GenerateMap() World {
 		panic(err)
 	}
 	waterLayerIndex, err := findLayerIndex("water", gameMap.Layers)
+	winStarsLayerIndex, err := findLayerIndex("win", gameMap.Layers)
 	if err != nil {
 		panic(err)
 	}
@@ -174,6 +176,10 @@ func GenerateMap() World {
 	movables := extractAndPlaceSprites(gameMap.Layers[movablesLayerIndex].Tiles, spritesheet, tilesFrames, originPosition)
 	water := extractAndPlaceSprites(gameMap.Layers[waterLayerIndex].Tiles, spritesheet, tilesFrames, originPosition)
 	holes := extractAndPlaceSprites(gameMap.Layers[holesLayerIndex].Tiles, spritesheet, tilesFrames, originPosition)
+	winStars := extractAndPlaceSprites(gameMap.Layers[winStarsLayerIndex].Tiles, spritesheet, tilesFrames, originPosition)
+	if len(winStars) == 0 {
+		panic(errors.New("no win star tile was placed"))
+	}
 
 	world := World{
 		BackgroundTiles: backgroundSprite,
@@ -182,6 +188,7 @@ func GenerateMap() World {
 		Obstacles:       obstacles,
 		Water:           water,
 		Holes:           holes,
+		WinStars:        winStars,
 	}
 	return world
 }

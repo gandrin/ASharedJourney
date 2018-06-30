@@ -1,10 +1,20 @@
 package mechanics
 
 import (
+	"log"
+
 	"github.com/faiface/pixel"
 	"github.com/gandrin/ASharedJourney/supervisor"
 	"github.com/gandrin/ASharedJourney/tiles"
 )
+
+func (gm *Mechanics) handlePlayerWon(nextPos1 pixel.Vec) {
+	for _, val := range gm.world.WinStars {
+		if val.Position.X == nextPos1.X && val.Position.Y == nextPos1.Y {
+			log.Printf("you won!")
+		}
+	}
+}
 
 //move function recives as input the data from a player direction channel
 func (gm *Mechanics) Move(playDir *supervisor.PlayerDirections) *tiles.World {
@@ -73,6 +83,7 @@ func (gm *Mechanics) movePlayer(player *tiles.SpriteWithPosition, getNextPositio
 
 	if canPlayerMove {
 		player.Position = nextPlayerPosition
+<<<<<<< HEAD
 
 		// Water
 		for _, val := range gm.world.Water {
@@ -87,6 +98,9 @@ func (gm *Mechanics) movePlayer(player *tiles.SpriteWithPosition, getNextPositio
 				player.InTheHole = true
 			}
 		}
+=======
+		gm.handlePlayerWon(player.Position)
+>>>>>>> e94c44de6f579ee851a7166cb99827c171f3f7d2
 	}
 }
 
@@ -102,12 +116,20 @@ func (gm *Mechanics) copyToNewWorld() *tiles.World {
 	newWorld.Players = make([]tiles.SpriteWithPosition, len(gm.world.Players))
 	newWorld.Obstacles = make([]tiles.SpriteWithPosition, len(gm.world.Obstacles))
 	newWorld.Water = make([]tiles.SpriteWithPosition, len(gm.world.Water))
+<<<<<<< HEAD
 	newWorld.Holes = make([]tiles.SpriteWithPosition, len(gm.world.Holes))
+=======
+	newWorld.WinStars = make([]tiles.SpriteWithPosition, len(gm.world.WinStars))
+>>>>>>> e94c44de6f579ee851a7166cb99827c171f3f7d2
 	copy(newWorld.BackgroundTiles, gm.world.BackgroundTiles)
 	copy(newWorld.Movables, gm.world.Movables)
 	copy(newWorld.Players, gm.world.Players)
 	copy(newWorld.Water, gm.world.Water)
 	copy(newWorld.Obstacles, gm.world.Obstacles)
+<<<<<<< HEAD
 	copy(newWorld.Holes, gm.world.Holes)
+=======
+	copy(newWorld.WinStars, gm.world.WinStars)
+>>>>>>> e94c44de6f579ee851a7166cb99827c171f3f7d2
 	return newWorld
 }
