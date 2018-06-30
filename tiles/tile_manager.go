@@ -19,8 +19,7 @@ import (
 	"github.com/lafriks/go-tiled"
 )
 
-const mapPath = "tiles/forest.tmx" // path to your map
-const tilesPath = "tiles/map.png"  // path to your tileset
+const tilesPath = "tiles/map.png" // path to your tileset
 var TileSize int = 32
 var mapWidth int
 var mapHeight int
@@ -113,13 +112,13 @@ func findLayerIndex(layerName string, layers []*tiled.Layer) (layerIndex int, er
 }
 
 // GenerateMap generates the map from a .tmx file
-func GenerateMap() World {
+func GenerateMap(levelFileName string) World {
 	//get path to file from current programme root
 	_, filename, _, ok := runtime.Caller(1)
 	if !ok {
 		log.Fatal("error loading called")
 	}
-	filemap := path.Join(path.Dir(filename), mapPath)
+	filemap := path.Join(path.Dir(filename), "tiles/"+levelFileName+".tmx")
 	filetile := path.Join(path.Dir(filename), tilesPath)
 
 	gameMap, err := tiled.LoadFromFile(filemap)

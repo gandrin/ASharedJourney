@@ -15,6 +15,13 @@ import (
 	"github.com/gandrin/ASharedJourney/shared"
 )
 
+const (
+	AMAZEING_LEVEL       string = "amazeing"
+	FOREST_LEVEL         string = "forest"
+	MY_LITTLE_PONY_LEVEL string = "myLittlePony"
+	THE_LITTLE_PIG_LEVEL string = "theLittlePig"
+)
+
 const frameRate = 60
 
 func run() {
@@ -32,7 +39,7 @@ func run() {
 
 	menu.Menu()
 
-	world := tiles.GenerateMap()
+	world := tiles.GenerateMap(FOREST_LEVEL)
 
 	fps := time.Tick(time.Second / frameRate)
 
