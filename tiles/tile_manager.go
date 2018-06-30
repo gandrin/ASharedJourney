@@ -10,9 +10,13 @@ import (
 	"github.com/faiface/pixel"
 	"github.com/faiface/pixel/pixelgl"
 	"github.com/lafriks/go-tiled"
+	"log"
+	"runtime"
+	"path"
 )
 
 const mapPath = "tiles/tilemap.tmx" // path to your map
+const tilesPath = "tiles/tileset.png" // path to your tileset
 const tileSize = 16
 const mapWidth = 30
 const mapHeight = 30
@@ -60,16 +64,27 @@ func getSpritePosition(spriteIndex int, origin pixel.Vec) pixel.Vec {
 // GenerateMap generates the map
 func GenerateMap(win *pixelgl.Window) (pixel.Picture, []pixel.Rect) {
 	// parse tmx file
-	gameMap, err := tiled.LoadFromFile(mapPath)
+
+	//get path to file from current programme root
+	_, filename, _, ok := runtime.Caller(1)
+	if !ok {
+		log.Fatal("error loading called")
+	}
+	filemap:= path.Join(path.Dir(filename), mapPath)
+	filetile:= path.Join(path.Dir(filename), tilesPath)
+
+	gameMap, err := tiled.LoadFromFile(filemap)
 	if err != nil {
+		log.Fatal(err)
 		fmt.Println("Error parsing map")
 		os.Exit(2)
 	}
 
-	spritesheet, err := loadPicture("tiles/tileset.png")
+	spritesheet, err := loadPicture(filetile)
 	if err != nil {
 		panic(err)
 	}
+
 
 	tilesFrames := getTilesFrames(spritesheet)
 
