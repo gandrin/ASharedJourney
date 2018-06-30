@@ -83,8 +83,8 @@ func (m *Mechanics) Play() {
 		time.Sleep(shared.MechanicsRefreshDelay_ms * time.Millisecond)
 
 		playDir := m.muxChannel()
-
 		//log.Printf("Got direction ", playDir)
+
 		m.toAnime <- m.Move(playDir)
 	}
 }

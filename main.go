@@ -50,6 +50,7 @@ func run() {
 		tiles.DrawMap(upToDateWorld.Water)
 		tiles.DrawMap(upToDateWorld.Movables)
 		tiles.DrawMap(upToDateWorld.Players)
+		tiles.DrawMap(upToDateWorld.Holes)
 		win.Update()
 		<-fps
 	}

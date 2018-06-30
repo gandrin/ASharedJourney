@@ -31,12 +31,15 @@ type World struct {
 	Movables        []SpriteWithPosition
 	Obstacles       []SpriteWithPosition
 	Water           []SpriteWithPosition
+	Holes           []SpriteWithPosition
 }
 
 //SpriteWithPosition holds the sprite and its position into the window
 type SpriteWithPosition struct {
-	Sprite   *pixel.Sprite
-	Position pixel.Vec
+	Sprite     *pixel.Sprite
+	Position   pixel.Vec
+	InTheWater bool
+	InTheHole  bool
 }
 
 // loadPicture load the picture
@@ -157,6 +160,10 @@ func GenerateMap() World {
 	if err != nil {
 		panic(err)
 	}
+	holesLayerIndex, err := findLayerIndex("holes", gameMap.Layers)
+	if err != nil {
+		panic(err)
+	}
 
 	backgroundSprite := extractAndPlaceSprites(gameMap.Layers[backgroundLayerIndex].Tiles, spritesheet, tilesFrames, originPosition)
 	players := extractAndPlaceSprites(gameMap.Layers[playersLayerIndex].Tiles, spritesheet, tilesFrames, originPosition)
@@ -166,6 +173,7 @@ func GenerateMap() World {
 	obstacles := extractAndPlaceSprites(gameMap.Layers[obstaclesLayerIndex].Tiles, spritesheet, tilesFrames, originPosition)
 	movables := extractAndPlaceSprites(gameMap.Layers[movablesLayerIndex].Tiles, spritesheet, tilesFrames, originPosition)
 	water := extractAndPlaceSprites(gameMap.Layers[waterLayerIndex].Tiles, spritesheet, tilesFrames, originPosition)
+	holes := extractAndPlaceSprites(gameMap.Layers[holesLayerIndex].Tiles, spritesheet, tilesFrames, originPosition)
 
 	world := World{
 		BackgroundTiles: backgroundSprite,
@@ -173,6 +181,7 @@ func GenerateMap() World {
 		Movables:        movables,
 		Obstacles:       obstacles,
 		Water:           water,
+		Holes:           holes,
 	}
 	return world
 }
