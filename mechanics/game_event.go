@@ -18,15 +18,15 @@ type Event struct {
 }
 
 //list of events
-type eventType string
+type EventType string
 
 const (
-	eventHello eventType = "Hello"
-	eventBy    eventType = "By"
+	eventHello EventType = "Hello"
+	eventBy    EventType = "By"
 )
 
 //build a new event according to the events type
-func NewEvent(newEventType eventType, ePos shared.Position) *Event {
+func NewEvent(newEventType EventType, ePos shared.Position) *Event {
 	var newEvent = new(Event)
 	newEvent.Pos = ePos
 	//todo compleat with event mechanics struct implementation

@@ -3,9 +3,9 @@ package mechanics
 import "github.com/gandrin/ASharedJourney/shared"
 
 //add data about a player used by the game mechanics
-type playerManager struct {
-	pos   shared.Position
-	pType PlayerType
+type PlayerManager struct {
+	Pos   shared.Position
+	PType PlayerType
 }
 
 type playerMechanics struct {
