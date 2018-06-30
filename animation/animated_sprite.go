@@ -1,20 +1,21 @@
 package animation
 
 import (
-	"github.com/ASharedJourney/shared"
-	"github.com/faiface/pixel"
-	"github.com/ASharedJourney/mechanics"
 	"log"
+
+	"github.com/faiface/pixel"
+	"github.com/gandrin/ASharedJourney/mechanics"
+	"github.com/gandrin/ASharedJourney/shared"
 )
 
 type AnimatedSprite struct {
-	pos shared.Position
-	strite pixel.Sprite
+	pos          shared.Position
+	strite       pixel.Sprite
 	currentEvent mechanics.Event
-	frame int
+	frame        int
 }
 
-func (as * AnimatedSprite) Move(){
+func (as *AnimatedSprite) Move() {
 	//todo move animated sprite
-	log.Print("Move called on animated sprite ",as.pos)
+	log.Print("Move called on animated sprite ", as.pos)
 }
