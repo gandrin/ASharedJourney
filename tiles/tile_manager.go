@@ -2,7 +2,6 @@ package tiles
 
 import (
 	"errors"
-	"fmt"
 	"image"
 	"os"
 
@@ -15,6 +14,9 @@ import (
 	"github.com/faiface/pixel"
 	"github.com/faiface/pixel/pixelgl"
 	"github.com/lafriks/go-tiled"
+	"fmt"
+	"runtime"
+	"path"
 )
 
 const tilesPath = "/tiles/map.png" // path to your tileset
@@ -112,22 +114,23 @@ func findLayerIndex(layerName string, layers []*tiled.Layer) (layerIndex int, er
 
 // GenerateMap generates the map from a .tmx file
 func GenerateMap(levelFileName string) World {
-	rootDirectory, err := os.Getwd()
-	if err != nil {
+	//added support for relative file addressing
+	_, rootName, _, ok := runtime.Caller(1)
+	if !ok {
 		log.Fatal("error loading called")
 	}
-	filemap := rootDirectory + "/tiles/" + levelFileName + ".tmx"
-	filetile := rootDirectory + tilesPath
-
+	filemap:= path.Join(path.Dir(rootName),  "/tiles/" + levelFileName + ".tmx")
+	filetile:= path.Join(path.Dir(rootName),  tilesPath)
 	gameMap, err := tiled.LoadFromFile(filemap)
-	mapWidth = gameMap.Width
-	mapHeight = gameMap.Height
-
 	if err != nil {
 		log.Fatal(err)
 		fmt.Println("Error parsing map")
 		os.Exit(2)
 	}
+	mapWidth = gameMap.Width
+	mapHeight = gameMap.Height
+
+
 
 	spritesheet, err := loadPicture(filetile)
 	if err != nil {
