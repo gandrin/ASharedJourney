@@ -36,17 +36,7 @@ func run() {
 
 	playerDirectionChannel := supervisor.Start(supervisor.OnePlayer)
 
-	//game mechanics
-	var p1 mechanics.PlayerManager
-	p1.Pos.X = 10
-	p1.Pos.Y = 10
-	p1.PType = mechanics.FOX
-	var p2 mechanics.PlayerManager
-	p2.Pos.X = 20
-	p2.Pos.Y = 20
-	p2.PType = mechanics.BEE
-
-	newWorldChannel := mechanics.Start(playerDirectionChannel, p1, p2, world)
+	newWorldChannel := mechanics.Start(playerDirectionChannel, world)
 
 	for !win.Closed() {
 		win.Clear(colornames.White)
