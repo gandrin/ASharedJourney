@@ -3,8 +3,6 @@ package main
 import (
 	"time"
 
-	"github.com/gandrin/ASharedJourney/shared"
-
 	"github.com/gandrin/ASharedJourney/supervisor"
 
 	"github.com/faiface/pixel"
@@ -13,6 +11,8 @@ import (
 	"golang.org/x/image/colornames"
 
 	"github.com/gandrin/ASharedJourney/mechanics"
+	"github.com/gandrin/ASharedJourney/menu"
+	"github.com/gandrin/ASharedJourney/shared"
 )
 
 const frameRate = 60
@@ -29,6 +29,8 @@ func run() {
 	}
 
 	shared.Win = win
+
+	menu.Menu()
 
 	world := tiles.GenerateMap()
 
@@ -89,5 +91,7 @@ func run() {
 }
 
 func main() {
+
+
 	pixelgl.Run(run)
 }
