@@ -9,7 +9,7 @@ import (
 func (gm *Mechanics) handlePlayerWon(nextPos1 pixel.Vec) {
 	for _, val := range gm.world.WinStars {
 		if val.Position.X == nextPos1.X && val.Position.Y == nextPos1.Y {
-			gm.world = tiles.GenerateMap("forest")
+			gm.world.Players[0].HasWon = true
 		}
 	}
 }
@@ -17,6 +17,10 @@ func (gm *Mechanics) handlePlayerWon(nextPos1 pixel.Vec) {
 //move function recives as input the data from a player direction channel
 func (gm *Mechanics) Move(playDir *supervisor.PlayerDirections) *tiles.World {
 	//log.Printf("Move called")
+
+	if gm.world.Players[0].HasWon {
+		gm.world = tiles.GenerateMap("forest")
+	}
 
 	if playDir.Player1.X != 0 || playDir.Player1.Y != 0 {
 		gm.movePlayer(&gm.world.Players[0], playDir.Player1.Next)
@@ -63,6 +67,11 @@ func (gm *Mechanics) movePlayer(player *tiles.SpriteWithPosition, getNextPositio
 				for _, val := range gm.world.Movables {
 					if val.Position.X == auxPos.X && val.Position.Y == auxPos.Y {
 						canPlayerMove = false
+					}
+				}
+				for _, val := range gm.world.WinStars {
+					if val.Position.X == auxPos.X && val.Position.Y == auxPos.Y {
+						gm.world.Players[0].HasWon = true
 					}
 				}
 				if canPlayerMove {
@@ -116,9 +125,9 @@ func (gm *Mechanics) copyToNewWorld() *tiles.World {
 	copy(newWorld.BackgroundTiles, gm.world.BackgroundTiles)
 	copy(newWorld.Movables, gm.world.Movables)
 	copy(newWorld.Players, gm.world.Players)
+	copy(newWorld.WinStars, gm.world.WinStars)
 	copy(newWorld.Water, gm.world.Water)
 	copy(newWorld.Obstacles, gm.world.Obstacles)
 	copy(newWorld.Holes, gm.world.Holes)
-	copy(newWorld.WinStars, gm.world.WinStars)
 	return newWorld
 }

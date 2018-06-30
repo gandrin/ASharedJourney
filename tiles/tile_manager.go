@@ -38,6 +38,7 @@ type SpriteWithPosition struct {
 	Position   pixel.Vec
 	InTheWater bool
 	InTheHole  bool
+	HasWon     bool
 }
 
 // loadPicture load the picture
