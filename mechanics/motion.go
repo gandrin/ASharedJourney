@@ -5,61 +5,51 @@ import (
 
 	"github.com/gandrin/ASharedJourney/shared"
 	"github.com/gandrin/ASharedJourney/supervisor"
+	"github.com/gandrin/ASharedJourney/tiles"
 )
 
-//structure that will be passes on to animator
-type Motion struct {
-	Player1 playerMechanics
-	Player2 playerMechanics
-	//potencially add other events later not dependant directly on the player position
-	//OtherEvents []Event
-}
+
 
 //move function recives as input the data from a player direction channel
-func (gm *Mechanics) Move(playDir *supervisor.PlayerDirections) *Motion {
+func (gm *Mechanics) Move(playDir *supervisor.PlayerDirections) *tiles.World {
 	log.Printf("Move called")
 
 	var nextPos1 shared.Position //next position for player 1 with current direction
 	var nextPos2 shared.Position // same for player 2
 
-	var newMotion *Motion = new(Motion)
-
-	//set old positions
-	newMotion.Player1.OldPos = gm.Player1.Pos
-	newMotion.Player2.OldPos = gm.Player2.Pos
-	//set player type
-	newMotion.Player1.PType = gm.Player1.PType
-	newMotion.Player2.PType = gm.Player2.PType
-
-	log.Print("Player old positions , p1 ", newMotion.Player1.OldPos, " p2 ",
-		newMotion.Player2.OldPos)
-
 	//Player 1
 	//check next position based on motions
-	nextPos1 = playDir.Player1.Next(newMotion.Player1.OldPos)
-	gm.move_player(gm.Player1.PType, nextPos1, &newMotion.Player1)
+	nextPos1 = playDir.Player1.Next(gm.Player1.Pos)
+	//check if player can go on tile
+	if gm.move_player(gm.Player1.PType, nextPos1){
+		//check for movables here
+		gm.Player1.Pos = nextPos1
+	}
 	//check if player has triggered an event
-	newMotion.Player1.PlayerEvent = gm.check_player_event(gm.Player1.PType, nextPos1, &newMotion.Player1)
+	//todo newMotion.Player1.PlayerEvent = gm.check_player_event(gm.Player1.PType, nextPos1, &newMotion.Player1)
 
 	//Player 2
-	nextPos2 = playDir.Player2.Next(newMotion.Player2.OldPos)
-	gm.move_player(gm.Player2.PType, nextPos2, &newMotion.Player2)
+	nextPos2 = playDir.Player2.Next(gm.Player2.Pos)
+	//check if player can go on tile
+	if gm.move_player(gm.Player2.PType, nextPos1){
+		//check for movables here
+		gm.Player2.Pos = nextPos2
+	}
+	//todo check if player has triggered an event
+	//newMotion.Player2.PlayerEvent = gm.check_player_event(gm.Player2.PType, nextPos2, &newMotion.Player2)
 
-	//update location
-	gm.Player1.Pos = nextPos1
-	gm.Player2.Pos = nextPos2
-	log.Print("New locations ", nextPos1 , " ", nextPos2)
-	//check if player has triggered an event
-	newMotion.Player2.PlayerEvent = gm.check_player_event(gm.Player2.PType, nextPos2, &newMotion.Player2)
+
 
 	//log debug
-	log.Printf("Motion player 1 ", newMotion.Player1)
-	log.Printf("Motion player 2 ", newMotion.Player2)
-	return newMotion
+	log.Print("Motion player 1 ", gm.Player1.Pos)
+	log.Print("Motion player 2 ", gm.Player2.Pos)
+
+
+	return gm.copyToNewWorld()
 }
 
 //move player if hitmap permits
-func (gm *Mechanics) move_player(ptype PlayerType, nextPos shared.Position, playerMotion *playerMechanics) {
+func (gm *Mechanics) move_player(ptype PlayerType, nextPos shared.Position) bool{
 	log.Print("Moving player ", nextPos , " legth of hitmap ",
 		len(gm.hitMap),":",len(gm.hitMap[0]))
 	//check if can move
@@ -67,8 +57,9 @@ func (gm *Mechanics) move_player(ptype PlayerType, nextPos shared.Position, play
 	log.Printf("hit values ", hitVal)
 	if ptype.can_walk(hitVal) {
 		//can move according to hit map
-		playerMotion.NewPos = nextPos
+		return true
 	}
+	return true
 }
 
 //check if player has triggered an event
@@ -83,4 +74,20 @@ func (gm *Mechanics) check_player_event(ptype PlayerType, nextPos shared.Positio
 		nEvent = ptype.trigger_event(eventType) // + dir +
 	}
 	return nEvent
+}
+
+func (gm *Mechanics) copyToNewWorld() * tiles.World{
+	var newWorld *tiles.World = new(tiles.World)
+	//copy player locations
+	gm.world.Players[0].Position.X = float64(gm.Player1.Pos.X)
+	gm.world.Players[0].Position.Y = float64(gm.Player1.Pos.Y)
+	gm.world.Players[1].Position.X = float64(gm.Player2.Pos.X)
+	gm.world.Players[1].Position.X = float64(gm.Player2.Pos.Y)
+	//copy world
+	//make a copy of world : todo check if doesn't fail
+	//this will have to be updated
+	newWorld.BackgroundTiles =gm.world.BackgroundTiles
+	newWorld.Movables =gm.world.Movables
+
+	return newWorld
 }

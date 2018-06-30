@@ -26,8 +26,8 @@ const mapHeight = 30
 
 type World struct {
 	BackgroundTiles [mapWidth * mapHeight]SpriteWithPosition
-	Players         [1]SpriteWithPosition
-	Movables 		[1]SpriteWithPosition
+	Players         []SpriteWithPosition
+	Movables 		[]SpriteWithPosition
 }
 
 //SpriteWithPosition holds the sprite and its position into the window
