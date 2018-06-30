@@ -13,7 +13,10 @@ import (
 )
 
 const mapPath = "tiles/tilemap.tmx" // path to your map
+const tileSize = 16
+const mapWidth = 32
 
+// LoadPicture load the picture
 func LoadPicture(path string) (pixel.Picture, error) {
 	file, err := os.Open(path)
 	if err != nil {
@@ -37,20 +40,23 @@ func GenerateMap(win *pixelgl.Window) {
 		panic(err)
 	}
 
-	var treesFrames []pixel.Rect
-	for y := spritesheet.Bounds().Max.Y - 16; y > spritesheet.Bounds().Min.Y; y -= 16 {
-		for x := spritesheet.Bounds().Min.X; x < spritesheet.Bounds().Max.X; x += 16 {
-			treesFrames = append(treesFrames, pixel.R(x, y, x+16, y+16))
+	var tilesFrames []pixel.Rect
+	for y := spritesheet.Bounds().Max.Y - tileSize; y > spritesheet.Bounds().Min.Y; y -= tileSize {
+		for x := spritesheet.Bounds().Min.X; x < spritesheet.Bounds().Max.X; x += tileSize {
+			tilesFrames = append(tilesFrames, pixel.R(x, y, x+tileSize, y+tileSize))
 		}
 	}
 
-	tree := pixel.NewSprite(spritesheet, treesFrames[0])
-	tree.Draw(win, pixel.IM.Moved(win.Bounds().Center()))
+	for index, layerTile := range gameMap.Layers[0].Tiles {
+		sprite := pixel.NewSprite(spritesheet, tilesFrames[layerTile.ID])
+		spritePosition := pixel.V(float64((index%mapWidth*tileSize)+tileSize/2), 0+tileSize/2)
+		sprite.Draw(win, pixel.IM.Moved(spritePosition))
+	}
 
 	if err != nil {
 		fmt.Println("Error parsing map")
 		os.Exit(2)
 	}
 
-	fmt.Print(gameMap.Tilesets[0])
+	fmt.Print(gameMap.Layers[0].Tiles[0])
 }

@@ -10,7 +10,7 @@ import (
 func run() {
 	cfg := pixelgl.WindowConfig{
 		Title:  "Pixel Rocks!",
-		Bounds: pixel.R(0, 0, 1024, 768),
+		Bounds: pixel.R(0, 0, 500, 500),
 		VSync:  true,
 	}
 	win, err := pixelgl.NewWindow(cfg)
