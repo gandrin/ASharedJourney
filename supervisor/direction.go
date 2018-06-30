@@ -3,7 +3,8 @@ package supervisor
 import (
 	"log"
 
-	"github.com/gandrin/ASharedJourney/shared"
+	"github.com/faiface/pixel"
+	"github.com/gandrin/ASharedJourney/tiles"
 )
 
 //call motion
@@ -29,9 +30,9 @@ func (dir *PlayerDirections) mirror() {
 }
 
 //calculate next position based on direction
-func (dir Direction) Next(currentPos shared.Position) shared.Position {
-	currentPos.X += dir.X
-	currentPos.Y += dir.Y
+func (dir Direction) Next(currentPos pixel.Vec) pixel.Vec {
+	currentPos.X += float64(dir.X * tiles.TileSize)
+	currentPos.Y += float64(dir.Y * tiles.TileSize)
 	//log.Printf("Calculated next position ", currentPos)
 	return currentPos
 }

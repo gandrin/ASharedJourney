@@ -21,9 +21,9 @@ import (
 
 const mapPath = "tiles/theLittlePig.tmx" // path to your map
 const tilesPath = "tiles/map.png"        // path to your tileset
-const tileSize = 32
-const mapWidth = 18
-const mapHeight = 20
+var TileSize int = 32
+var MapWidth int = 18
+var MapHeight int = 20
 
 type World struct {
 	BackgroundTiles []SpriteWithPosition
@@ -54,10 +54,9 @@ func loadPicture(path string) (pixel.Picture, error) {
 
 func getTilesFrames(spritesheet pixel.Picture) []pixel.Rect {
 	var tilesFrames []pixel.Rect
-	fmt.Println(spritesheet.Bounds())
-	for y := spritesheet.Bounds().Max.Y - tileSize; y > spritesheet.Bounds().Min.Y-tileSize; y -= tileSize {
-		for x := spritesheet.Bounds().Min.X; x < spritesheet.Bounds().Max.X; x += tileSize {
-			tilesFrames = append(tilesFrames, pixel.R(x, y, x+tileSize, y+tileSize))
+	for y := spritesheet.Bounds().Max.Y - float64(TileSize); y > spritesheet.Bounds().Min.Y-float64(TileSize); y -= float64(TileSize) {
+		for x := spritesheet.Bounds().Min.X; x < spritesheet.Bounds().Max.X; x += float64(TileSize) {
+			tilesFrames = append(tilesFrames, pixel.R(x, y, x+float64(TileSize), y+float64(TileSize)))
 		}
 	}
 
@@ -66,15 +65,15 @@ func getTilesFrames(spritesheet pixel.Picture) []pixel.Rect {
 
 func getOrigin(win *pixelgl.Window) pixel.Vec {
 	centerPosition := win.Bounds().Center()
-	originXPosition := centerPosition.X - mapWidth/2*tileSize
-	originYPosition := centerPosition.Y + mapHeight/2*tileSize - tileSize
+	originXPosition := centerPosition.X - float64(MapWidth)/2*float64(TileSize)
+	originYPosition := centerPosition.Y + float64(MapHeight)/2*float64(TileSize) - float64(TileSize)
 
 	return pixel.V(originXPosition, originYPosition)
 }
 
 func getSpritePosition(spriteIndex int, origin pixel.Vec) pixel.Vec {
-	spriteXPosition := origin.X + float64((spriteIndex%mapWidth)*tileSize) + tileSize/2
-	spriteYPosition := origin.Y + tileSize/2 - float64((spriteIndex/mapWidth)*tileSize)
+	spriteXPosition := origin.X + float64((spriteIndex%MapWidth)*TileSize) + float64(TileSize)/2
+	spriteYPosition := origin.Y + float64(TileSize)/2 - float64((spriteIndex/MapWidth)*TileSize)
 
 	return pixel.V(spriteXPosition, spriteYPosition)
 }
@@ -87,7 +86,6 @@ func extractAndPlaceSprites(
 	originPosition pixel.Vec,
 ) (positionedSprites []SpriteWithPosition) {
 	for index, layerTile := range layerTiles {
-		fmt.Println(len(tilesFrames))
 		if !layerTile.IsNil() {
 			sprite := pixel.NewSprite(spritesheet, tilesFrames[layerTile.ID])
 			spritePosition := getSpritePosition(index, originPosition)
@@ -131,13 +129,11 @@ func GenerateMap() World {
 		panic(err)
 	}
 
-	//tileSize = gameMap.TileWidth
-	//mapWidth = gameMap.Width
-	//mapHeight = gameMap.Height
+	//TileSize = gameMap.TileWidth
+	//MapWidth = gameMap.Width
+	//MapHeight = gameMap.Height
 
 	tilesFrames := getTilesFrames(spritesheet)
-
-	fmt.Println(len(tilesFrames))
 
 	originPosition := getOrigin(shared.Win)
 
