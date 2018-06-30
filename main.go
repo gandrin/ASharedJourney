@@ -22,7 +22,7 @@ const frameRate = 60
 func run() {
 	cfg := pixelgl.WindowConfig{
 		Title:  "A Shared Journey",
-		Bounds: pixel.R(0, 0, 500, 500),
+		Bounds: pixel.R(0, 0, 800, 800),
 		VSync:  true,
 	}
 	win, err := pixelgl.NewWindow(cfg)
@@ -33,14 +33,7 @@ func run() {
 	win.Clear(colornames.White)
 	shared.Win = win
 
-	spritesheet, tilesFrames, world := tiles.GenerateMap()
-
-	//log.Print("Hello")
-	//sprite := pixel.NewSprite(spritesheet, tilesFrames[203])
-
-	//modification to not call sprtie
-	//sprite := pixel.NewSprite(spritesheet, tilesFrames[203])
-	 pixel.NewSprite(spritesheet, tilesFrames[203])
+	world := tiles.GenerateMap()
 
 	fps := time.Tick(time.Second / frameRate)
 
@@ -57,35 +50,32 @@ func run() {
 	p2.PType = mechanics.BEE
 	//init rules map
 	ruleMap := make([][]mechanics.TileRules, 40)
-	for i := 0; i < 40; i ++ {
+	for i := 0; i < 40; i++ {
 		ruleMap[i] = make([]mechanics.TileRules, 40)
-		for j := 0; j < 40; j ++ {
+		for j := 0; j < 40; j++ {
 			ruleMap[i][j] = 0
 		}
 
 	}
 	//init event map
 	eventMap := make([][]*mechanics.EventType, 40)
-	for i := 0; i < 40; i ++ {
+	for i := 0; i < 40; i++ {
 		eventMap[i] = make([]*mechanics.EventType, 40)
-		for j := 0; j < 40; j ++ {
+		for j := 0; j < 40; j++ {
 			eventMap[i][j] = nil // no events set
 		}
 
 	}
 	//init object map
 	objMap := make([][]*mechanics.Object, 40)
-	for i := 0; i < 40; i ++ {
+	for i := 0; i < 40; i++ {
 		objMap[i] = make([]*mechanics.Object, 40)
-		for j := 0; j < 40; j ++ {
+		for j := 0; j < 40; j++ {
 			objMap[i][j] = nil // no events set
 		}
 
 	}
 	newWorldChannel := mechanics.Start(playerDirectionChannel, p1, p2, ruleMap, eventMap, objMap,world)
-
-
-	//if you want direction to work comment out this line but lose animations
 
 	for !win.Closed() {
 		supervisor.Sup.Play()

@@ -19,11 +19,11 @@ import (
 	"github.com/lafriks/go-tiled"
 )
 
-const mapPath = "tiles/tilemap.tmx"   // path to your map
-const tilesPath = "tiles/tileset.png" // path to your tileset
-const tileSize = 16
-const mapWidth = 30
-const mapHeight = 30
+const mapPath = "tiles/theLittlePig.tmx"   // path to your map
+const tilesPath = "tiles/forest.png" // path to your tileset
+const tileSize = 32
+const mapWidth = 18
+const mapHeight = 20
 
 type World struct {
 
@@ -108,7 +108,7 @@ func findLayerIndex(layerName string, layers []*tiled.Layer) (layerIndex int, er
 }
 
 // GenerateMap generates the map from a .tmx file
-func GenerateMap() (pixel.Picture, []pixel.Rect, World) {
+func GenerateMap() World {
 	//get path to file from current programme root
 	_, filename, _, ok := runtime.Caller(1)
 	if !ok {
@@ -137,7 +137,7 @@ func GenerateMap() (pixel.Picture, []pixel.Rect, World) {
 	if err != nil {
 		panic(err)
 	}
-	playersLayerIndex, err := findLayerIndex("players", gameMap.Layers)
+	playersLayerIndex, err := findLayerIndex("animals", gameMap.Layers)
 	if err != nil {
 		panic(err)
 	}
@@ -149,8 +149,7 @@ func GenerateMap() (pixel.Picture, []pixel.Rect, World) {
 		BackgroundTiles: backgroundSprite,
 		Players:         players,
 	}
-
-	return spritesheet, tilesFrames, world
+	return world
 }
 
 //DrawMap draws into window the given sprites
