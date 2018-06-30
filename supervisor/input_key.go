@@ -19,14 +19,18 @@ func key() Direction {
 	}
 	if shared.Win.Pressed(pixelgl.KeyLeft) {
 		newDir.X = -1
+		newDir.Y = 0
 	}
 	if shared.Win.Pressed(pixelgl.KeyRight) {
 		newDir.X = 1
+		newDir.Y = 0
 	}
 	if shared.Win.Pressed(pixelgl.KeyDown) {
+		newDir.X = 0
 		newDir.Y = -1
 	}
 	if shared.Win.Pressed(pixelgl.KeyUp) {
+		newDir.X = 0
 		newDir.Y = 1
 	}
 	return newDir
