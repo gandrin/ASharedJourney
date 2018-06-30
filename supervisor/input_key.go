@@ -39,11 +39,13 @@ func key() Direction  {
 		goto end
 	}else
 	if shared.Win.Pressed(pixelgl.KeyDown) {
+		newDir.X = 0
 		newDir.Y = -1
 		pressed = pixelgl.KeyDown
 		goto end
 	}else
 	if shared.Win.Pressed(pixelgl.KeyUp) {
+		newDir.X = 0
 		newDir.Y = 1
 		pressed = pixelgl.KeyUp
 		goto end
