@@ -30,7 +30,6 @@ func run() {
 		panic(err)
 	}
 
-	win.Clear(colornames.White)
 	shared.Win = win
 
 	world := tiles.GenerateMap()
@@ -78,6 +77,7 @@ func run() {
 	newWorldChannel := mechanics.Start(playerDirectionChannel, p1, p2, ruleMap, eventMap, objMap,world)
 
 	for !win.Closed() {
+		win.Clear(colornames.White)
 		supervisor.Sup.Play()
 		mechanics.Mecha.Play()
 		tiles.DrawMap(world.BackgroundTiles)
