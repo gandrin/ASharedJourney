@@ -16,7 +16,7 @@ type Direction struct {
 var prevKeyPressed pixelgl.Button
 var interty int
 
-func key() Direction  {
+func key() Direction {
 	var pressed pixelgl.Button
 
 	var newDir Direction = Direction{
@@ -26,30 +26,24 @@ func key() Direction  {
 	//check if key was just pressed
 
 	if shared.Win.Pressed(pixelgl.KeyLeft) {
-		if shared.Win.JustPressed(pixelgl.KeyLeft){
-
-		}
 		pressed = pixelgl.KeyLeft
 		newDir.X = -1
 		goto end
-	}else
-	if shared.Win.Pressed(pixelgl.KeyRight) {
+	} else if shared.Win.Pressed(pixelgl.KeyRight) {
 		pressed = pixelgl.KeyRight
 		newDir.X = 1
 		goto end
-	}else
-	if shared.Win.Pressed(pixelgl.KeyDown) {
+	} else if shared.Win.Pressed(pixelgl.KeyDown) {
 		newDir.X = 0
 		newDir.Y = -1
 		pressed = pixelgl.KeyDown
 		goto end
-	}else
-	if shared.Win.Pressed(pixelgl.KeyUp) {
+	} else if shared.Win.Pressed(pixelgl.KeyUp) {
 		newDir.X = 0
 		newDir.Y = 1
 		pressed = pixelgl.KeyUp
 		goto end
-	}else{
+	} else {
 		//no key pressed
 		prevKeyPressed = pixelgl.Key0 //default
 		return newDir
@@ -57,16 +51,16 @@ func key() Direction  {
 
 end:
 	//check if key repressed
-	if pressed == prevKeyPressed{
+	if pressed == prevKeyPressed {
 		//time penalty
-		if interty == 5{
+		if interty == 5 {
 			interty = 0
 			return newDir
-		}else{
-			newDir = Direction{0,0}
+		} else {
+			newDir = Direction{0, 0}
 		}
 		interty += 1
-	}else{
+	} else {
 		interty = 0
 	}
 	prevKeyPressed = pressed
