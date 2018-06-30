@@ -38,11 +38,7 @@ var Mecha *Mechanics
 
 //initialise the game mechanics structure
 func Start(fromSup chan *supervisor.PlayerDirections,
-	p1 PlayerManager, p2 PlayerManager,
-	hitmap [][]TileRules,
-	eventmap [][]*EventType,
-	dynmap [][]*Object,
-		baseWorld tiles.World) chan *tiles.World {
+	p1 PlayerManager, p2 PlayerManager, baseWorld tiles.World) chan *tiles.World {
 
 	Mecha = new(Mechanics)
 	//build return channel to animator
@@ -51,16 +47,11 @@ func Start(fromSup chan *supervisor.PlayerDirections,
 
 	Mecha.toAnime = toAnim
 	Mecha.fromSuper = fromSup
-	Mecha.dynamicObject = dynmap
 	Mecha.world = baseWorld
 
 	//load initial player positions + type
 	Mecha.Player1 = p1
 	Mecha.Player2 = p2
-
-	//load maps
-	Mecha.hitMap = hitmap
-	Mecha.eventMap = eventmap
 
 	//log.Print("Mecanics loaded")
 	return Mecha.toAnime
