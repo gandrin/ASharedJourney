@@ -2,9 +2,10 @@
 package mechanics
 
 import (
-	"github.com/ASharedJourney/supervisor"
 	"log"
-	"github.com/ASharedJourney/shared"
+
+	"github.com/gandrin/ASharedJourney/shared"
+	"github.com/gandrin/ASharedJourney/supervisor"
 )
 
 type Mechanics struct {
@@ -12,8 +13,8 @@ type Mechanics struct {
 	Player1 playerManager
 	Player2 playerManager
 
-    hitMap [][]tileRules
-    //location of event that can be trigged on the map
+	hitMap [][]tileRules
+	//location of event that can be trigged on the map
 	eventMap [][]*eventType
 
 	//communication channel to animator
@@ -24,12 +25,13 @@ type Mechanics struct {
 
 	//all data relative to game status ( score , nb actions , ect ... ) is in game_status : call by func
 }
+
 var Mecha *Mechanics
 
 func Start(fromSup chan *supervisor.PlayerDirections,
-	p1 playerManager,p2 playerManager,
-	hitmap[][]tileRules,
-eventmap [][]*eventType) chan *Motion{
+	p1 playerManager, p2 playerManager,
+	hitmap [][]tileRules,
+	eventmap [][]*eventType) chan *Motion {
 	Mecha = new(Mechanics)
 	var toAnim chan *Motion
 	toAnim = make(chan *Motion, 1)
@@ -48,7 +50,7 @@ eventmap [][]*eventType) chan *Motion{
 	return Mecha.toAnime
 }
 
-func (m *Mechanics) Play(){
+func (m *Mechanics) Play() {
 
 	for play := true; play; play = shared.Continue() {
 		//wait for next deplacement
@@ -57,4 +59,3 @@ func (m *Mechanics) Play(){
 		m.Move(playDir)
 	}
 }
-

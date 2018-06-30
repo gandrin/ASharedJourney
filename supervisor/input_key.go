@@ -1,8 +1,8 @@
 package supervisor
 
 import (
-	"github.com/ASharedJourney/shared"
 	"github.com/faiface/pixel/pixelgl"
+	"github.com/gandrin/ASharedJourney/shared"
 )
 
 //transition Direction in x , y coord
@@ -11,11 +11,10 @@ type Direction struct {
 	Y int
 }
 
-
 func key() Direction {
 	var newDir Direction = Direction{
-		X:0,
-		Y:0,
+		X: 0,
+		Y: 0,
 	}
 	if shared.Win.Pressed(pixelgl.KeyLeft) {
 		newDir.X = -1
@@ -29,4 +28,5 @@ func key() Direction {
 	if shared.Win.Pressed(pixelgl.KeyUp) {
 		newDir.Y = -1
 	}
+	return newDir
 }
