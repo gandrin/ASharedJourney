@@ -42,7 +42,6 @@ func run() {
 		panic(err)
 	}
 
-	win.Clear(colornames.White)
 	shared.Win = win
 
 	world := tiles.GenerateMap()
@@ -94,6 +93,7 @@ func run() {
 	//if you want direction to work comment out this line but lose animations
 	updatePlayer(win, world.Players[0].Sprite, playerDirectionChannel, &playerNewPosition)
 	for !win.Closed() {
+		win.Clear(colornames.White)
 		supervisor.Sup.Play()
 		//mechanics.Mecha.Play()
 		tiles.DrawMap(world.BackgroundTiles)
