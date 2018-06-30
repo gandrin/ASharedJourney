@@ -3,8 +3,6 @@ package main
 import (
 	"time"
 
-	"github.com/gandrin/ASharedJourney/shared"
-
 	"github.com/gandrin/ASharedJourney/supervisor"
 
 	"github.com/faiface/pixel"
@@ -13,6 +11,8 @@ import (
 	"golang.org/x/image/colornames"
 
 	"github.com/gandrin/ASharedJourney/mechanics"
+	"github.com/gandrin/ASharedJourney/menu"
+	"github.com/gandrin/ASharedJourney/shared"
 )
 
 const frameRate = 60
@@ -30,6 +30,8 @@ func run() {
 
 	shared.Win = win
 
+	menu.Menu()
+
 	world := tiles.GenerateMap()
 
 	fps := time.Tick(time.Second / frameRate)
@@ -45,6 +47,7 @@ func run() {
 		tiles.DrawMap(world.BackgroundTiles)
 		tiles.DrawMap(world.Obstacles)
 		tiles.DrawMap(world.Movables)
+		tiles.DrawMap(world.Water)
 		channelOutput := <-newWorldChannel
 		channelOutput.Players[0].Sprite.Draw(win, pixel.IM.Moved(channelOutput.Players[0].Position))
 		win.Update()
@@ -53,5 +56,7 @@ func run() {
 }
 
 func main() {
+
+
 	pixelgl.Run(run)
 }

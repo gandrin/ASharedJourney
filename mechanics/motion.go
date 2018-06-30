@@ -99,6 +99,7 @@ func (gm *Mechanics) copyToNewWorld() *tiles.World {
 	copy(newWorld.BackgroundTiles, gm.world.BackgroundTiles)
 	copy(newWorld.Movables, gm.world.Movables)
 	copy(newWorld.Players, gm.world.Players)
+	copy(newWorld.Water, gm.world.Water)
 
 	return newWorld
 }
