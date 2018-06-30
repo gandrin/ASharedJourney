@@ -2,7 +2,6 @@
 package animation
 
 import (
-
 	"fmt"
 	"log"
 	"time"
@@ -44,7 +43,6 @@ func (anim *Animator) muxChannel() *mechanics.Motion {
 	select {
 	case m, ok := <-anim.fromAnim:
 		if ok {
-			fmt.Printf("Motion was read.")
 			nextMotion = m
 		} else {
 			fmt.Println("Channel closed!")

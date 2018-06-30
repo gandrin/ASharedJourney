@@ -56,42 +56,6 @@ func (gm *Mechanics) Move(playDir *supervisor.PlayerDirections) *tiles.World {
 		gm.world.Players[0].Position = nextPos1
 	}
 
-	//tiles.World.Obstacles[nextPos1.Y * tiles.MapWidth + nextPos1.X]
-
-	/*
-
-		//check if player can go on tile
-		if gm.move_player(gm.Player1.PType, nextPos1){
-			//check for movables here
-			gm.Player1.Pos = nextPos1
-		}
-		//check if player has triggered an event
-		//todo newMotion.Player1.PlayerEvent = gm.check_player_event(gm.Player1.PType, nextPos1, &newMotion.Player1)
-
-		//Player 2
-		nextPos2 = playDir.Player2.Next(gm.Player2.Pos)
-		//check if player can go on tile
-		if gm.move_player(gm.Player2.PType, nextPos1){
-			//check for movables here
-			gm.Player2.Pos = nextPos2
-		}
-		//todo check if player has triggered an event
-		//newMotion.Player2.PlayerEvent = gm.check_player_event(gm.Player2.PType, nextPos2, &newMotion.Player2)
-
-
-
-		//log debug
-		log.Print("Motion player 1 ", gm.Player1.Pos,"Motion player 2 ", gm.Player2.Pos)
-
-		//update map
-		gm.world.Players[0].Position.X = float64(gm.Player1.Pos.X) * tiles.TileSize
-		gm.world.Players[0].Position.Y = float64(gm.Player1.Pos.Y) * tiles.TileSize
-		if(len(gm.world.Players)>1){
-			gm.world.Players[1].Position.X = float64(gm.Player2.Pos.X) * tiles.TileSize
-			gm.world.Players[1].Position.X = float64(gm.Player2.Pos.Y) * tiles.TileSize
-		}
-	*/
-
 	return gm.copyToNewWorld()
 }
 
