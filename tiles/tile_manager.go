@@ -18,6 +18,25 @@ import (
 	"github.com/lafriks/go-tiled"
 )
 
+func extractAndPlaceSprites(
+	layerTiles []*tiled.LayerTile,
+	spritesheet pixel.Picture,
+	tilesFrames []pixel.Rect,
+	originPosition pixel.Vec,
+) (positionedSprites []SpriteWithPosition) {
+	for index, layerTile := range layerTiles {
+		if !layerTile.IsNil() {
+			sprite := pixel.NewSprite(spritesheet, tilesFrames[layerTile.ID])
+			spritePosition := getSpritePosition(index, originPosition)
+			positionedSprites = append(positionedSprites, SpriteWithPosition{
+				Sprite:   sprite,
+				Position: spritePosition,
+			})
+		}
+	}
+	return positionedSprites
+}
+
 const mapPath = "tiles/tilemap.tmx"   // path to your map
 const tilesPath = "tiles/tileset.png" // path to your tileset
 const tileSize = 16
@@ -25,7 +44,7 @@ const mapWidth = 30
 const mapHeight = 30
 
 type World struct {
-	BackgroundTiles [mapWidth * mapHeight]SpriteWithPosition
+	BackgroundTiles []SpriteWithPosition
 	Players         [1]SpriteWithPosition
 	Movables 		[1]SpriteWithPosition
 }
@@ -102,18 +121,11 @@ func GenerateMap() (pixel.Picture, []pixel.Rect, World) {
 
 	originPosition := getOrigin(shared.Win)
 
-	var positionedSprites [mapWidth * mapHeight]SpriteWithPosition
-	for index, layerTile := range gameMap.Layers[0].Tiles {
-		sprite := pixel.NewSprite(spritesheet, tilesFrames[layerTile.ID])
-		spritePosition := getSpritePosition(index, originPosition)
-		positionedSprites[index] = SpriteWithPosition{
-			Sprite:   sprite,
-			Position: spritePosition,
-		}
-	}
+	positionedSprites := extractAndPlaceSprites(gameMap.Layers[0].Tiles, spritesheet, tilesFrames, originPosition)
 
 	// TODO iterate over objects to look for "player" object
 	// TODO make sure the given input is a multiple of tileSize
+	// playerLayer := gameMap.Layers[2].Tiles
 	playerTiledObject := gameMap.ObjectGroups[0].Objects[0]
 	player1X := playerTiledObject.X + int(originPosition.X)
 	player1Y := -playerTiledObject.Y + int(originPosition.Y)
@@ -130,7 +142,7 @@ func GenerateMap() (pixel.Picture, []pixel.Rect, World) {
 }
 
 //DrawMap draws into window the given sprites
-func DrawMap(positionedSprites [mapWidth * mapHeight]SpriteWithPosition) {
+func DrawMap(positionedSprites []SpriteWithPosition) {
 	for _, positionedSprite := range positionedSprites {
 		positionedSprite.Sprite.Draw(shared.Win, pixel.IM.Moved(positionedSprite.Position))
 	}
