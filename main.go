@@ -46,20 +46,21 @@ func run() {
 	}
 
 	win.Clear(colornames.White)
+	shared.Win = win
 
-	spritesheet, tilesFrames := tiles.GenerateMap(win)
+	spritesheet, tilesFrames, positionedSprites := tiles.GenerateMap()
 
 	log.Print("Hello")
 	sprite := pixel.NewSprite(spritesheet, tilesFrames[203])
 
 	fps := time.Tick(time.Second / frameRate)
 
-	shared.Win = win
 	playerDirectionChannel := supervisor.Start(supervisor.OnePlayer)
 	updatePlayer(win, sprite, playerDirectionChannel)
 
 	for !win.Closed() {
 		supervisor.Sup.Play()
+		tiles.DrawMap(positionedSprites)
 		win.Update()
 		<-fps
 	}

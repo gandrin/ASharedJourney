@@ -5,17 +5,20 @@ import (
 	"image"
 	"os"
 
+	"github.com/gandrin/ASharedJourney/shared"
+
 	_ "image/png"
+
+	"log"
+	"path"
+	"runtime"
 
 	"github.com/faiface/pixel"
 	"github.com/faiface/pixel/pixelgl"
 	"github.com/lafriks/go-tiled"
-	"log"
-	"runtime"
-	"path"
 )
 
-const mapPath = "tiles/tilemap.tmx" // path to your map
+const mapPath = "tiles/tilemap.tmx"   // path to your map
 const tilesPath = "tiles/tileset.png" // path to your tileset
 const tileSize = 16
 const mapWidth = 30
@@ -46,6 +49,12 @@ func getTilesFrames(spritesheet pixel.Picture) []pixel.Rect {
 	return tilesFrames
 }
 
+//SpriteWithPosition holds the sprite and its position into the window
+type SpriteWithPosition struct {
+	Sprite   *pixel.Sprite
+	Position pixel.Vec
+}
+
 func getOrigin(win *pixelgl.Window) pixel.Vec {
 	centerPosition := win.Bounds().Center()
 	originXPosition := centerPosition.X - mapWidth/2*tileSize
@@ -61,17 +70,15 @@ func getSpritePosition(spriteIndex int, origin pixel.Vec) pixel.Vec {
 	return pixel.V(spriteXPosition, spriteYPosition)
 }
 
-// GenerateMap generates the map
-func GenerateMap(win *pixelgl.Window) (pixel.Picture, []pixel.Rect) {
-	// parse tmx file
-
+// GenerateMap generates the map from a .tmx file
+func GenerateMap() (pixel.Picture, []pixel.Rect, [mapWidth * mapHeight]SpriteWithPosition) {
 	//get path to file from current programme root
 	_, filename, _, ok := runtime.Caller(1)
 	if !ok {
 		log.Fatal("error loading called")
 	}
-	filemap:= path.Join(path.Dir(filename), mapPath)
-	filetile:= path.Join(path.Dir(filename), tilesPath)
+	filemap := path.Join(path.Dir(filename), mapPath)
+	filetile := path.Join(path.Dir(filename), tilesPath)
 
 	gameMap, err := tiled.LoadFromFile(filemap)
 	if err != nil {
@@ -85,16 +92,26 @@ func GenerateMap(win *pixelgl.Window) (pixel.Picture, []pixel.Rect) {
 		panic(err)
 	}
 
-
 	tilesFrames := getTilesFrames(spritesheet)
 
-	originPosition := getOrigin(win)
+	originPosition := getOrigin(shared.Win)
 
+	var positionedSprites [mapWidth * mapHeight]SpriteWithPosition
 	for index, layerTile := range gameMap.Layers[0].Tiles {
 		sprite := pixel.NewSprite(spritesheet, tilesFrames[layerTile.ID])
 		spritePosition := getSpritePosition(index, originPosition)
-		sprite.Draw(win, pixel.IM.Moved(spritePosition))
+		positionedSprites[index] = SpriteWithPosition{
+			Sprite:   sprite,
+			Position: spritePosition,
+		}
 	}
 
-	return spritesheet, tilesFrames
+	return spritesheet, tilesFrames, positionedSprites
+}
+
+//DrawMap draws into window the given sprites
+func DrawMap(positionedSprites [mapWidth * mapHeight]SpriteWithPosition) {
+	for _, positionedSprite := range positionedSprites {
+		positionedSprite.Sprite.Draw(shared.Win, pixel.IM.Moved(positionedSprite.Position))
+	}
 }
