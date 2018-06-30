@@ -19,7 +19,7 @@ import (
 	"github.com/lafriks/go-tiled"
 )
 
-const mapPath = "tiles/theLittlePig.tmx" // path to your map
+const mapPath = "tiles/myLittlePony.tmx" // path to your map
 const tilesPath = "tiles/map.png"        // path to your tileset
 const tileSize = 32
 const mapWidth = 18
@@ -54,7 +54,6 @@ func loadPicture(path string) (pixel.Picture, error) {
 
 func getTilesFrames(spritesheet pixel.Picture) []pixel.Rect {
 	var tilesFrames []pixel.Rect
-	fmt.Println(spritesheet.Bounds())
 	for y := spritesheet.Bounds().Max.Y - tileSize; y > spritesheet.Bounds().Min.Y-tileSize; y -= tileSize {
 		for x := spritesheet.Bounds().Min.X; x < spritesheet.Bounds().Max.X; x += tileSize {
 			tilesFrames = append(tilesFrames, pixel.R(x, y, x+tileSize, y+tileSize))
@@ -87,7 +86,6 @@ func extractAndPlaceSprites(
 	originPosition pixel.Vec,
 ) (positionedSprites []SpriteWithPosition) {
 	for index, layerTile := range layerTiles {
-		fmt.Println(len(tilesFrames))
 		if !layerTile.IsNil() {
 			sprite := pixel.NewSprite(spritesheet, tilesFrames[layerTile.ID])
 			spritePosition := getSpritePosition(index, originPosition)
@@ -136,8 +134,6 @@ func GenerateMap() World {
 	//mapHeight = gameMap.Height
 
 	tilesFrames := getTilesFrames(spritesheet)
-
-	fmt.Println(len(tilesFrames))
 
 	originPosition := getOrigin(shared.Win)
 
