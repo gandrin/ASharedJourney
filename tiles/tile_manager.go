@@ -129,6 +129,10 @@ func GenerateMap() World {
 		panic(err)
 	}
 
+	//tileSize = gameMap.TileWidth
+	//mapWidth = gameMap.Width
+	//mapHeight = gameMap.Height
+
 	tilesFrames := getTilesFrames(spritesheet)
 
 	originPosition := getOrigin(shared.Win)
@@ -141,9 +145,14 @@ func GenerateMap() World {
 	if err != nil {
 		panic(err)
 	}
+	obstaclesLayerIndex, err := findLayerIndex("obstacles", gameMap.Layers)
+	if err != nil {
+		panic(err)
+	}
 
 	backgroundSprite := extractAndPlaceSprites(gameMap.Layers[backgroundLayerIndex].Tiles, spritesheet, tilesFrames, originPosition)
 	players := extractAndPlaceSprites(gameMap.Layers[playersLayerIndex].Tiles, spritesheet, tilesFrames, originPosition)
+	//obstacles := extractAndPlaceSprites(gameMap.Layers[obstaclesLayerIndex].Tiles, spritesheet, tilesFrames, originPosition)
 
 	world := World{
 		BackgroundTiles: backgroundSprite,
