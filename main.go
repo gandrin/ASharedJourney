@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/faiface/pixel"
 	"github.com/faiface/pixel/pixelgl"
+	"github.com/gandrin/ASharedJourney/tiles"
 	"golang.org/x/image/colornames"
 )
 
@@ -17,7 +18,9 @@ func run() {
 		panic(err)
 	}
 
-	win.Clear(colornames.Skyblue)
+	win.Clear(colornames.White)
+
+	tiles.GenerateMap(win)
 
 	for !win.Closed() {
 		win.Update()
