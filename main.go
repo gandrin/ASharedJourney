@@ -41,7 +41,7 @@ func run() {
 	newWorldChannel := mechanics.Start(playerDirectionChannel, world)
 
 	for !win.Closed() {
-		win.Clear(colornames.White)
+		win.Clear(colornames.Black)
 		supervisor.Sup.Play()
 		mechanics.Mecha.Play()
 		tiles.DrawMap(world.BackgroundTiles)
