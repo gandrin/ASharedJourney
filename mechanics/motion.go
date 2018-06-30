@@ -19,9 +19,12 @@ func (gm *Mechanics) Move(playDir *supervisor.PlayerDirections) *tiles.World {
 	//log.Printf("Move called")
 
 	if gm.world.Players[0].HasWon {
-		gm.world = tiles.GenerateMap("forest")
+		gm.world = tiles.GenerateMap("forest") // TODO next level
 	}
 
+	if gm.world.Players[0].InTheWater && gm.world.Players[1].InTheWater {
+		gm.world = tiles.GenerateMap("forest") // TODO same game RESTART
+	}
 	if playDir.Player1.X != 0 || playDir.Player1.Y != 0 {
 		gm.movePlayer(&gm.world.Players[0], playDir.Player1.Next)
 		gm.movePlayer(&gm.world.Players[1], playDir.Player2.Next)
@@ -36,7 +39,6 @@ func (gm *Mechanics) movePlayer(player *tiles.SpriteWithPosition, getNextPositio
 
 	// In the water
 	if player.InTheWater {
-		// restart
 		return
 	}
 
