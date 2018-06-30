@@ -15,6 +15,7 @@ import (
 const mapPath = "tiles/tilemap.tmx" // path to your map
 const tileSize = 16
 const mapWidth = 30
+const mapHeight = 30
 
 // loadPicture load the picture
 func loadPicture(path string) (pixel.Picture, error) {
@@ -41,11 +42,19 @@ func getTilesFrames(spritesheet pixel.Picture) []pixel.Rect {
 	return tilesFrames
 }
 
-func getSpritePosition(spriteIndex int) pixel.Vec {
-	spriteXPosition := (spriteIndex%mapWidth)*tileSize + tileSize/2
-	spriteYPosition := (spriteIndex/mapWidth)*tileSize + tileSize/2
+func getOrigin(win *pixelgl.Window) pixel.Vec {
+	centerPosition := win.Bounds().Center()
+	originXPosition := centerPosition.X - mapWidth/2*tileSize
+	originYPosition := centerPosition.Y + mapHeight/2*tileSize - tileSize
 
-	return pixel.V(float64(spriteXPosition), float64(spriteYPosition))
+	return pixel.V(originXPosition, originYPosition)
+}
+
+func getSpritePosition(spriteIndex int, origin pixel.Vec) pixel.Vec {
+	spriteXPosition := origin.X + float64((spriteIndex%mapWidth)*tileSize) + tileSize/2
+	spriteYPosition := origin.Y + tileSize/2 - float64((spriteIndex/mapWidth)*tileSize)
+
+	return pixel.V(spriteXPosition, spriteYPosition)
 }
 
 // GenerateMap generates the map
@@ -64,9 +73,11 @@ func GenerateMap(win *pixelgl.Window) {
 
 	tilesFrames := getTilesFrames(spritesheet)
 
+	originPosition := getOrigin(win)
+
 	for index, layerTile := range gameMap.Layers[0].Tiles {
 		sprite := pixel.NewSprite(spritesheet, tilesFrames[layerTile.ID])
-		spritePosition := getSpritePosition(index)
+		spritePosition := getSpritePosition(index, originPosition)
 		sprite.Draw(win, pixel.IM.Moved(spritePosition))
 	}
 }
