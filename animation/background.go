@@ -17,5 +17,5 @@ func (a *Animator) generateBackground(level int) [][]backgroundImage {
 
 func (a *Animator) redrawBackGroundTile(pos shared.Position) {
 	//todo refresh background position
-	log.Print("position to redraw ", pos)
+	//log.Print("position to redraw ", pos)
 }

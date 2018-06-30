@@ -70,9 +70,9 @@ func (anim *Animator) animate(motion *mechanics.Motion) {
 	//check if motion called
 	if motion != nil {
 		//move players and events
-		log.Printf("Move players")
+		//log.Printf("Move players")
 	}
 
 	//move all animations
-	log.Printf("animting")
+	//log.Printf("animting")
 }

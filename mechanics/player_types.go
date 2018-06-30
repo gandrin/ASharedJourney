@@ -1,6 +1,5 @@
 package mechanics
 
-import "log"
 
 type PlayerType string
 
@@ -13,7 +12,7 @@ const (
 
 func (pt PlayerType) can_walk(tileType TileRules) bool{
 	//check if this type of player can walk on this type of tile
-	log.Print("Checking if player of type ",pt, " can walk of tile ", tileType)
+	//log.Print("Checking if player of type ",pt, " can walk of tile ", tileType)
 	var retVal bool = true
 	switch pt {
 	case BEE:

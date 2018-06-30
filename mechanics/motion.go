@@ -1,18 +1,17 @@
 package mechanics
 
 import (
-	"log"
-
 	"github.com/gandrin/ASharedJourney/shared"
 	"github.com/gandrin/ASharedJourney/supervisor"
 	"github.com/gandrin/ASharedJourney/tiles"
+	"log"
 )
 
 
 
 //move function recives as input the data from a player direction channel
 func (gm *Mechanics) Move(playDir *supervisor.PlayerDirections) *tiles.World {
-	log.Printf("Move called")
+	//log.Printf("Move called")
 
 	var nextPos1 shared.Position //next position for player 1 with current direction
 	var nextPos2 shared.Position // same for player 2
@@ -41,15 +40,14 @@ func (gm *Mechanics) Move(playDir *supervisor.PlayerDirections) *tiles.World {
 
 
 	//log debug
-	log.Print("Motion player 1 ", gm.Player1.Pos)
-	log.Print("Motion player 2 ", gm.Player2.Pos)
+	log.Print("Motion player 1 ", gm.Player1.Pos,"Motion player 2 ", gm.Player2.Pos)
 
 	//update map
-	gm.world.Players[0].Position.X = float64(gm.Player1.Pos.X)
-	gm.world.Players[0].Position.Y = float64(gm.Player1.Pos.Y)
+	gm.world.Players[0].Position.X = float64(gm.Player1.Pos.X) * 16
+	gm.world.Players[0].Position.Y = float64(gm.Player1.Pos.Y) * 16
 	if(len(gm.world.Players)>1){
-		gm.world.Players[1].Position.X = float64(gm.Player2.Pos.X)
-		gm.world.Players[1].Position.X = float64(gm.Player2.Pos.Y)
+		gm.world.Players[1].Position.X = float64(gm.Player2.Pos.X) * 16
+		gm.world.Players[1].Position.X = float64(gm.Player2.Pos.Y) * 16
 	}
 
 
@@ -58,11 +56,10 @@ func (gm *Mechanics) Move(playDir *supervisor.PlayerDirections) *tiles.World {
 
 //move player if hitmap permits
 func (gm *Mechanics) move_player(ptype PlayerType, nextPos shared.Position) bool{
-	log.Print("Moving player ", nextPos , " legth of hitmap ",
-		len(gm.hitMap),":",len(gm.hitMap[0]))
+	//log.Print("Moving player ", nextPos , " legth of hitmap ",len(gm.hitMap),":",len(gm.hitMap[0]))
 	//check if can move
 	var hitVal = gm.hitMap[nextPos.X][nextPos.Y]
-	log.Printf("hit values ", hitVal)
+	//log.Printf("hit values ", hitVal)
 	if ptype.can_walk(hitVal) {
 		//can move according to hit map
 		return true
@@ -85,14 +82,18 @@ func (gm *Mechanics) check_player_event(ptype PlayerType, nextPos shared.Positio
 }
 
 func (gm *Mechanics) copyToNewWorld() * tiles.World{
-	var newWorld *tiles.World = new(tiles.World)
+	var newWorld *tiles.World =new(tiles.World)
 	//copy player locations
 
 	//copy world
 	//make a copy of world : todo check if doesn't fail
 	//this will have to be updated
+	newWorld.BackgroundTiles = make([]tiles.SpriteWithPosition, len(gm.world.BackgroundTiles))
+	newWorld.Movables = make([]tiles.SpriteWithPosition, len(gm.world.Movables))
+	newWorld.Players = make([]tiles.SpriteWithPosition, len(gm.world.Players))
 	copy(newWorld.BackgroundTiles, gm.world.BackgroundTiles)
 	copy(newWorld.Movables ,gm.world.Movables)
+	copy(newWorld.Players, gm.world.Players)
 
 	return newWorld
 }

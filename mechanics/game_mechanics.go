@@ -62,7 +62,7 @@ func Start(fromSup chan *supervisor.PlayerDirections,
 	Mecha.hitMap = hitmap
 	Mecha.eventMap = eventmap
 
-	log.Print("Mecanics loaded")
+	//log.Print("Mecanics loaded")
 	return Mecha.toAnime
 }
 //synchronisation objects
@@ -100,7 +100,7 @@ func (m *Mechanics) Play() {
 
 		playDir := m.muxChannel()
 
-		log.Printf("Got direction ", playDir)
-		m.Move(playDir)
+		//log.Printf("Got direction ", playDir)
+		m.toAnime <- m.Move(playDir)
 	}
 }

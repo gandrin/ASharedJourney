@@ -17,5 +17,5 @@ type AnimatedSprite struct {
 
 func (as *AnimatedSprite) Move() {
 	//todo move animated sprite
-	log.Print("Move called on animated sprite ", as.pos)
+	//log.Print("Move called on animated sprite ", as.pos)
 }

@@ -32,6 +32,6 @@ func (dir *PlayerDirections) mirror() {
 func (dir Direction) Next(currentPos shared.Position) shared.Position {
 	currentPos.X += dir.X
 	currentPos.Y += dir.Y
-	log.Printf("Calculated next position ", currentPos)
+	//log.Printf("Calculated next position ", currentPos)
 	return currentPos
 }

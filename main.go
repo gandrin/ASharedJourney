@@ -12,25 +12,12 @@ import (
 	"github.com/gandrin/ASharedJourney/tiles"
 	"golang.org/x/image/colornames"
 
-	"log"
 	"github.com/gandrin/ASharedJourney/mechanics"
 )
 
 const frameRate = 60
 
-func updatePlayer(win *pixelgl.Window, sprite *pixel.Sprite, playerDirectionChannel chan *supervisor.PlayerDirections, playerPosition *pixel.Vec) {
-	go func(playerDirection chan *supervisor.PlayerDirections) {
-		for true {
-			newPlayerDirection := <-playerDirection
-			playerNewPosition := pixel.V(
-				playerPosition.X+float64(newPlayerDirection.Player1.X*16),
-				playerPosition.Y+float64(newPlayerDirection.Player1.Y*16),
-			)
-			playerPosition.X = playerNewPosition.X
-			playerPosition.Y = playerNewPosition.Y
-		}
-	}(playerDirectionChannel)
-}
+
 
 func run() {
 	cfg := pixelgl.WindowConfig{
@@ -48,9 +35,8 @@ func run() {
 
 	spritesheet, tilesFrames, world := tiles.GenerateMap()
 
-	log.Print("Hello")
+	//log.Print("Hello")
 	//sprite := pixel.NewSprite(spritesheet, tilesFrames[203])
-	pixel.NewSprite(spritesheet, tilesFrames[203])
 
 	//modification to not call sprtie
 	//sprite := pixel.NewSprite(spritesheet, tilesFrames[203])
@@ -96,17 +82,17 @@ func run() {
 		}
 
 	}
-	_ = mechanics.Start(playerDirectionChannel, p1, p2, ruleMap, eventMap, objMap,world)
+	newWorldChannel := mechanics.Start(playerDirectionChannel, p1, p2, ruleMap, eventMap, objMap,world)
 
-	playerNewPosition := world.Players[0].Position
 
 	//if you want direction to work comment out this line but lose animations
-	//updatePlayer(win, sprite, playerDirectionChannel, &playerNewPosition)
+
 	for !win.Closed() {
 		supervisor.Sup.Play()
 		mechanics.Mecha.Play()
 		tiles.DrawMap(world.BackgroundTiles)
-		world.Players[0].Sprite.Draw(win, pixel.IM.Moved(playerNewPosition))
+		channelOutput := <- newWorldChannel
+		channelOutput.Players[0].Sprite.Draw(win, pixel.IM.Moved(channelOutput.Players[0].Position))
 		win.Update()
 		<-fps
 	}
