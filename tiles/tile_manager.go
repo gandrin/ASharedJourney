@@ -18,6 +18,7 @@ import (
 	"github.com/lafriks/go-tiled"
 )
 
+// extractAndPlaceSprites filters out empty tiles and positions them properly on the screen
 func extractAndPlaceSprites(
 	layerTiles []*tiled.LayerTile,
 	spritesheet pixel.Picture,
@@ -45,8 +46,8 @@ const mapHeight = 30
 
 type World struct {
 	BackgroundTiles []SpriteWithPosition
-	Players         [1]SpriteWithPosition
-	Movables 		[1]SpriteWithPosition
+	Players         []SpriteWithPosition
+	Movables        []SpriteWithPosition
 }
 
 //SpriteWithPosition holds the sprite and its position into the window
@@ -121,22 +122,13 @@ func GenerateMap() (pixel.Picture, []pixel.Rect, World) {
 
 	originPosition := getOrigin(shared.Win)
 
-	positionedSprites := extractAndPlaceSprites(gameMap.Layers[0].Tiles, spritesheet, tilesFrames, originPosition)
+	backgroundSprite := extractAndPlaceSprites(gameMap.Layers[0].Tiles, spritesheet, tilesFrames, originPosition)
 
 	// TODO iterate over objects to look for "player" object
 	// TODO make sure the given input is a multiple of tileSize
-	// playerLayer := gameMap.Layers[2].Tiles
-	playerTiledObject := gameMap.ObjectGroups[0].Objects[0]
-	player1X := playerTiledObject.X + int(originPosition.X)
-	player1Y := -playerTiledObject.Y + int(originPosition.Y)
+	players := extractAndPlaceSprites(gameMap.Layers[2].Tiles, spritesheet, tilesFrames, originPosition)
 
-	fmt.Println(player1X)
-	fmt.Println(player1Y)
-
-	player1 := SpriteWithPosition{Sprite: pixel.NewSprite(spritesheet, tilesFrames[203]), Position: pixel.V(float64(player1X), float64(player1Y))}
-	var players [1]SpriteWithPosition
-	players[0] = player1
-	world := World{BackgroundTiles: positionedSprites, Players: players}
+	world := World{BackgroundTiles: backgroundSprite, Players: players}
 
 	return spritesheet, tilesFrames, world
 }
