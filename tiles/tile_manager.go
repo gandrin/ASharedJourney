@@ -54,7 +54,6 @@ func loadPicture(path string) (pixel.Picture, error) {
 
 func getTilesFrames(spritesheet pixel.Picture) []pixel.Rect {
 	var tilesFrames []pixel.Rect
-	fmt.Println(spritesheet.Bounds())
 	for y := spritesheet.Bounds().Max.Y - float64(TileSize); y > spritesheet.Bounds().Min.Y-float64(TileSize); y -= float64(TileSize) {
 		for x := spritesheet.Bounds().Min.X; x < spritesheet.Bounds().Max.X; x += float64(TileSize) {
 			tilesFrames = append(tilesFrames, pixel.R(x, y, x+float64(TileSize), y+float64(TileSize)))
@@ -87,7 +86,6 @@ func extractAndPlaceSprites(
 	originPosition pixel.Vec,
 ) (positionedSprites []SpriteWithPosition) {
 	for index, layerTile := range layerTiles {
-		fmt.Println(len(tilesFrames))
 		if !layerTile.IsNil() {
 			sprite := pixel.NewSprite(spritesheet, tilesFrames[layerTile.ID])
 			spritePosition := getSpritePosition(index, originPosition)
@@ -136,8 +134,6 @@ func GenerateMap() World {
 	//MapHeight = gameMap.Height
 
 	tilesFrames := getTilesFrames(spritesheet)
-
-	fmt.Println(len(tilesFrames))
 
 	originPosition := getOrigin(shared.Win)
 
