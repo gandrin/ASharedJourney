@@ -44,19 +44,18 @@ func run() {
 		win.Clear(colornames.White)
 		supervisor.Sup.Play()
 		mechanics.Mecha.Play()
-		tiles.DrawMap(world.BackgroundTiles)
-		tiles.DrawMap(world.Obstacles)
-		tiles.DrawMap(world.Movables)
-		tiles.DrawMap(world.Water)
-		channelOutput := <-newWorldChannel
-		channelOutput.Players[0].Sprite.Draw(win, pixel.IM.Moved(channelOutput.Players[0].Position))
+		upToDateWorld := <-newWorldChannel
+		tiles.DrawMap(upToDateWorld.BackgroundTiles)
+		tiles.DrawMap(upToDateWorld.Obstacles)
+		tiles.DrawMap(upToDateWorld.Water)
+		tiles.DrawMap(upToDateWorld.Movables)
+		tiles.DrawMap(upToDateWorld.Players)
 		win.Update()
 		<-fps
 	}
 }
 
 func main() {
-
 
 	pixelgl.Run(run)
 }

@@ -21,9 +21,7 @@ func (mode GameMode) Move() *PlayerDirections {
 
 //mirror motion of player 1 onto direction of player 2
 func (dir *PlayerDirections) mirror() {
-	if dir.Player1.X != 0 {
-		dir.Player2.X = dir.Player1.X * (-1)
-	}
+	dir.Player2.X = dir.Player1.X
 	if dir.Player1.Y != 0 {
 		dir.Player2.Y = dir.Player1.Y * (-1)
 	}
