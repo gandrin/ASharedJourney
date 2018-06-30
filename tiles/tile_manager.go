@@ -19,17 +19,17 @@ import (
 	"github.com/lafriks/go-tiled"
 )
 
-const mapPath = "tiles/theLittlePig.tmx"   // path to your map
-const tilesPath = "tiles/forest.png" // path to your tileset
+const mapPath = "tiles/theLittlePig.tmx" // path to your map
+const tilesPath = "tiles/map.png"        // path to your tileset
 const tileSize = 32
 const mapWidth = 18
 const mapHeight = 20
 
 type World struct {
-
 	BackgroundTiles []SpriteWithPosition
 	Players         []SpriteWithPosition
 	Movables        []SpriteWithPosition
+	Obstacles       []SpriteWithPosition
 }
 
 //SpriteWithPosition holds the sprite and its position into the window
@@ -54,6 +54,7 @@ func loadPicture(path string) (pixel.Picture, error) {
 
 func getTilesFrames(spritesheet pixel.Picture) []pixel.Rect {
 	var tilesFrames []pixel.Rect
+	fmt.Println(spritesheet.Bounds())
 	for y := spritesheet.Bounds().Max.Y - tileSize; y > spritesheet.Bounds().Min.Y; y -= tileSize {
 		for x := spritesheet.Bounds().Min.X; x < spritesheet.Bounds().Max.X; x += tileSize {
 			tilesFrames = append(tilesFrames, pixel.R(x, y, x+tileSize, y+tileSize))
@@ -86,6 +87,7 @@ func extractAndPlaceSprites(
 	originPosition pixel.Vec,
 ) (positionedSprites []SpriteWithPosition) {
 	for index, layerTile := range layerTiles {
+		fmt.Println(len(tilesFrames))
 		if !layerTile.IsNil() {
 			sprite := pixel.NewSprite(spritesheet, tilesFrames[layerTile.ID])
 			spritePosition := getSpritePosition(index, originPosition)
@@ -135,6 +137,8 @@ func GenerateMap() World {
 
 	tilesFrames := getTilesFrames(spritesheet)
 
+	fmt.Println(len(tilesFrames))
+
 	originPosition := getOrigin(shared.Win)
 
 	backgroundLayerIndex, err := findLayerIndex("background", gameMap.Layers)
@@ -145,18 +149,19 @@ func GenerateMap() World {
 	if err != nil {
 		panic(err)
 	}
-	//obstaclesLayerIndex, err := findLayerIndex("obstacles", gameMap.Layers)
-	//if err != nil {
-	//	panic(err)
-	//}
+	obstaclesLayerIndex, err := findLayerIndex("obstacles", gameMap.Layers)
+	if err != nil {
+		panic(err)
+	}
 
 	backgroundSprite := extractAndPlaceSprites(gameMap.Layers[backgroundLayerIndex].Tiles, spritesheet, tilesFrames, originPosition)
 	players := extractAndPlaceSprites(gameMap.Layers[playersLayerIndex].Tiles, spritesheet, tilesFrames, originPosition)
-	//obstacles := extractAndPlaceSprites(gameMap.Layers[obstaclesLayerIndex].Tiles, spritesheet, tilesFrames, originPosition)
+	obstacles := extractAndPlaceSprites(gameMap.Layers[obstaclesLayerIndex].Tiles, spritesheet, tilesFrames, originPosition)
 
 	world := World{
 		BackgroundTiles: backgroundSprite,
 		Players:         players,
+		Obstacles:       obstacles,
 	}
 	return world
 }

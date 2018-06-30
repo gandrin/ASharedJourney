@@ -17,8 +17,6 @@ import (
 
 const frameRate = 60
 
-
-
 func run() {
 	cfg := pixelgl.WindowConfig{
 		Title:  "A Shared Journey",
@@ -74,14 +72,14 @@ func run() {
 		}
 
 	}
-	newWorldChannel := mechanics.Start(playerDirectionChannel, p1, p2, ruleMap, eventMap, objMap,world)
+	newWorldChannel := mechanics.Start(playerDirectionChannel, p1, p2, ruleMap, eventMap, objMap, world)
 
 	for !win.Closed() {
 		win.Clear(colornames.White)
 		supervisor.Sup.Play()
 		mechanics.Mecha.Play()
 		tiles.DrawMap(world.BackgroundTiles)
-		channelOutput := <- newWorldChannel
+		channelOutput := <-newWorldChannel
 		channelOutput.Players[0].Sprite.Draw(win, pixel.IM.Moved(channelOutput.Players[0].Position))
 		win.Update()
 		<-fps
