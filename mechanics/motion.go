@@ -1,8 +1,6 @@
 package mechanics
 
 import (
-	"log"
-
 	"github.com/faiface/pixel"
 	"github.com/gandrin/ASharedJourney/supervisor"
 	"github.com/gandrin/ASharedJourney/tiles"
@@ -11,7 +9,7 @@ import (
 func (gm *Mechanics) handlePlayerWon(nextPos1 pixel.Vec) {
 	for _, val := range gm.world.WinStars {
 		if val.Position.X == nextPos1.X && val.Position.Y == nextPos1.Y {
-			log.Printf("you won!")
+			gm.world = tiles.GenerateMap("forest")
 		}
 	}
 }

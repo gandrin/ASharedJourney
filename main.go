@@ -39,7 +39,7 @@ func run() {
 
 	menu.Menu()
 
-	world := tiles.GenerateMap(FOREST_LEVEL)
+	world := tiles.GenerateMap(AMAZEING_LEVEL)
 
 	fps := time.Tick(time.Second / frameRate)
 
