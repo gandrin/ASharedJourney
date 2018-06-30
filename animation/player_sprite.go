@@ -7,8 +7,7 @@ type playerSprite struct {
 	asprite AnimatedSprite
 }
 
-
-func NewPlayerSprite(pt mechanics.PlayerType) * playerSprite{
+func NewPlayerSprite(pt mechanics.PlayerType) *playerSprite {
 	//todo implement
 	return new(playerSprite)
 }

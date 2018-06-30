@@ -10,8 +10,9 @@ import (
 
 	"github.com/faiface/pixel"
 	"github.com/faiface/pixel/pixelgl"
-	"golang.org/x/image/colornames"
 	"github.com/gandrin/ASharedJourney/tiles"
+	"golang.org/x/image/colornames"
+
 	"log"
 )
 
@@ -19,7 +20,7 @@ const frameRate = 60
 
 func run() {
 	cfg := pixelgl.WindowConfig{
-		Title:  "Pixel Rocks!",
+		Title:  "A Shared Journey",
 		Bounds: pixel.R(0, 0, 500, 500),
 		VSync:  true,
 	}
@@ -34,16 +35,22 @@ func run() {
 
 	log.Print("Hello")
 	sprite := pixel.NewSprite(spritesheet, tilesFrames[203])
-	sprite.Draw(win, pixel.IM.Moved(win.Bounds().Center()))
 
 	fps := time.Tick(time.Second / frameRate)
 
 	shared.Win = win
 	playerDirectionChannel := supervisor.Start(supervisor.OnePlayer)
 	go func(playerDirection chan *supervisor.PlayerDirections) {
+		playerOldPosition := win.Bounds().Center()
 		for true {
 			newPlayerDirection := <-playerDirection
-			fmt.Println(newPlayerDirection.Player1)
+			fmt.Println(newPlayerDirection)
+			playerNewPosition := pixel.V(
+				playerOldPosition.X+float64(newPlayerDirection.Player1.X*16),
+				playerOldPosition.Y+float64(newPlayerDirection.Player1.Y*16),
+			)
+			sprite.Draw(win, pixel.IM.Moved(playerNewPosition))
+			playerOldPosition = playerNewPosition
 		}
 	}(playerDirectionChannel)
 

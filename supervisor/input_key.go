@@ -24,10 +24,10 @@ func key() Direction {
 		newDir.X = 1
 	}
 	if shared.Win.Pressed(pixelgl.KeyDown) {
-		newDir.Y = 1
+		newDir.Y = -1
 	}
 	if shared.Win.Pressed(pixelgl.KeyUp) {
-		newDir.Y = -1
+		newDir.Y = 1
 	}
 	return newDir
 }
