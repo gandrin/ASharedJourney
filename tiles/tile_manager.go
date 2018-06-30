@@ -58,7 +58,7 @@ func getSpritePosition(spriteIndex int, origin pixel.Vec) pixel.Vec {
 }
 
 // GenerateMap generates the map
-func GenerateMap(win *pixelgl.Window) {
+func GenerateMap(win *pixelgl.Window) (pixel.Picture, []pixel.Rect) {
 	// parse tmx file
 	gameMap, err := tiled.LoadFromFile(mapPath)
 	if err != nil {
@@ -80,4 +80,6 @@ func GenerateMap(win *pixelgl.Window) {
 		spritePosition := getSpritePosition(index, originPosition)
 		sprite.Draw(win, pixel.IM.Moved(spritePosition))
 	}
+
+	return spritesheet, tilesFrames
 }

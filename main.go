@@ -24,7 +24,10 @@ func run() {
 
 	win.Clear(colornames.White)
 
-	tiles.GenerateMap(win)
+	spritesheet, tilesFrames := tiles.GenerateMap(win)
+
+	sprite := pixel.NewSprite(spritesheet, tilesFrames[203])
+	sprite.Draw(win, pixel.IM.Moved(win.Bounds().Center()))
 
 	fps := time.Tick(time.Second / frameRate)
 
