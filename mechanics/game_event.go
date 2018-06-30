@@ -2,7 +2,8 @@ package mechanics
 
 import (
 	"log"
-	"github.com/ASharedJourney/shared"
+
+	"github.com/gandrin/ASharedJourney/shared"
 )
 
 //in game events
@@ -14,18 +15,18 @@ type Event struct {
 	//ObjectToMove []ObjectMotion
 
 	Pos shared.Position
-
 }
+
 //list of events
 type eventType string
+
 const (
-	eventHello eventType= "Hello"
-	eventBy eventType= "By"
+	eventHello eventType = "Hello"
+	eventBy    eventType = "By"
 )
 
-
 //build a new event according to the events type
-func NewEvent(newEventType eventType,ePos shared.Position) *Event{
+func NewEvent(newEventType eventType, ePos shared.Position) *Event {
 	var newEvent = new(Event)
 	newEvent.Pos = ePos
 	//todo compleat with event mechanics struct implementation
@@ -38,7 +39,7 @@ func NewEvent(newEventType eventType,ePos shared.Position) *Event{
 		break
 	default:
 		log.Fatal("Unhandled event ", string(newEventType))
-	break
+		break
 	}
 	return newEvent
 }

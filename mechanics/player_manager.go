@@ -1,8 +1,6 @@
 package mechanics
 
-import "github.com/ASharedJourney/shared"
-
-
+import "github.com/gandrin/ASharedJourney/shared"
 
 //add data about a player used by the game mechanics
 type playerManager struct {
@@ -16,4 +14,3 @@ type playerMechanics struct {
 	NewPos      shared.Position
 	PlayerEvent *Event
 }
-

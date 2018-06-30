@@ -1,11 +1,20 @@
 package main
 
 import (
+	"fmt"
+	"time"
+
+	"github.com/gandrin/ASharedJourney/shared"
+
+	"github.com/gandrin/ASharedJourney/supervisor"
+
 	"github.com/faiface/pixel"
 	"github.com/faiface/pixel/pixelgl"
 	"golang.org/x/image/colornames"
 	"github.com/ASharedJourney/tiles"
 )
+
+const frameRate = 60
 
 func run() {
 	cfg := pixelgl.WindowConfig{
@@ -20,10 +29,26 @@ func run() {
 
 	win.Clear(colornames.White)
 
-	tiles.GenerateMap(win)
+	spritesheet, tilesFrames := tiles.GenerateMap(win)
+
+	sprite := pixel.NewSprite(spritesheet, tilesFrames[203])
+	sprite.Draw(win, pixel.IM.Moved(win.Bounds().Center()))
+
+	fps := time.Tick(time.Second / frameRate)
+
+	shared.Win = win
+	playerDirectionChannel := supervisor.Start(supervisor.OnePlayer)
+	go func(playerDirection chan *supervisor.PlayerDirections) {
+		for true {
+			newPlayerDirection := <-playerDirection
+			fmt.Println(newPlayerDirection.Player1)
+		}
+	}(playerDirectionChannel)
 
 	for !win.Closed() {
+		supervisor.Sup.Play()
 		win.Update()
+		<-fps
 	}
 }
 
