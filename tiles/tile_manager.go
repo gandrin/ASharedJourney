@@ -16,8 +16,8 @@ const mapPath = "tiles/tilemap.tmx" // path to your map
 const tileSize = 16
 const mapWidth = 30
 
-// LoadPicture load the picture
-func LoadPicture(path string) (pixel.Picture, error) {
+// loadPicture load the picture
+func loadPicture(path string) (pixel.Picture, error) {
 	file, err := os.Open(path)
 	if err != nil {
 		return nil, err
@@ -30,16 +30,7 @@ func LoadPicture(path string) (pixel.Picture, error) {
 	return pixel.PictureDataFromImage(img), nil
 }
 
-// GenerateMap generates the map
-func GenerateMap(win *pixelgl.Window) {
-	// parse tmx file
-	gameMap, err := tiled.LoadFromFile(mapPath)
-
-	spritesheet, err := LoadPicture("tiles/tileset.png")
-	if err != nil {
-		panic(err)
-	}
-
+func getTilesFrames(spritesheet pixel.Picture) []pixel.Rect {
 	var tilesFrames []pixel.Rect
 	for y := spritesheet.Bounds().Max.Y - tileSize; y > spritesheet.Bounds().Min.Y; y -= tileSize {
 		for x := spritesheet.Bounds().Min.X; x < spritesheet.Bounds().Max.X; x += tileSize {
@@ -47,9 +38,31 @@ func GenerateMap(win *pixelgl.Window) {
 		}
 	}
 
+	return tilesFrames
+}
+
+func getSpritePosition(spriteIndex int) pixel.Vec {
+	spriteXPosition := (spriteIndex%mapWidth)*tileSize + tileSize/2
+	spriteYPosition := (spriteIndex/mapWidth)*tileSize + tileSize/2
+
+	return pixel.V(float64(spriteXPosition), float64(spriteYPosition))
+}
+
+// GenerateMap generates the map
+func GenerateMap(win *pixelgl.Window) {
+	// parse tmx file
+	gameMap, err := tiled.LoadFromFile(mapPath)
+
+	spritesheet, err := loadPicture("tiles/tileset.png")
+	if err != nil {
+		panic(err)
+	}
+
+	tilesFrames := getTilesFrames(spritesheet)
+
 	for index, layerTile := range gameMap.Layers[0].Tiles {
 		sprite := pixel.NewSprite(spritesheet, tilesFrames[layerTile.ID])
-		spritePosition := pixel.V(float64(((index%mapWidth)*tileSize)+tileSize/2), float64(index/mapWidth)*tileSize+float64(tileSize/2))
+		spritePosition := getSpritePosition(index)
 		sprite.Draw(win, pixel.IM.Moved(spritePosition))
 	}
 
