@@ -51,7 +51,10 @@ func run() {
 	log.Print("Hello")
 	//sprite := pixel.NewSprite(spritesheet, tilesFrames[203])
 	pixel.NewSprite(spritesheet, tilesFrames[203])
-	sprite := pixel.NewSprite(spritesheet, tilesFrames[203])
+
+	//modification to not call sprtie
+	//sprite := pixel.NewSprite(spritesheet, tilesFrames[203])
+	 pixel.NewSprite(spritesheet, tilesFrames[203])
 
 	fps := time.Tick(time.Second / frameRate)
 
@@ -93,15 +96,15 @@ func run() {
 		}
 
 	}
-	_ = mechanics.Start(playerDirectionChannel, p1, p2, ruleMap, eventMap, objMap)
+	_ = mechanics.Start(playerDirectionChannel, p1, p2, ruleMap, eventMap, objMap,world)
 
 	playerNewPosition := world.Players[0].Position
 
 	//if you want direction to work comment out this line but lose animations
-	updatePlayer(win, sprite, playerDirectionChannel, &playerNewPosition)
+	//updatePlayer(win, sprite, playerDirectionChannel, &playerNewPosition)
 	for !win.Closed() {
 		supervisor.Sup.Play()
-		//mechanics.Mecha.Play()
+		mechanics.Mecha.Play()
 		tiles.DrawMap(world.BackgroundTiles)
 		world.Players[0].Sprite.Draw(win, pixel.IM.Moved(playerNewPosition))
 		win.Update()

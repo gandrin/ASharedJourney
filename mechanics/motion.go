@@ -44,6 +44,14 @@ func (gm *Mechanics) Move(playDir *supervisor.PlayerDirections) *tiles.World {
 	log.Print("Motion player 1 ", gm.Player1.Pos)
 	log.Print("Motion player 2 ", gm.Player2.Pos)
 
+	//update map
+	gm.world.Players[0].Position.X = float64(gm.Player1.Pos.X)
+	gm.world.Players[0].Position.Y = float64(gm.Player1.Pos.Y)
+	if(len(gm.world.Players)>1){
+		gm.world.Players[1].Position.X = float64(gm.Player2.Pos.X)
+		gm.world.Players[1].Position.X = float64(gm.Player2.Pos.Y)
+	}
+
 
 	return gm.copyToNewWorld()
 }
@@ -79,15 +87,12 @@ func (gm *Mechanics) check_player_event(ptype PlayerType, nextPos shared.Positio
 func (gm *Mechanics) copyToNewWorld() * tiles.World{
 	var newWorld *tiles.World = new(tiles.World)
 	//copy player locations
-	gm.world.Players[0].Position.X = float64(gm.Player1.Pos.X)
-	gm.world.Players[0].Position.Y = float64(gm.Player1.Pos.Y)
-	gm.world.Players[1].Position.X = float64(gm.Player2.Pos.X)
-	gm.world.Players[1].Position.X = float64(gm.Player2.Pos.Y)
+
 	//copy world
 	//make a copy of world : todo check if doesn't fail
 	//this will have to be updated
-	newWorld.BackgroundTiles =gm.world.BackgroundTiles
-	newWorld.Movables =gm.world.Movables
+	copy(newWorld.BackgroundTiles, gm.world.BackgroundTiles)
+	copy(newWorld.Movables ,gm.world.Movables)
 
 	return newWorld
 }
