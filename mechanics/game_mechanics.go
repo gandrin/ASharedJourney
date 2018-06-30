@@ -8,6 +8,7 @@ import (
 	"github.com/gandrin/ASharedJourney/supervisor"
 	"fmt"
 	"time"
+	"github.com/gandrin/ASharedJourney/tiles"
 )
 
 type Mechanics struct {
@@ -19,8 +20,10 @@ type Mechanics struct {
 	//location of event that can be trigged on the map
 	eventMap [][]*EventType
 
+	dynamicObject [][]*Object
+
 	//communication channel to animator
-	toAnime chan *Motion
+	toAnime chan *tiles.World
 
 	//communication channel from supervisor
 	fromSuper chan *supervisor.PlayerDirections
@@ -33,12 +36,15 @@ var Mecha *Mechanics
 func Start(fromSup chan *supervisor.PlayerDirections,
 	p1 PlayerManager, p2 PlayerManager,
 	hitmap [][]TileRules,
-	eventmap [][]*EventType) chan *Motion {
+	eventmap [][]*EventType,
+		dynmap [][]*Object) chan *tiles.World{
 	Mecha = new(Mechanics)
-	var toAnim chan *Motion
-	toAnim = make(chan *Motion, 1)
+	var toAnim chan *tiles.World
+	toAnim = make(chan *tiles.World, 1)
 	Mecha.toAnime = toAnim
 	Mecha.fromSuper = fromSup
+	Mecha.dynamicObject = dynmap
+
 
 	//load initial player positions + type
 	Mecha.Player1 = p1

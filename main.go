@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"time"
 
 	"github.com/gandrin/ASharedJourney/shared"
@@ -19,18 +18,16 @@ import (
 
 const frameRate = 60
 
-func updatePlayer(win *pixelgl.Window, sprite *pixel.Sprite, playerDirectionChannel chan *supervisor.PlayerDirections) {
+func updatePlayer(win *pixelgl.Window, sprite *pixel.Sprite, playerDirectionChannel chan *supervisor.PlayerDirections, playerPosition *pixel.Vec) {
 	go func(playerDirection chan *supervisor.PlayerDirections) {
-		playerOldPosition := win.Bounds().Center()
 		for true {
 			newPlayerDirection := <-playerDirection
-			fmt.Println(newPlayerDirection)
 			playerNewPosition := pixel.V(
-				playerOldPosition.X+float64(newPlayerDirection.Player1.X*16),
-				playerOldPosition.Y+float64(newPlayerDirection.Player1.Y*16),
+				playerPosition.X+float64(newPlayerDirection.Player1.X*16),
+				playerPosition.Y+float64(newPlayerDirection.Player1.Y*16),
 			)
-			sprite.Draw(win, pixel.IM.Moved(playerNewPosition))
-			playerOldPosition = playerNewPosition
+			playerPosition.X = playerNewPosition.X
+			playerPosition.Y = playerNewPosition.Y
 		}
 	}(playerDirectionChannel)
 }
@@ -47,16 +44,17 @@ func run() {
 	}
 
 	win.Clear(colornames.White)
+	shared.Win = win
 
-	spritesheet, tilesFrames := tiles.GenerateMap(win)
+	spritesheet, tilesFrames, world := tiles.GenerateMap()
 
 	log.Print("Hello")
 	//sprite := pixel.NewSprite(spritesheet, tilesFrames[203])
 	pixel.NewSprite(spritesheet, tilesFrames[203])
+	sprite := pixel.NewSprite(spritesheet, tilesFrames[203])
 
 	fps := time.Tick(time.Second / frameRate)
 
-	shared.Win = win
 	playerDirectionChannel := supervisor.Start(supervisor.OnePlayer)
 
 	//game mechanics
@@ -86,24 +84,31 @@ func run() {
 		}
 
 	}
-	_ = mechanics.Start(playerDirectionChannel, p1, p2, ruleMap, eventMap)
+	//init object map
+	objMap := make([][]*mechanics.Object, 40)
+	for i := 0; i < 40; i ++ {
+		objMap[i] = make([]*mechanics.Object, 40)
+		for j := 0; j < 40; j ++ {
+			objMap[i][j] = nil // no events set
+		}
 
-	//updatePlayer(win, sprite, playerDirectionChannel)
+	}
+	_ = mechanics.Start(playerDirectionChannel, p1, p2, ruleMap, eventMap, objMap)
 
+	playerNewPosition := world.Players[0].Position
 
-
+	//if you want direction to work comment out this line but lose animations
+	updatePlayer(win, sprite, playerDirectionChannel, &playerNewPosition)
 	for !win.Closed() {
 		supervisor.Sup.Play()
-		mechanics.Mecha.Play()
-
-
+		//mechanics.Mecha.Play()
+		tiles.DrawMap(world.BackgroundTiles)
+		world.Players[0].Sprite.Draw(win, pixel.IM.Moved(playerNewPosition))
 		win.Update()
 		<-fps
 	}
 }
 
 func main() {
-
-	log.Printf("jello")
 	pixelgl.Run(run)
 }
