@@ -18,26 +18,6 @@ import (
 	"github.com/lafriks/go-tiled"
 )
 
-// extractAndPlaceSprites filters out empty tiles and positions them properly on the screen
-func extractAndPlaceSprites(
-	layerTiles []*tiled.LayerTile,
-	spritesheet pixel.Picture,
-	tilesFrames []pixel.Rect,
-	originPosition pixel.Vec,
-) (positionedSprites []SpriteWithPosition) {
-	for index, layerTile := range layerTiles {
-		if !layerTile.IsNil() {
-			sprite := pixel.NewSprite(spritesheet, tilesFrames[layerTile.ID])
-			spritePosition := getSpritePosition(index, originPosition)
-			positionedSprites = append(positionedSprites, SpriteWithPosition{
-				Sprite:   sprite,
-				Position: spritePosition,
-			})
-		}
-	}
-	return positionedSprites
-}
-
 const mapPath = "tiles/tilemap.tmx"   // path to your map
 const tilesPath = "tiles/tileset.png" // path to your tileset
 const tileSize = 16
@@ -94,6 +74,26 @@ func getSpritePosition(spriteIndex int, origin pixel.Vec) pixel.Vec {
 	spriteYPosition := origin.Y + tileSize/2 - float64((spriteIndex/mapWidth)*tileSize)
 
 	return pixel.V(spriteXPosition, spriteYPosition)
+}
+
+// extractAndPlaceSprites filters out empty tiles and positions them properly on the screen
+func extractAndPlaceSprites(
+	layerTiles []*tiled.LayerTile,
+	spritesheet pixel.Picture,
+	tilesFrames []pixel.Rect,
+	originPosition pixel.Vec,
+) (positionedSprites []SpriteWithPosition) {
+	for index, layerTile := range layerTiles {
+		if !layerTile.IsNil() {
+			sprite := pixel.NewSprite(spritesheet, tilesFrames[layerTile.ID])
+			spritePosition := getSpritePosition(index, originPosition)
+			positionedSprites = append(positionedSprites, SpriteWithPosition{
+				Sprite:   sprite,
+				Position: spritePosition,
+			})
+		}
+	}
+	return positionedSprites
 }
 
 // GenerateMap generates the map from a .tmx file
