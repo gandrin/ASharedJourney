@@ -18,7 +18,7 @@ const frameRate = 60
 
 func run() {
 	cfg := pixelgl.WindowConfig{
-		Title:  "Pixel Rocks!",
+		Title:  "A Shared Journey",
 		Bounds: pixel.R(0, 0, 500, 500),
 		VSync:  true,
 	}
