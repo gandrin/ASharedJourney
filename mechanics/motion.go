@@ -43,11 +43,11 @@ func (gm *Mechanics) Move(playDir *supervisor.PlayerDirections) *tiles.World {
 	log.Print("Motion player 1 ", gm.Player1.Pos,"Motion player 2 ", gm.Player2.Pos)
 
 	//update map
-	gm.world.Players[0].Position.X = float64(gm.Player1.Pos.X) * 16
-	gm.world.Players[0].Position.Y = float64(gm.Player1.Pos.Y) * 16
+	gm.world.Players[0].Position.X = float64(gm.Player1.Pos.X) * 32
+	gm.world.Players[0].Position.Y = float64(gm.Player1.Pos.Y) * 32
 	if(len(gm.world.Players)>1){
-		gm.world.Players[1].Position.X = float64(gm.Player2.Pos.X) * 16
-		gm.world.Players[1].Position.X = float64(gm.Player2.Pos.Y) * 16
+		gm.world.Players[1].Position.X = float64(gm.Player2.Pos.X) * 32
+		gm.world.Players[1].Position.X = float64(gm.Player2.Pos.Y) * 32
 	}
 
 
