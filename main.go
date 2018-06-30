@@ -12,7 +12,6 @@ import (
 	"github.com/gandrin/ASharedJourney/tiles"
 	"golang.org/x/image/colornames"
 
-	"log"
 	"github.com/gandrin/ASharedJourney/mechanics"
 )
 
@@ -23,8 +22,8 @@ func updatePlayer(win *pixelgl.Window, sprite *pixel.Sprite, playerDirectionChan
 		for true {
 			newPlayerDirection := <-playerDirection
 			playerNewPosition := pixel.V(
-				playerPosition.X+float64(newPlayerDirection.Player1.X*16),
-				playerPosition.Y+float64(newPlayerDirection.Player1.Y*16),
+				playerPosition.X+float64(newPlayerDirection.Player1.X*32),
+				playerPosition.Y+float64(newPlayerDirection.Player1.Y*32),
 			)
 			playerPosition.X = playerNewPosition.X
 			playerPosition.Y = playerNewPosition.Y
@@ -35,7 +34,7 @@ func updatePlayer(win *pixelgl.Window, sprite *pixel.Sprite, playerDirectionChan
 func run() {
 	cfg := pixelgl.WindowConfig{
 		Title:  "A Shared Journey",
-		Bounds: pixel.R(0, 0, 500, 500),
+		Bounds: pixel.R(0, 0, 800, 800),
 		VSync:  true,
 	}
 	win, err := pixelgl.NewWindow(cfg)
@@ -46,12 +45,7 @@ func run() {
 	win.Clear(colornames.White)
 	shared.Win = win
 
-	spritesheet, tilesFrames, world := tiles.GenerateMap()
-
-	log.Print("Hello")
-	//sprite := pixel.NewSprite(spritesheet, tilesFrames[203])
-	pixel.NewSprite(spritesheet, tilesFrames[203])
-	sprite := pixel.NewSprite(spritesheet, tilesFrames[203])
+	world := tiles.GenerateMap()
 
 	fps := time.Tick(time.Second / frameRate)
 
@@ -68,27 +62,27 @@ func run() {
 	p2.PType = mechanics.BEE
 	//init rules map
 	ruleMap := make([][]mechanics.TileRules, 40)
-	for i := 0; i < 40; i ++ {
+	for i := 0; i < 40; i++ {
 		ruleMap[i] = make([]mechanics.TileRules, 40)
-		for j := 0; j < 40; j ++ {
+		for j := 0; j < 40; j++ {
 			ruleMap[i][j] = 0
 		}
 
 	}
 	//init event map
 	eventMap := make([][]*mechanics.EventType, 40)
-	for i := 0; i < 40; i ++ {
+	for i := 0; i < 40; i++ {
 		eventMap[i] = make([]*mechanics.EventType, 40)
-		for j := 0; j < 40; j ++ {
+		for j := 0; j < 40; j++ {
 			eventMap[i][j] = nil // no events set
 		}
 
 	}
 	//init object map
 	objMap := make([][]*mechanics.Object, 40)
-	for i := 0; i < 40; i ++ {
+	for i := 0; i < 40; i++ {
 		objMap[i] = make([]*mechanics.Object, 40)
-		for j := 0; j < 40; j ++ {
+		for j := 0; j < 40; j++ {
 			objMap[i][j] = nil // no events set
 		}
 
@@ -98,7 +92,7 @@ func run() {
 	playerNewPosition := world.Players[0].Position
 
 	//if you want direction to work comment out this line but lose animations
-	updatePlayer(win, sprite, playerDirectionChannel, &playerNewPosition)
+	updatePlayer(win, world.Players[0].Sprite, playerDirectionChannel, &playerNewPosition)
 	for !win.Closed() {
 		supervisor.Sup.Play()
 		//mechanics.Mecha.Play()
