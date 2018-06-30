@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"time"
 
 	"github.com/gandrin/ASharedJourney/shared"
@@ -12,8 +11,6 @@ import (
 	"github.com/faiface/pixel/pixelgl"
 	"github.com/gandrin/ASharedJourney/tiles"
 	"golang.org/x/image/colornames"
-
-	"log"
 )
 
 const frameRate = 60
@@ -23,7 +20,6 @@ func updatePlayer(win *pixelgl.Window, sprite *pixel.Sprite, playerDirectionChan
 		playerOldPosition := win.Bounds().Center()
 		for true {
 			newPlayerDirection := <-playerDirection
-			fmt.Println(newPlayerDirection)
 			playerNewPosition := pixel.V(
 				playerOldPosition.X+float64(newPlayerDirection.Player1.X*16),
 				playerOldPosition.Y+float64(newPlayerDirection.Player1.Y*16),
@@ -50,7 +46,6 @@ func run() {
 
 	spritesheet, tilesFrames, positionedSprites := tiles.GenerateMap()
 
-	log.Print("Hello")
 	sprite := pixel.NewSprite(spritesheet, tilesFrames[203])
 
 	fps := time.Tick(time.Second / frameRate)
@@ -67,6 +62,5 @@ func run() {
 }
 
 func main() {
-	log.Printf("jello")
 	pixelgl.Run(run)
 }
