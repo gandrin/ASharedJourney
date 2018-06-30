@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" tiledversion="1.1.5" orientation="orthogonal" renderorder="right-down" width="30" height="30" tilewidth="16" tileheight="16" infinite="0" nextobjectid="1">
  <tileset firstgid="1" name="tileset" tilewidth="16" tileheight="16" tilecount="280" columns="10">
-  <image source="../../../ASharedJourney/tile/tileset.png" width="160" height="448"/>
+  <image source="tileset.png" width="160" height="448"/>
  </tileset>
  <layer name="Calque de Tile 1" width="30" height="30">
   <data encoding="csv">
