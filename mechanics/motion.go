@@ -7,8 +7,8 @@ import (
 )
 
 func (gm *Mechanics) handlePlayerWon(nextPos1 pixel.Vec) {
-	for _, val := range gm.world.WinStars {
-		if val.Position.X == nextPos1.X && val.Position.Y == nextPos1.Y {
+	for _, winStartTile := range gm.world.WinStars {
+		if winStartTile.Position.X == nextPos1.X && winStartTile.Position.Y == nextPos1.Y {
 			gm.world.Players[0].HasWon = true
 		}
 	}
@@ -61,26 +61,26 @@ func (gm *Mechanics) movePlayer(player *tiles.SpriteWithPosition, getNextPositio
 			if mov.Position.X == nextPlayerPosition.X && mov.Position.Y == nextPlayerPosition.Y {
 				// There's a movable in that position
 				auxPos := getNextPosition(nextPlayerPosition)
-				for _, val := range gm.world.Obstacles {
-					if val.Position.X == auxPos.X && val.Position.Y == auxPos.Y {
+				for _, obstacleTile := range gm.world.Obstacles {
+					if obstacleTile.Position.X == auxPos.X && obstacleTile.Position.Y == auxPos.Y {
 						canPlayerMove = false
 					}
 				}
-				for _, val := range gm.world.Movables {
-					if val.Position.X == auxPos.X && val.Position.Y == auxPos.Y {
+				for _, obstacleTile := range gm.world.Movables {
+					if obstacleTile.Position.X == auxPos.X && obstacleTile.Position.Y == auxPos.Y {
 						canPlayerMove = false
 					}
 				}
-				for _, val := range gm.world.WinStars {
-					if val.Position.X == auxPos.X && val.Position.Y == auxPos.Y {
+				for _, winStarTile := range gm.world.WinStars {
+					if winStarTile.Position.X == auxPos.X && winStarTile.Position.Y == auxPos.Y {
 						gm.world.Players[0].HasWon = true
 					}
 				}
 				if canPlayerMove {
 					gm.world.Movables[n].Position = auxPos
 				}
-				for h, val := range gm.world.Holes {
-					if val.Position.X == auxPos.X && val.Position.Y == auxPos.Y {
+				for h, holeTile := range gm.world.Holes {
+					if holeTile.Position.X == auxPos.X && holeTile.Position.Y == auxPos.Y {
 						// remove both obj (hole and movable)
 						gm.world.Movables[n].Position.X = -100
 						gm.world.Holes[h].Position.X = -100
@@ -94,15 +94,15 @@ func (gm *Mechanics) movePlayer(player *tiles.SpriteWithPosition, getNextPositio
 		player.Position = nextPlayerPosition
 
 		// Water
-		for _, val := range gm.world.Water {
-			if val.Position.X == nextPlayerPosition.X && val.Position.Y == nextPlayerPosition.Y {
+		for _, waterTile := range gm.world.Water {
+			if waterTile.Position.X == nextPlayerPosition.X && waterTile.Position.Y == nextPlayerPosition.Y {
 				player.InTheWater = true
 			}
 		}
 
 		// Hole
-		for _, val := range gm.world.Holes {
-			if val.Position.X == nextPlayerPosition.X && val.Position.Y == nextPlayerPosition.Y {
+		for _, holeTile := range gm.world.Holes {
+			if holeTile.Position.X == nextPlayerPosition.X && holeTile.Position.Y == nextPlayerPosition.Y {
 				player.InTheHole = true
 			}
 		}
