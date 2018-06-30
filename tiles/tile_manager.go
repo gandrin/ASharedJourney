@@ -21,9 +21,9 @@ import (
 
 const mapPath = "tiles/thePig.tmx"   // path to your map
 const tilesPath = "tiles/forest.png" // path to your tileset
-const tileSize = 32
-const mapWidth = 18
-const mapHeight = 20
+var tileSize = 32
+var mapWidth = 18
+var mapHeight = 20
 
 type World struct {
 	BackgroundTiles []SpriteWithPosition
@@ -127,6 +127,10 @@ func GenerateMap() World {
 	if err != nil {
 		panic(err)
 	}
+
+	tileSize = gameMap.TileWidth
+	mapWidth = gameMap.Width
+	mapHeight = gameMap.Height
 
 	tilesFrames := getTilesFrames(spritesheet)
 
