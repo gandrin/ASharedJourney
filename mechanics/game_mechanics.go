@@ -57,7 +57,6 @@ func (motion *Mechanics) muxChannel() *supervisor.PlayerDirections {
 	select {
 	case motion, ok := <-motion.playerDirectionsFromSupervisor:
 		if ok {
-			fmt.Printf("Motion was read.")
 			nextMotion = motion
 		} else {
 			fmt.Println("Channel closed!")
