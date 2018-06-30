@@ -11,6 +11,7 @@ type Direction struct {
 	Y int
 }
 
+//get the key values that was pressed
 func key() Direction {
 	var newDir Direction = Direction{
 		X: 0,

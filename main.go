@@ -11,7 +11,8 @@ import (
 	"github.com/faiface/pixel"
 	"github.com/faiface/pixel/pixelgl"
 	"golang.org/x/image/colornames"
-	"github.com/ASharedJourney/tiles"
+	"github.com/gandrin/ASharedJourney/tiles"
+	"log"
 )
 
 const frameRate = 60
@@ -31,6 +32,7 @@ func run() {
 
 	spritesheet, tilesFrames := tiles.GenerateMap(win)
 
+	log.Print("Hello")
 	sprite := pixel.NewSprite(spritesheet, tilesFrames[203])
 	sprite.Draw(win, pixel.IM.Moved(win.Bounds().Center()))
 
@@ -53,5 +55,6 @@ func run() {
 }
 
 func main() {
+	log.Printf("jello")
 	pixelgl.Run(run)
 }

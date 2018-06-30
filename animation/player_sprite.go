@@ -1,6 +1,6 @@
 package animation
 
-import "github.com/ASharedJourney/mechanics"
+import "github.com/gandrin/ASharedJourney/mechanics"
 
 type playerSprite struct {
 	//some stuff

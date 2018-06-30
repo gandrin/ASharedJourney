@@ -1,9 +1,9 @@
 package animation
 
 import (
-	"github.com/ASharedJourney/shared"
+	"github.com/gandrin/ASharedJourney/shared"
 	"github.com/faiface/pixel"
-	"github.com/ASharedJourney/mechanics"
+	"github.com/gandrin/ASharedJourney/mechanics"
 	"log"
 )
 

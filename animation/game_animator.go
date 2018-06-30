@@ -2,8 +2,8 @@
 package animation
 
 import (
-	"github.com/ASharedJourney/mechanics"
-	"github.com/ASharedJourney/shared"
+	"github.com/gandrin/ASharedJourney/mechanics"
+	"github.com/gandrin/ASharedJourney/shared"
 	"fmt"
 	"log"
 	"time"

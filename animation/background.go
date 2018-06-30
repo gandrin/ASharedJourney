@@ -1,7 +1,7 @@
 package animation
 
 import (
-	"github.com/ASharedJourney/shared"
+	"github.com/gandrin/ASharedJourney/shared"
 	"log"
 )
 
