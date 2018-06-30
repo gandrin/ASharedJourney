@@ -112,6 +112,7 @@ func GenerateMap() (pixel.Picture, []pixel.Rect, World) {
 	}
 
 	// TODO iterate over objects to look for "player" object
+	// TODO make sure the given input is a multiple of tileSize
 	playerTiledObject := gameMap.ObjectGroups[0].Objects[0]
 	player1X := playerTiledObject.X + tileSize/2
 	player1Y := playerTiledObject.Y + tileSize/2
