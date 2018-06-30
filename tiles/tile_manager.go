@@ -155,6 +155,9 @@ func GenerateMap(levelFileName string) World {
 		panic(err)
 	}
 	waterLayerIndex, err := findLayerIndex("water", gameMap.Layers)
+	if err != nil {
+		panic(err)
+	}
 	winStarsLayerIndex, err := findLayerIndex("win", gameMap.Layers)
 	if err != nil {
 		panic(err)
