@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" tiledversion="1.1.5" orientation="orthogonal" renderorder="right-down" width="17" height="17" tilewidth="32" tileheight="32" infinite="0" nextobjectid="1">
  <tileset firstgid="1" source="forest.tsx"/>
- <tileset firstgid="76" name="tileset" tilewidth="16" tileheight="16" tilecount="0" columns="10">
-  <image source="../../../../ASharedJourney/tiles/tileset.png" width="160" height="448"/>
- </tileset>
  <layer name="background" width="17" height="17">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
