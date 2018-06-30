@@ -1,6 +1,9 @@
 package supervisor
 
-import "log"
+import (
+	"log"
+	"github.com/ASharedJourney/shared"
+)
 
 //call motion
 func (mode GameMode)Move() *PlayerDirections{
@@ -22,4 +25,11 @@ func (dir * PlayerDirections) mirror(){
 	if dir.Player1.Y!= 0{
 		dir.Player2.Y = dir.Player1.Y*(-1)
 	}
+}
+
+//calculate next position based on direction
+func (dir Direction)Next(currentPos shared.Position) shared.Position{
+	currentPos.X += dir.X
+	currentPos.Y += dir.Y
+	return currentPos
 }

@@ -28,7 +28,7 @@ func Start(gm GameMode) chan *PlayerDirections{
 //launch game supervisor ( should be lauched last
 func (g * GameSupervisor) Play() {
 	for play := true; play; play = shared.Continue() {
-		time.Sleep(FrameDelay_ms* time.Millisecond)
+		time.Sleep(shared.FrameDelay_ms* time.Millisecond)
 		g.DirectionChannel <- g.Mode.Move()
 	}
 }
