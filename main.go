@@ -15,6 +15,13 @@ import (
 	"github.com/gandrin/ASharedJourney/shared"
 )
 
+const (
+	AMAZEING_LEVEL       string = "amazeing"
+	FOREST_LEVEL         string = "forest"
+	MY_LITTLE_PONY_LEVEL string = "myLittlePony"
+	THE_LITTLE_PIG_LEVEL string = "theLittlePig"
+)
+
 const frameRate = 60
 
 func run() {
@@ -32,7 +39,7 @@ func run() {
 
 	menu.Menu()
 
-	world := tiles.GenerateMap()
+	world := tiles.GenerateMap(AMAZEING_LEVEL)
 
 	fps := time.Tick(time.Second / frameRate)
 
@@ -41,22 +48,23 @@ func run() {
 	newWorldChannel := mechanics.Start(playerDirectionChannel, world)
 
 	for !win.Closed() {
-		win.Clear(colornames.White)
+		win.Clear(colornames.Black)
 		supervisor.Sup.Play()
 		mechanics.Mecha.Play()
-		tiles.DrawMap(world.BackgroundTiles)
-		tiles.DrawMap(world.Obstacles)
-		tiles.DrawMap(world.Movables)
-		tiles.DrawMap(world.Water)
-		channelOutput := <-newWorldChannel
-		channelOutput.Players[0].Sprite.Draw(win, pixel.IM.Moved(channelOutput.Players[0].Position))
+		upToDateWorld := <-newWorldChannel
+		tiles.DrawMap(upToDateWorld.BackgroundTiles)
+		tiles.DrawMap(upToDateWorld.Obstacles)
+		tiles.DrawMap(upToDateWorld.WinStars)
+		tiles.DrawMap(upToDateWorld.Water)
+		tiles.DrawMap(upToDateWorld.Movables)
+		tiles.DrawMap(upToDateWorld.Players)
+		tiles.DrawMap(upToDateWorld.Holes)
 		win.Update()
 		<-fps
 	}
 }
 
 func main() {
-
 
 	pixelgl.Run(run)
 }

@@ -2,88 +2,112 @@ package mechanics
 
 import (
 	"github.com/faiface/pixel"
-	"github.com/gandrin/ASharedJourney/shared"
 	"github.com/gandrin/ASharedJourney/supervisor"
 	"github.com/gandrin/ASharedJourney/tiles"
 )
+
+func (gm *Mechanics) handlePlayerWon(nextPos1 pixel.Vec) {
+	for _, winStartTile := range gm.world.WinStars {
+		if winStartTile.Position.X == nextPos1.X && winStartTile.Position.Y == nextPos1.Y {
+			gm.world.Players[0].HasWon = true
+		}
+	}
+}
 
 //move function recives as input the data from a player direction channel
 func (gm *Mechanics) Move(playDir *supervisor.PlayerDirections) *tiles.World {
 	//log.Printf("Move called")
 
-	var nextPos1 pixel.Vec //next position for player 1 with current direction
-	var auxPos pixel.Vec
-
-	var canPlayer1Move bool = true
-	//Player 1
-	//check next position based on motions
-
-	nextPos1 = playDir.Player1.Next(gm.world.Players[0].Position)
-
-	// Obstacles
-	for _, val := range gm.world.Obstacles {
-		if val.Position.X == nextPos1.X && val.Position.Y == nextPos1.Y {
-			canPlayer1Move = false
-		}
+	if gm.world.Players[0].HasWon {
+		gm.world = tiles.GenerateMap("forest") // TODO next level
 	}
 
-	// Movables
-	if canPlayer1Move {
-		for n, val := range gm.world.Movables {
-			if val.Position.X == nextPos1.X && val.Position.Y == nextPos1.Y {
-				// There's a mouvable in that position
-
-				auxPos = playDir.Player1.Next(nextPos1)
-				for _, val := range gm.world.Obstacles {
-					if val.Position.X == auxPos.X && val.Position.Y == auxPos.Y {
-						canPlayer1Move = false
-					}
-				}
-				for _, val := range gm.world.Movables {
-					if val.Position.X == auxPos.X && val.Position.Y == auxPos.Y {
-						canPlayer1Move = false
-					}
-				}
-				//
-				if canPlayer1Move {
-					gm.world.Movables[n].Position = auxPos
-				}
-			}
-		}
+	if gm.world.Players[0].InTheWater && gm.world.Players[1].InTheWater {
+		gm.world = tiles.GenerateMap("forest") // TODO same game RESTART
 	}
-
-	if canPlayer1Move {
-		gm.world.Players[0].Position = nextPos1
+	if playDir.Player1.X != 0 || playDir.Player1.Y != 0 {
+		gm.movePlayer(&gm.world.Players[0], playDir.Player1.Next)
+		gm.movePlayer(&gm.world.Players[1], playDir.Player2.Next)
 	}
 
 	return gm.copyToNewWorld()
 }
 
-//move player if hitmap permits
-func (gm *Mechanics) move_player(ptype PlayerType, nextPos shared.Position) bool {
-	//log.Print("Moving player ", nextPos , " legth of hitmap ",len(gm.hitMap),":",len(gm.hitMap[0]))
-	//check if can move
-	var hitVal = gm.hitMap[nextPos.X][nextPos.Y]
-	//log.Printf("hit values ", hitVal)
-	if ptype.can_walk(hitVal) {
-		//can move according to hit map
-		return true
-	}
-	return true
-}
+func (gm *Mechanics) movePlayer(player *tiles.SpriteWithPosition, getNextPosition func(pixel.Vec) pixel.Vec) {
+	var canPlayerMove = true
+	nextPlayerPosition := getNextPosition(player.Position)
 
-//check if player has triggered an event
-func (gm *Mechanics) check_player_event(ptype PlayerType, nextPos shared.Position, playerMotion *playerMechanics) *Event {
-	var nEvent *Event
-	var eventType *EventType
-	//check if we have triggered an event
-	eventType = gm.eventMap[nextPos.X][nextPos.Y]
-	if eventType != nil {
-		//potencially have an event
-		//check if our player can trigger it
-		nEvent = ptype.trigger_event(eventType) // + dir +
+	// In the water
+	if player.InTheWater {
+		return
 	}
-	return nEvent
+
+	/// In the hole
+	if player.InTheHole {
+		player.InTheHole = false
+		return
+	}
+
+	// Obstacles
+	for _, obstacle := range gm.world.Obstacles {
+		if obstacle.Position.X == nextPlayerPosition.X && obstacle.Position.Y == nextPlayerPosition.Y {
+			canPlayerMove = false
+		}
+	}
+
+	// Movables
+	if canPlayerMove {
+		for n, mov := range gm.world.Movables {
+			if mov.Position.X == nextPlayerPosition.X && mov.Position.Y == nextPlayerPosition.Y {
+				// There's a movable in that position
+				auxPos := getNextPosition(nextPlayerPosition)
+				for _, obstacleTile := range gm.world.Obstacles {
+					if obstacleTile.Position.X == auxPos.X && obstacleTile.Position.Y == auxPos.Y {
+						canPlayerMove = false
+					}
+				}
+				for _, obstacleTile := range gm.world.Movables {
+					if obstacleTile.Position.X == auxPos.X && obstacleTile.Position.Y == auxPos.Y {
+						canPlayerMove = false
+					}
+				}
+				for _, winStarTile := range gm.world.WinStars {
+					if winStarTile.Position.X == auxPos.X && winStarTile.Position.Y == auxPos.Y {
+						gm.world.Players[0].HasWon = true
+					}
+				}
+				if canPlayerMove {
+					gm.world.Movables[n].Position = auxPos
+				}
+				for h, holeTile := range gm.world.Holes {
+					if holeTile.Position.X == auxPos.X && holeTile.Position.Y == auxPos.Y {
+						// remove both obj (hole and movable)
+						gm.world.Movables[n].Position.X = -100
+						gm.world.Holes[h].Position.X = -100
+					}
+				}
+			}
+		}
+	}
+
+	if canPlayerMove {
+		player.Position = nextPlayerPosition
+
+		// Water
+		for _, waterTile := range gm.world.Water {
+			if waterTile.Position.X == nextPlayerPosition.X && waterTile.Position.Y == nextPlayerPosition.Y {
+				player.InTheWater = true
+			}
+		}
+
+		// Hole
+		for _, holeTile := range gm.world.Holes {
+			if holeTile.Position.X == nextPlayerPosition.X && holeTile.Position.Y == nextPlayerPosition.Y {
+				player.InTheHole = true
+			}
+		}
+		gm.handlePlayerWon(player.Position)
+	}
 }
 
 func (gm *Mechanics) copyToNewWorld() *tiles.World {
@@ -96,10 +120,16 @@ func (gm *Mechanics) copyToNewWorld() *tiles.World {
 	newWorld.BackgroundTiles = make([]tiles.SpriteWithPosition, len(gm.world.BackgroundTiles))
 	newWorld.Movables = make([]tiles.SpriteWithPosition, len(gm.world.Movables))
 	newWorld.Players = make([]tiles.SpriteWithPosition, len(gm.world.Players))
+	newWorld.Obstacles = make([]tiles.SpriteWithPosition, len(gm.world.Obstacles))
+	newWorld.Water = make([]tiles.SpriteWithPosition, len(gm.world.Water))
+	newWorld.Holes = make([]tiles.SpriteWithPosition, len(gm.world.Holes))
+	newWorld.WinStars = make([]tiles.SpriteWithPosition, len(gm.world.WinStars))
 	copy(newWorld.BackgroundTiles, gm.world.BackgroundTiles)
 	copy(newWorld.Movables, gm.world.Movables)
 	copy(newWorld.Players, gm.world.Players)
+	copy(newWorld.WinStars, gm.world.WinStars)
 	copy(newWorld.Water, gm.world.Water)
-
+	copy(newWorld.Obstacles, gm.world.Obstacles)
+	copy(newWorld.Holes, gm.world.Holes)
 	return newWorld
 }

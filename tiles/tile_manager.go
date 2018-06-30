@@ -2,7 +2,6 @@ package tiles
 
 import (
 	"errors"
-	"fmt"
 	"image"
 	"os"
 
@@ -11,16 +10,15 @@ import (
 	_ "image/png"
 
 	"log"
-	"path"
-	"runtime"
+
+	"fmt"
 
 	"github.com/faiface/pixel"
 	"github.com/faiface/pixel/pixelgl"
 	"github.com/lafriks/go-tiled"
 )
 
-const mapPath = "tiles/forest.tmx" // path to your map
-const tilesPath = "tiles/map.png"  // path to your tileset
+const tilesPath = "/tiles/map.png" // path to your tileset
 var TileSize int = 32
 var mapWidth int
 var mapHeight int
@@ -31,12 +29,17 @@ type World struct {
 	Movables        []SpriteWithPosition
 	Obstacles       []SpriteWithPosition
 	Water           []SpriteWithPosition
+	Holes           []SpriteWithPosition
+	WinStars        []SpriteWithPosition
 }
 
 //SpriteWithPosition holds the sprite and its position into the window
 type SpriteWithPosition struct {
-	Sprite   *pixel.Sprite
-	Position pixel.Vec
+	Sprite     *pixel.Sprite
+	Position   pixel.Vec
+	InTheWater bool
+	InTheHole  bool
+	HasWon     bool
 }
 
 // loadPicture load the picture
@@ -109,24 +112,22 @@ func findLayerIndex(layerName string, layers []*tiled.Layer) (layerIndex int, er
 }
 
 // GenerateMap generates the map from a .tmx file
-func GenerateMap() World {
-	//get path to file from current programme root
-	_, filename, _, ok := runtime.Caller(1)
-	if !ok {
+func GenerateMap(levelFileName string) World {
+	//added support for relative file addressing
+	rootDirectory, err := os.Getwd()
+	if err != nil {
 		log.Fatal("error loading called")
 	}
-	filemap := path.Join(path.Dir(filename), mapPath)
-	filetile := path.Join(path.Dir(filename), tilesPath)
-
+	filemap := rootDirectory + "/tiles/" + levelFileName + ".tmx"
+	filetile := rootDirectory + tilesPath
 	gameMap, err := tiled.LoadFromFile(filemap)
-	mapWidth = gameMap.Width
-	mapHeight = gameMap.Height
-
 	if err != nil {
 		log.Fatal(err)
 		fmt.Println("Error parsing map")
 		os.Exit(2)
 	}
+	mapWidth = gameMap.Width
+	mapHeight = gameMap.Height
 
 	spritesheet, err := loadPicture(filetile)
 	if err != nil {
@@ -154,6 +155,11 @@ func GenerateMap() World {
 		panic(err)
 	}
 	waterLayerIndex, err := findLayerIndex("water", gameMap.Layers)
+	winStarsLayerIndex, err := findLayerIndex("win", gameMap.Layers)
+	if err != nil {
+		panic(err)
+	}
+	holesLayerIndex, err := findLayerIndex("holes", gameMap.Layers)
 	if err != nil {
 		panic(err)
 	}
@@ -166,6 +172,11 @@ func GenerateMap() World {
 	obstacles := extractAndPlaceSprites(gameMap.Layers[obstaclesLayerIndex].Tiles, spritesheet, tilesFrames, originPosition)
 	movables := extractAndPlaceSprites(gameMap.Layers[movablesLayerIndex].Tiles, spritesheet, tilesFrames, originPosition)
 	water := extractAndPlaceSprites(gameMap.Layers[waterLayerIndex].Tiles, spritesheet, tilesFrames, originPosition)
+	holes := extractAndPlaceSprites(gameMap.Layers[holesLayerIndex].Tiles, spritesheet, tilesFrames, originPosition)
+	winStars := extractAndPlaceSprites(gameMap.Layers[winStarsLayerIndex].Tiles, spritesheet, tilesFrames, originPosition)
+	if len(winStars) == 0 {
+		panic(errors.New("no win star tile was placed"))
+	}
 
 	world := World{
 		BackgroundTiles: backgroundSprite,
@@ -173,6 +184,8 @@ func GenerateMap() World {
 		Movables:        movables,
 		Obstacles:       obstacles,
 		Water:           water,
+		Holes:           holes,
+		WinStars:        winStars,
 	}
 	return world
 }
