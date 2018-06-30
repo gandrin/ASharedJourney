@@ -114,8 +114,11 @@ func GenerateMap() (pixel.Picture, []pixel.Rect, World) {
 	// TODO iterate over objects to look for "player" object
 	// TODO make sure the given input is a multiple of tileSize
 	playerTiledObject := gameMap.ObjectGroups[0].Objects[0]
-	player1X := playerTiledObject.X + tileSize/2
-	player1Y := playerTiledObject.Y + tileSize/2
+	player1X := playerTiledObject.X + int(originPosition.X)
+	player1Y := -playerTiledObject.Y + int(originPosition.Y)
+
+	fmt.Println(player1X)
+	fmt.Println(player1Y)
 
 	player1 := SpriteWithPosition{Sprite: pixel.NewSprite(spritesheet, tilesFrames[203]), Position: pixel.V(float64(player1X), float64(player1Y))}
 	var players [1]SpriteWithPosition
