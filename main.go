@@ -1,7 +1,12 @@
 package main
 
 import (
+	"fmt"
 	"time"
+
+	"github.com/gandrin/ASharedJourney/shared"
+
+	"github.com/gandrin/ASharedJourney/supervisor"
 
 	"github.com/faiface/pixel"
 	"github.com/faiface/pixel/pixelgl"
@@ -31,7 +36,17 @@ func run() {
 
 	fps := time.Tick(time.Second / frameRate)
 
+	shared.Win = win
+	playerDirectionChannel := supervisor.Start(supervisor.OnePlayer)
+	go func(playerDirection chan *supervisor.PlayerDirections) {
+		for true {
+			newPlayerDirection := <-playerDirection
+			fmt.Println(newPlayerDirection.Player1)
+		}
+	}(playerDirectionChannel)
+
 	for !win.Closed() {
+		supervisor.Sup.Play()
 		win.Update()
 		<-fps
 	}
