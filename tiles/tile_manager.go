@@ -14,7 +14,7 @@ import (
 
 const mapPath = "tiles/tilemap.tmx" // path to your map
 const tileSize = 16
-const mapWidth = 32
+const mapWidth = 30
 
 // LoadPicture load the picture
 func LoadPicture(path string) (pixel.Picture, error) {
@@ -49,7 +49,7 @@ func GenerateMap(win *pixelgl.Window) {
 
 	for index, layerTile := range gameMap.Layers[0].Tiles {
 		sprite := pixel.NewSprite(spritesheet, tilesFrames[layerTile.ID])
-		spritePosition := pixel.V(float64((index%mapWidth*tileSize)+tileSize/2), 0+tileSize/2)
+		spritePosition := pixel.V(float64(((index%mapWidth)*tileSize)+tileSize/2), float64(index/mapWidth)*tileSize+float64(tileSize/2))
 		sprite.Draw(win, pixel.IM.Moved(spritePosition))
 	}
 
