@@ -55,7 +55,7 @@ func loadPicture(path string) (pixel.Picture, error) {
 func getTilesFrames(spritesheet pixel.Picture) []pixel.Rect {
 	var tilesFrames []pixel.Rect
 	fmt.Println(spritesheet.Bounds())
-	for y := spritesheet.Bounds().Max.Y - tileSize; y > spritesheet.Bounds().Min.Y; y -= tileSize {
+	for y := spritesheet.Bounds().Max.Y - tileSize; y > spritesheet.Bounds().Min.Y-tileSize; y -= tileSize {
 		for x := spritesheet.Bounds().Min.X; x < spritesheet.Bounds().Max.X; x += tileSize {
 			tilesFrames = append(tilesFrames, pixel.R(x, y, x+tileSize, y+tileSize))
 		}
@@ -153,14 +153,20 @@ func GenerateMap() World {
 	if err != nil {
 		panic(err)
 	}
+	movablesLayerIndex, err := findLayerIndex("movables", gameMap.Layers)
+	if err != nil {
+		panic(err)
+	}
 
 	backgroundSprite := extractAndPlaceSprites(gameMap.Layers[backgroundLayerIndex].Tiles, spritesheet, tilesFrames, originPosition)
 	players := extractAndPlaceSprites(gameMap.Layers[playersLayerIndex].Tiles, spritesheet, tilesFrames, originPosition)
 	obstacles := extractAndPlaceSprites(gameMap.Layers[obstaclesLayerIndex].Tiles, spritesheet, tilesFrames, originPosition)
+	movables := extractAndPlaceSprites(gameMap.Layers[movablesLayerIndex].Tiles, spritesheet, tilesFrames, originPosition)
 
 	world := World{
 		BackgroundTiles: backgroundSprite,
 		Players:         players,
+		Movables:        movables,
 		Obstacles:       obstacles,
 	}
 	return world

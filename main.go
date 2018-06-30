@@ -79,6 +79,8 @@ func run() {
 		supervisor.Sup.Play()
 		mechanics.Mecha.Play()
 		tiles.DrawMap(world.BackgroundTiles)
+		tiles.DrawMap(world.Obstacles)
+		tiles.DrawMap(world.Movables)
 		channelOutput := <-newWorldChannel
 		channelOutput.Players[0].Sprite.Draw(win, pixel.IM.Moved(channelOutput.Players[0].Position))
 		win.Update()
