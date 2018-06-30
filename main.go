@@ -45,6 +45,7 @@ func run() {
 		tiles.DrawMap(world.BackgroundTiles)
 		tiles.DrawMap(world.Obstacles)
 		tiles.DrawMap(world.Movables)
+		tiles.DrawMap(world.Water)
 		channelOutput := <-newWorldChannel
 		channelOutput.Players[0].Sprite.Draw(win, pixel.IM.Moved(channelOutput.Players[0].Position))
 		win.Update()

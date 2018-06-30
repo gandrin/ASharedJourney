@@ -19,8 +19,8 @@ import (
 	"github.com/lafriks/go-tiled"
 )
 
-const mapPath = "tiles/theLittlePig.tmx" // path to your map
-const tilesPath = "tiles/map.png"        // path to your tileset
+const mapPath = "tiles/forest.tmx" // path to your map
+const tilesPath = "tiles/map.png"  // path to your tileset
 var TileSize int = 32
 var mapWidth int
 var mapHeight int
@@ -30,6 +30,7 @@ type World struct {
 	Players         []SpriteWithPosition
 	Movables        []SpriteWithPosition
 	Obstacles       []SpriteWithPosition
+	Water           []SpriteWithPosition
 }
 
 //SpriteWithPosition holds the sprite and its position into the window
@@ -152,17 +153,23 @@ func GenerateMap() World {
 	if err != nil {
 		panic(err)
 	}
+	waterLayerIndex, err := findLayerIndex("water", gameMap.Layers)
+	if err != nil {
+		panic(err)
+	}
 
 	backgroundSprite := extractAndPlaceSprites(gameMap.Layers[backgroundLayerIndex].Tiles, spritesheet, tilesFrames, originPosition)
 	players := extractAndPlaceSprites(gameMap.Layers[playersLayerIndex].Tiles, spritesheet, tilesFrames, originPosition)
 	obstacles := extractAndPlaceSprites(gameMap.Layers[obstaclesLayerIndex].Tiles, spritesheet, tilesFrames, originPosition)
 	movables := extractAndPlaceSprites(gameMap.Layers[movablesLayerIndex].Tiles, spritesheet, tilesFrames, originPosition)
+	water := extractAndPlaceSprites(gameMap.Layers[waterLayerIndex].Tiles, spritesheet, tilesFrames, originPosition)
 
 	world := World{
 		BackgroundTiles: backgroundSprite,
 		Players:         players,
 		Movables:        movables,
 		Obstacles:       obstacles,
+		Water:           water,
 	}
 	return world
 }
