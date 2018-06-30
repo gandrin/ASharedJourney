@@ -18,6 +18,20 @@ import (
 	"github.com/lafriks/go-tiled"
 )
 
+// Level names
+const (
+	amazeingLevel     string = "amazeing"
+	forestLevel       string = "forest"
+	myLittlePonyLevel string = "myLittlePony"
+	theLittlePigLevel string = "theLittlePig"
+)
+
+// CurrentLevel played
+var CurrentLevel = -1
+
+// Levels list
+var Levels = [...]string{amazeingLevel, forestLevel, myLittlePonyLevel, theLittlePigLevel}
+
 const tilesPath = "/tiles/map.png" // path to your tileset
 var TileSize int = 32
 var mapWidth int
@@ -109,6 +123,17 @@ func findLayerIndex(layerName string, layers []*tiled.Layer) (layerIndex int, er
 		}
 	}
 	return -1, errors.New("Expected to find layer with name " + layerName)
+}
+
+// NextLevel goes to next level
+func NextLevel() World {
+	CurrentLevel = (CurrentLevel + 1) % len(Levels)
+	return GenerateMap(Levels[CurrentLevel])
+}
+
+// RestartLevel reinitializes the current level
+func RestartLevel() World {
+	return GenerateMap(Levels[CurrentLevel])
 }
 
 // GenerateMap generates the map from a .tmx file
