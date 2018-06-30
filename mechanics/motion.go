@@ -2,8 +2,9 @@ package mechanics
 
 import (
 	"log"
-	"github.com/ASharedJourney/shared"
-	"github.com/ASharedJourney/supervisor"
+
+	"github.com/gandrin/ASharedJourney/shared"
+	"github.com/gandrin/ASharedJourney/supervisor"
 )
 
 //structure that will be passes on to animator
@@ -30,7 +31,6 @@ func (gm *Mechanics) Move(playDir *supervisor.PlayerDirections) *Motion {
 
 	log.Print("Player old positions , p1 ", newMotion.Player1.OldPos, " p2 ",
 		newMotion.Player2.OldPos)
-
 
 	//Player 1
 	//check next position based on motions
