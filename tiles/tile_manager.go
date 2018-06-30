@@ -19,8 +19,8 @@ import (
 	"github.com/lafriks/go-tiled"
 )
 
-const mapPath = "tiles/theLittlePig.tmx" // path to your map
-const tilesPath = "tiles/map.png"        // path to your tileset
+const mapPath = "tiles/forest.tmx" // path to your map
+const tilesPath = "tiles/map.png"  // path to your tileset
 var TileSize int = 32
 var mapWidth int
 var mapHeight int
