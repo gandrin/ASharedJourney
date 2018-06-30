@@ -1,6 +1,7 @@
 package tiles
 
 import (
+	"errors"
 	"fmt"
 	"image"
 	"os"
@@ -96,6 +97,15 @@ func extractAndPlaceSprites(
 	return positionedSprites
 }
 
+func findLayerIndex(layerName string, layers []*tiled.Layer) (layerIndex int, err error) {
+	for index, layer := range layers {
+		if layer.Name == layerName {
+			return index, nil
+		}
+	}
+	return -1, errors.New("Expected to find layer with name " + layerName)
+}
+
 // GenerateMap generates the map from a .tmx file
 func GenerateMap() (pixel.Picture, []pixel.Rect, World) {
 	//get path to file from current programme root
@@ -122,13 +132,22 @@ func GenerateMap() (pixel.Picture, []pixel.Rect, World) {
 
 	originPosition := getOrigin(shared.Win)
 
-	backgroundSprite := extractAndPlaceSprites(gameMap.Layers[0].Tiles, spritesheet, tilesFrames, originPosition)
+	backgroundLayerIndex, err := findLayerIndex("background", gameMap.Layers)
+	if err != nil {
+		panic(err)
+	}
+	playersLayerIndex, err := findLayerIndex("players", gameMap.Layers)
+	if err != nil {
+		panic(err)
+	}
 
-	// TODO iterate over objects to look for "player" object
-	// TODO make sure the given input is a multiple of tileSize
-	players := extractAndPlaceSprites(gameMap.Layers[2].Tiles, spritesheet, tilesFrames, originPosition)
+	backgroundSprite := extractAndPlaceSprites(gameMap.Layers[backgroundLayerIndex].Tiles, spritesheet, tilesFrames, originPosition)
+	players := extractAndPlaceSprites(gameMap.Layers[playersLayerIndex].Tiles, spritesheet, tilesFrames, originPosition)
 
-	world := World{BackgroundTiles: backgroundSprite, Players: players}
+	world := World{
+		BackgroundTiles: backgroundSprite,
+		Players:         players,
+	}
 
 	return spritesheet, tilesFrames, world
 }
