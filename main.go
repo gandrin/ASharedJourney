@@ -15,17 +15,16 @@ import (
 
 const frameRate = 60
 
-func updatePlayer(win *pixelgl.Window, sprite *pixel.Sprite, playerDirectionChannel chan *supervisor.PlayerDirections) {
+func updatePlayer(win *pixelgl.Window, sprite *pixel.Sprite, playerDirectionChannel chan *supervisor.PlayerDirections, playerPosition *pixel.Vec) {
 	go func(playerDirection chan *supervisor.PlayerDirections) {
-		playerOldPosition := win.Bounds().Center()
 		for true {
 			newPlayerDirection := <-playerDirection
 			playerNewPosition := pixel.V(
-				playerOldPosition.X+float64(newPlayerDirection.Player1.X*16),
-				playerOldPosition.Y+float64(newPlayerDirection.Player1.Y*16),
+				playerPosition.X+float64(newPlayerDirection.Player1.X*16),
+				playerPosition.Y+float64(newPlayerDirection.Player1.Y*16),
 			)
-			sprite.Draw(win, pixel.IM.Moved(playerNewPosition))
-			playerOldPosition = playerNewPosition
+			playerPosition.X = playerNewPosition.X
+			playerPosition.Y = playerNewPosition.Y
 		}
 	}(playerDirectionChannel)
 }
@@ -44,18 +43,20 @@ func run() {
 	win.Clear(colornames.White)
 	shared.Win = win
 
-	spritesheet, tilesFrames, positionedSprites := tiles.GenerateMap()
+	spritesheet, tilesFrames, world := tiles.GenerateMap()
 
 	sprite := pixel.NewSprite(spritesheet, tilesFrames[203])
 
 	fps := time.Tick(time.Second / frameRate)
 
 	playerDirectionChannel := supervisor.Start(supervisor.OnePlayer)
-	updatePlayer(win, sprite, playerDirectionChannel)
 
+	playerNewPosition := world.Players[0].Position
+	updatePlayer(win, sprite, playerDirectionChannel, &playerNewPosition)
 	for !win.Closed() {
 		supervisor.Sup.Play()
-		tiles.DrawMap(positionedSprites)
+		tiles.DrawMap(world.BackgroundTiles)
+		world.Players[0].Sprite.Draw(win, pixel.IM.Moved(playerNewPosition))
 		win.Update()
 		<-fps
 	}

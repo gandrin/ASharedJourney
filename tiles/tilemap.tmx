@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.1.5" orientation="orthogonal" renderorder="right-down" width="30" height="30" tilewidth="16" tileheight="16" infinite="0" nextobjectid="1">
+<map version="1.0" tiledversion="1.1.5" orientation="orthogonal" renderorder="right-down" width="30" height="30" tilewidth="16" tileheight="16" infinite="0" nextobjectid="11">
  <tileset firstgid="1" name="tileset" tilewidth="16" tileheight="16" tilecount="280" columns="10">
   <image source="tileset.png" width="160" height="448"/>
  </tileset>
@@ -71,4 +71,9 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
+ <objectgroup name="Calque d'objets 1">
+  <object id="10" name="player" x="8" y="8">
+   <point/>
+  </object>
+ </objectgroup>
 </map>

@@ -24,6 +24,17 @@ const tileSize = 16
 const mapWidth = 30
 const mapHeight = 30
 
+type World struct {
+	BackgroundTiles [mapWidth * mapHeight]SpriteWithPosition
+	Players         [1]SpriteWithPosition
+}
+
+//SpriteWithPosition holds the sprite and its position into the window
+type SpriteWithPosition struct {
+	Sprite   *pixel.Sprite
+	Position pixel.Vec
+}
+
 // loadPicture load the picture
 func loadPicture(path string) (pixel.Picture, error) {
 	file, err := os.Open(path)
@@ -49,12 +60,6 @@ func getTilesFrames(spritesheet pixel.Picture) []pixel.Rect {
 	return tilesFrames
 }
 
-//SpriteWithPosition holds the sprite and its position into the window
-type SpriteWithPosition struct {
-	Sprite   *pixel.Sprite
-	Position pixel.Vec
-}
-
 func getOrigin(win *pixelgl.Window) pixel.Vec {
 	centerPosition := win.Bounds().Center()
 	originXPosition := centerPosition.X - mapWidth/2*tileSize
@@ -71,7 +76,7 @@ func getSpritePosition(spriteIndex int, origin pixel.Vec) pixel.Vec {
 }
 
 // GenerateMap generates the map from a .tmx file
-func GenerateMap() (pixel.Picture, []pixel.Rect, [mapWidth * mapHeight]SpriteWithPosition) {
+func GenerateMap() (pixel.Picture, []pixel.Rect, World) {
 	//get path to file from current programme root
 	_, filename, _, ok := runtime.Caller(1)
 	if !ok {
@@ -106,7 +111,17 @@ func GenerateMap() (pixel.Picture, []pixel.Rect, [mapWidth * mapHeight]SpriteWit
 		}
 	}
 
-	return spritesheet, tilesFrames, positionedSprites
+	// TODO iterate over objects to look for "player" object
+	playerTiledObject := gameMap.ObjectGroups[0].Objects[0]
+	player1X := playerTiledObject.X + tileSize/2
+	player1Y := playerTiledObject.Y + tileSize/2
+
+	player1 := SpriteWithPosition{Sprite: pixel.NewSprite(spritesheet, tilesFrames[203]), Position: pixel.V(float64(player1X), float64(player1Y))}
+	var players [1]SpriteWithPosition
+	players[0] = player1
+	world := World{BackgroundTiles: positionedSprites, Players: players}
+
+	return spritesheet, tilesFrames, world
 }
 
 //DrawMap draws into window the given sprites
