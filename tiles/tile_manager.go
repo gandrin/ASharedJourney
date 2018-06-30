@@ -52,6 +52,10 @@ func getSpritePosition(spriteIndex int) pixel.Vec {
 func GenerateMap(win *pixelgl.Window) {
 	// parse tmx file
 	gameMap, err := tiled.LoadFromFile(mapPath)
+	if err != nil {
+		fmt.Println("Error parsing map")
+		os.Exit(2)
+	}
 
 	spritesheet, err := loadPicture("tiles/tileset.png")
 	if err != nil {
@@ -65,11 +69,4 @@ func GenerateMap(win *pixelgl.Window) {
 		spritePosition := getSpritePosition(index)
 		sprite.Draw(win, pixel.IM.Moved(spritePosition))
 	}
-
-	if err != nil {
-		fmt.Println("Error parsing map")
-		os.Exit(2)
-	}
-
-	fmt.Print(gameMap.Layers[0].Tiles[0])
 }
