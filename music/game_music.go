@@ -11,7 +11,7 @@ import (
 	"github.com/faiface/beep/wav"
 )
 //const musicMTfileName string ="/music/MainThemeMiroir.wav"
-const musicMTfileName string ="/music/tmpTheme.mp3"
+const musicMTfileName string ="/music/MenuEffect.wav"
 
 type musicStreamers struct {
 	//list of loaded musics ( streamer )
@@ -42,12 +42,16 @@ func (m *musicStreamers) loadMainTheam() beep.Format{
 
 func (m*musicStreamers) Play()  {
 	m.streamControl.Paused = false
-	m.playMainTheme()
+	go m.playMainTheme()
 }
 
 func (m *musicStreamers) playMainTheme(){
-	log.Print("Starting music")
-	speaker.Play(m.streamControl.Streamer)
+
+			log.Print("Starting music")
+			speaker.Play(m.streamControl.Streamer)
+
+			log.Print("Music finished")
+
 }
 
 

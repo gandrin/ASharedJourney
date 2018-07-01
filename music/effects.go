@@ -10,6 +10,10 @@ type soundEffect string
 
 const (
 	SOUND_EFFECT_START_GAME soundEffect = "/music/MenuEffect.wav"
+
+	SOUND_EFFECT_WIN_GAME soundEffect = "/music/win2.wav"
+
+	SOUND_EFFECT_LOSE_GAME soundEffect = "/music/lose2.wav"
 )
 
 func (m *musicStreamers) PlayEffect(effectType soundEffect){
@@ -49,4 +53,6 @@ func (m *musicStreamers) PlayEffect(effectType soundEffect){
 func (m *musicStreamers) loadEffects(){
 	m.gameEffects = make(map[soundEffect]beep.Streamer,0)
 	m.gameEffects[SOUND_EFFECT_START_GAME], _ = getStream(string(SOUND_EFFECT_START_GAME))
+	m.gameEffects[SOUND_EFFECT_LOSE_GAME], _ = getStream(string(SOUND_EFFECT_WIN_GAME))
+	m.gameEffects[SOUND_EFFECT_LOSE_GAME], _ = getStream(string(SOUND_EFFECT_LOSE_GAME))
 }
