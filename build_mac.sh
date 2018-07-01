@@ -6,6 +6,7 @@ DESTINATION="./build/ASharedJourney.app"
 make build_assets
 go build main.go
 chmod +x main
+rm -rf $DESTINATION
 cp -r $SOURCE $DESTINATION
 cp main $DESTINATION/Contents/MacOS/ASharedJourney
 
