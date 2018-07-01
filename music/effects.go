@@ -14,7 +14,7 @@ const (
 
 	SOUND_EFFECT_WIN_FINAL_GAME SoundEffect = "win.mp3"
 
-	SOUND_EFFECT_SNORE SoundEffect = "snore.mp3"
+	SOUND_EFFECT_SNORE SoundEffect = "snore.wav"
 
 	SOUND_EFFECT_LOSE_GAME SoundEffect = "lose2.mp3"
 
