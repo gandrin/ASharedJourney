@@ -147,10 +147,11 @@ func NextLevel() World {
 	if CurrentLevel!=0{
 		if !(len(Levels) == CurrentLevel){
 			//last level was finished
-			menu.Menu(menu.WinLevelMenuImage, "Level solved, continue ...", pixel.V(100,100),true, music.SOUND_EFFECT_WIN_GAME)
+			menu.Menu(menu.WinLevelMenuImage, "Level solved, continue ...", pixel.V(150,200),true, music.SOUND_EFFECT_WIN_GAME)
+
 		}else{
 			//game was finished
-			menu.Menu(menu.FinishedGameImage, "You WIN, keep playing ....", pixel.V(100,100),true, music.SOUND_EFFECT_WIN_GAME)
+			menu.Menu(menu.FinishedGameImage, "You WIN, keep playing ....", pixel.V(150,200),true, music.SOUND_EFFECT_WIN_GAME)
 		}
 	}
 	return newWorlg

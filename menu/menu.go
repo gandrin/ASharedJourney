@@ -34,7 +34,7 @@ func Menu(pictureName string, menuText string,positionText pixel.Vec, blocking b
 	fmt.Fprintln(basicTxt, menuText)
 
 	//get picture
-	menupicture := path.Join(".", "assets", MainMenuImage)
+	menupicture := path.Join(".", "assets",pictureName)
 	pic, err := loadPicture(menupicture)
 	if err != nil {
 		log.Fatal(err)
