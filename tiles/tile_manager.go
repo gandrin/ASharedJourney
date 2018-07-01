@@ -18,9 +18,9 @@ import (
 
 	"github.com/faiface/pixel"
 	"github.com/faiface/pixel/pixelgl"
-	"github.com/lafriks/go-tiled"
 	"github.com/gandrin/ASharedJourney/menu"
 	"github.com/gandrin/ASharedJourney/music"
+	"github.com/lafriks/go-tiled"
 )
 
 // Level names
@@ -43,6 +43,7 @@ var CurrentLevel = -1
 
 // Levels list
 var Levels = [...]string{
+	theStruggleLevel,
 	veryEasyLevel,
 	amazeingLevel,
 	mazeLevel,
@@ -51,7 +52,6 @@ var Levels = [...]string{
 	theLittlePigLevel,
 	bonhommeMap,
 	myLittlePonyLevel,
-	theStruggleLevel,
 }
 
 // Uncomment this for testing :)
@@ -155,19 +155,27 @@ func findLayerIndex(layerName string, layers []*tiled.Layer) (layerIndex int, er
 	return -1, errors.New("Expected to find layer with name " + layerName)
 }
 
+// SetNextLevel called before NextLevel if you want to select it
+func SetNexLevel(nextMapLevel int) {
+	if nextMapLevel == 0 {
+		CurrentLevel = len(Levels)
+	} else {
+		CurrentLevel = nextMapLevel - 1
+	}
+}
+
 // NextLevel goes to next level
 func NextLevel() World {
 	CurrentLevel = (CurrentLevel + 1) % len(Levels)
 	var newWorlg = GenerateMap(Levels[CurrentLevel])
-	if CurrentLevel!=0{
-		if !(len(Levels) == CurrentLevel){
+	if CurrentLevel != 0 {
+		if !(len(Levels) == CurrentLevel) {
 			//last level was finished
+			menu.Menu(menu.WinLevelMenuImage, "Level solved, continue ...", pixel.V(150, 200), true, music.SOUND_EFFECT_WIN_GAME)
 
-			menu.Menu(menu.WinLevelMenuImage, "Level solved, continue ...", pixel.V(150,200),true, music.SOUND_EFFECT_WIN_GAME)
-
-		}else{
+		} else {
 			//game was finished
-			menu.Menu(menu.FinishedGameImage, "You WIN, keep playing ....", pixel.V(150,150),true, music.SOUND_EFFECT_WIN_GAME)
+			menu.Menu(menu.FinishedGameImage, "You WIN, keep playing ....", pixel.V(150, 150), true, music.SOUND_EFFECT_WIN_GAME)
 		}
 	}
 	return newWorlg
