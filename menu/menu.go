@@ -22,7 +22,7 @@ import (
 const MainMenuImage string = "menu.png"
 const WinLevelMenuImage string = "win.png"
 const FinishedGameImage string = "end.png"
-const DrownedGameImage string = "win.png"
+const DrownedGameImage string = "oops.png"
 const RulesMenuImage string = "splashScreen.png"
 
 //draw menu to screen while player while player hasn't pressed enter
