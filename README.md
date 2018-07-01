@@ -1,15 +1,17 @@
 ﻿# ASharedJourney
 GameJam SFR 2018 Julia - Pierre - Gabriel - Aurore - Fabio
+Music: Thibault
 
 Theme: Si j'étais toi et que tu étais moi (If I were you and you were me)
 
+[Itch.io](https://fmaschi.itch.io/a-shared-journey)
+
 ## Getting Started
 
-```
 * [GO](https://golang.org) - Programming language
 * [Visual Code](https://code.visualstudio.com) - Light and useful IDE (Linux, MacOS, Win)
 * [GOLand] (https://www.jetbrains.com/go/) - An alternative IDE
-```
+
 
 ## Building and running
 
