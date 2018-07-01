@@ -36,6 +36,10 @@ func (g *GameSupervisor) Play() {
 
 		//get the players key move
 		nextMove = g.Mode.Move()
+		if( nextMove.Player1.X != 0 || nextMove.Player1.Y!= 0 ){
+			//new move
+			shared.AddAction()
+		}
 
 		g.DirectionChannel <- nextMove
 
