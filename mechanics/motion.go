@@ -95,6 +95,8 @@ func (gm *Mechanics) movePlayer(player *tiles.SpriteWithPosition, getNextPositio
 			}
 		}
 
+		player.HasWon = false
+
 		// Winning rule
 		for _, winStartTile := range gm.world.WinStars {
 			if winStartTile.Position.X == nextPlayerPosition.X && winStartTile.Position.Y == nextPlayerPosition.Y {
