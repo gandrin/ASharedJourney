@@ -32,7 +32,7 @@ func (m *musicStreamers) PlayEffect(effectType soundEffect) {
 			done := make(chan struct{})
 			//effect exists -> play
 			speaker.Play(beep.Seq(
-				es,
+				,
 				beep.Callback(func() {
 					close(done)
 				}),
@@ -50,9 +50,18 @@ func (m *musicStreamers) PlayEffect(effectType soundEffect) {
 }
 
 func (m *musicStreamers) loadEffects() {
-	m.gameEffects = make(map[soundEffect]beep.Streamer, 0)
-	m.gameEffects[SOUND_EFFECT_START_GAME], _ = getStream(string(SOUND_EFFECT_START_GAME))
-	m.gameEffects[SOUND_EFFECT_LOSE_GAME], _ = getStream(string(SOUND_EFFECT_WIN_GAME))
-	m.gameEffects[SOUND_EFFECT_LOSE_GAME], _ = getStream(string(SOUND_EFFECT_LOSE_GAME))
-	m.gameEffects[SOUND_EFFECT_WATER], _ = getStream(string(SOUND_EFFECT_WATER))
+	m.gameEffects = make(map[soundEffect]*beep.Buffer, 0)
+	//make new buffers and add to buffer
+	stream1,format1 := getStream(string(SOUND_EFFECT_START_GAME))
+	m.gameEffects[SOUND_EFFECT_START_GAME]= beep.NewBuffer(format1)
+	m.gameEffects[SOUND_EFFECT_START_GAME].Append(stream1)
+
+	stream2,format2 := getStream(string(SOUND_EFFECT_WIN_GAME))
+	m.gameEffects[SOUND_EFFECT_WIN_GAME]= beep.NewBuffer(format2)
+	m.gameEffects[SOUND_EFFECT_WIN_GAME].Append(stream2)
+
+	stream3,format3 := getStream(string(SOUND_EFFECT_WATER))
+	m.gameEffects[SOUND_EFFECT_WATER]= beep.NewBuffer(format3)
+	m.gameEffects[SOUND_EFFECT_WATER].Append(stream3)
+
 }

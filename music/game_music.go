@@ -17,7 +17,7 @@ const musicMTfileName string = "/music/MainThemeMiroir.mp3"
 type musicStreamers struct {
 	//list of loaded musics ( streamer )
 	mainTheamStreamer beep.Streamer
-	gameEffects       map[soundEffect]beep.Streamer
+	gameEffects       map[soundEffect]*beep.Buffer
 	streamControl     beep.Ctrl
 }
 
