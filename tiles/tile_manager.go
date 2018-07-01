@@ -30,7 +30,7 @@ const (
 var CurrentLevel = -1
 
 // Levels list
-var Levels = [...]string{amazeingLevel, forestLevel, myLittlePonyLevel, theLittlePigLevel}
+var Levels = [...]string{amazeingLevel, theLittlePigLevel, myLittlePonyLevel, forestLevel}
 
 const tilesPath = "/tiles/map.png" // path to your tileset
 var TileSize int = 32
