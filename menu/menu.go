@@ -1,12 +1,14 @@
 package menu
 
 import (
+	"bytes"
 	"fmt"
 	"image"
 	"log"
-	"os"
 	"path"
 	"time"
+
+	"github.com/gandrin/ASharedJourney/assets_manager"
 
 	"github.com/faiface/pixel"
 	"github.com/faiface/pixel/pixelgl"
@@ -61,12 +63,11 @@ func Menu(pictureName string, menuText string, blocking bool, exitSoundEffect mu
 }
 
 func loadPicture(path string) (pixel.Picture, error) {
-	file, err := os.Open(path)
+	byteImage, err := assetsManager.Asset("assets/" + MenuPicName)
 	if err != nil {
 		return nil, err
 	}
-	defer file.Close()
-	img, _, err := image.Decode(file)
+	img, _, err := image.Decode(bytes.NewReader(byteImage))
 	if err != nil {
 		return nil, err
 	}
