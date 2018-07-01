@@ -58,7 +58,6 @@ func (m *musicStreamers) loadMainTheam() beep.Format {
 	return format
 }
 
-
 func (m *musicStreamers) playMainTheme() {
 
 	log.Print("Starting music")
@@ -77,7 +76,7 @@ func getfilename(fileName string) string {
 	if err != nil {
 		log.Fatal("error loading called")
 	}
-	log.Print("file ", rootDirectory+fileName)
+	//log.Print("file ", rootDirectory+fileName)
 	return rootDirectory + fileName
 }
 
