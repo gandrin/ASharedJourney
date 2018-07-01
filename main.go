@@ -13,6 +13,7 @@ import (
 	"github.com/gandrin/ASharedJourney/mechanics"
 	"github.com/gandrin/ASharedJourney/menu"
 	"github.com/gandrin/ASharedJourney/shared"
+	"github.com/gandrin/ASharedJourney/music"
 )
 
 const frameRate = 60
@@ -58,6 +59,7 @@ func run() {
 }
 
 func main() {
-
+	music.Music.Start()
+	music.Music.Play()
 	pixelgl.Run(run)
 }

@@ -14,6 +14,7 @@ import (
 	"log"
 	"path"
 	"time"
+	"github.com/gandrin/ASharedJourney/music"
 )
 
 const menuText string = "Press ENTER to PLAY"
@@ -69,6 +70,7 @@ func Menu(){
 		time.Sleep(50 * time.Millisecond)
 		shared.Win.Update()
 	}
+	music.Music.PlayEffect(music.SOUND_EFFECT_START_GAME)
 
 }
 
