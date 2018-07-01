@@ -1,9 +1,10 @@
 package music
 
 import (
+	"log"
+
 	"github.com/faiface/beep"
 	"github.com/faiface/beep/speaker"
-	"log"
 )
 
 type soundEffect string
@@ -14,11 +15,13 @@ const (
 	SOUND_EFFECT_WIN_GAME soundEffect = "/music/win2.mp3"
 
 	SOUND_EFFECT_LOSE_GAME soundEffect = "/music/lose2.mp3"
+
+	SOUND_EFFECT_WATER soundEffect = "/music/Acid_Bubble.wav"
 )
 
-func (m *musicStreamers) PlayEffect(effectType soundEffect){
+func (m *musicStreamers) PlayEffect(effectType soundEffect) {
 
-	go func(m *musicStreamers,effectType soundEffect) {
+	go func(m *musicStreamers, effectType soundEffect) {
 		//play the sound effect
 		es, ok := m.gameEffects[effectType]
 		if ok {
@@ -42,16 +45,12 @@ func (m *musicStreamers) PlayEffect(effectType soundEffect){
 
 			log.Print("stream of sound finished")
 		}
-	}(m,effectType )
-
-
-
-
+	}(m, effectType)
 
 }
 
-func (m *musicStreamers) loadEffects(){
-	m.gameEffects = make(map[soundEffect]beep.Streamer,0)
+func (m *musicStreamers) loadEffects() {
+	m.gameEffects = make(map[soundEffect]beep.Streamer, 0)
 	m.gameEffects[SOUND_EFFECT_START_GAME], _ = getStream(string(SOUND_EFFECT_START_GAME))
 	m.gameEffects[SOUND_EFFECT_LOSE_GAME], _ = getStream(string(SOUND_EFFECT_WIN_GAME))
 	m.gameEffects[SOUND_EFFECT_LOSE_GAME], _ = getStream(string(SOUND_EFFECT_LOSE_GAME))

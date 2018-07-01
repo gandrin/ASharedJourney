@@ -2,6 +2,7 @@ package mechanics
 
 import (
 	"github.com/faiface/pixel"
+	"github.com/gandrin/ASharedJourney/music"
 	"github.com/gandrin/ASharedJourney/supervisor"
 	"github.com/gandrin/ASharedJourney/tiles"
 )
@@ -90,6 +91,7 @@ func (gm *Mechanics) movePlayer(player *tiles.SpriteWithPosition, getNextPositio
 		for _, waterTile := range gm.world.Water {
 			if waterTile.Position.X == nextPlayerPosition.X && waterTile.Position.Y == nextPlayerPosition.Y {
 				player.InTheWater = true
+				music.Music.PlayEffect(music.SOUND_EFFECT_WATER)
 			}
 		}
 

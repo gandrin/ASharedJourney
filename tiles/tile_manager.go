@@ -27,7 +27,7 @@ const (
 	forestLevel       string = "forest"
 	myLittlePonyLevel string = "myLittlePony"
 	theLittlePigLevel string = "theLittlePig"
-	inTheHoleTileID   int    = 61 // ou 62
+	inTheHoleTileID   int    = 61
 )
 
 // CurrentLevel played
