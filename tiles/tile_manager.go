@@ -21,6 +21,7 @@ import (
 // Level names
 const (
 	splashScreen      string = "orgyIsland"
+	veryEasyLevel     string = "veryEasy"
 	amazeingLevel     string = "amazeing"
 	forestLevel       string = "forest"
 	myLittlePonyLevel string = "myLittlePony"
@@ -31,7 +32,7 @@ const (
 var CurrentLevel = -1
 
 // Levels list
-var Levels = [...]string{amazeingLevel, theLittlePigLevel, myLittlePonyLevel, forestLevel}
+var Levels = [...]string{veryEasyLevel, amazeingLevel, theLittlePigLevel, myLittlePonyLevel, forestLevel}
 
 const tilesPath = "/tiles/map.png" // path to your tileset
 
