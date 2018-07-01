@@ -47,12 +47,10 @@ func (m *musicStreamers) Play() {
 	go m.playMainTheme()
 }
 
-func (m *musicStreamers) playMainTheme(){
-
-			log.Print("Starting music")
-			speaker.Play(m.streamControl.Streamer)
-
-			log.Print("Music finished")
+func (m *musicStreamers) playMainTheme() {
+	//log.Print("Starting music")
+	speaker.Play(m.streamControl.Streamer)
+	//log.Print("Music finished")
 
 }
 
@@ -61,7 +59,7 @@ func getfilename(fileName string) string {
 	if err != nil {
 		log.Fatal("error loading called")
 	}
-	log.Print("file ", rootDirectory+fileName)
+	//log.Print("file ", rootDirectory+fileName)
 	return rootDirectory + fileName
 }
 

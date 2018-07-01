@@ -1,8 +1,6 @@
 package music
 
 import (
-	"log"
-
 	"github.com/faiface/beep"
 	"github.com/faiface/beep/speaker"
 )
@@ -28,7 +26,7 @@ func (m *musicStreamers) PlayEffect(effectType soundEffect) {
 			speaker.Lock()
 			m.streamControl.Paused = true
 			speaker.Unlock()
-			log.Print("Creating new stream entry")
+			//log.Print("Creating new stream entry")
 			done := make(chan struct{})
 			//effect exists -> play
 			speaker.Play(beep.Seq(
@@ -37,13 +35,12 @@ func (m *musicStreamers) PlayEffect(effectType soundEffect) {
 					close(done)
 				}),
 			))
-			log.Print("finished playing effect ")
+			//log.Print("finished playing effect ")
 			speaker.Lock()
 			m.streamControl.Paused = false
 			speaker.Unlock()
 			<-done
-
-			log.Print("stream of sound finished")
+			//log.Print("stream of sound finished")
 		}
 	}(m, effectType)
 
