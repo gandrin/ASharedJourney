@@ -21,18 +21,22 @@ import (
 
 const menuTextPosX float64 = 200
 const menuTextPosY float64 = 100
-const MenuPicName string = "menu.png"
+//level image names
+const MainMenuImage string = "menu.png"
+const WinLevelMenuImage string = "win.png"
+const FinishedGameImage string = "win.png"
+
 
 //draw menu to screen while player while player hasn't pressed enter
-func Menu(pictureName string, menuText string, blocking bool, exitSoundEffect music.SoundEffect) {
+func Menu(pictureName string, menuText string,positionText pixel.Vec, blocking bool, exitSoundEffect music.SoundEffect) {
 
 	basicAtlas := text.NewAtlas(basicfont.Face7x13, text.ASCII)
-	basicTxt := text.New(pixel.V(menuTextPosX, menuTextPosY), basicAtlas)
+	basicTxt := text.New(positionText, basicAtlas)
 	basicTxt.Color = colornames.White
 	fmt.Fprintln(basicTxt, menuText)
 
 	//get picture
-	menupicture := path.Join(".", "assets", MenuPicName)
+	menupicture := path.Join(".", "assets", MainMenuImage)
 	pic, err := loadPicture(menupicture)
 	if err != nil {
 		log.Fatal(err)

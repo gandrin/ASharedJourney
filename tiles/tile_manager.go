@@ -19,6 +19,8 @@ import (
 	"github.com/faiface/pixel"
 	"github.com/faiface/pixel/pixelgl"
 	"github.com/lafriks/go-tiled"
+	"github.com/gandrin/ASharedJourney/menu"
+	"github.com/gandrin/ASharedJourney/music"
 )
 
 // Level names
@@ -144,7 +146,17 @@ func findLayerIndex(layerName string, layers []*tiled.Layer) (layerIndex int, er
 // NextLevel goes to next level
 func NextLevel() World {
 	CurrentLevel = (CurrentLevel + 1) % len(Levels)
-	return GenerateMap(Levels[CurrentLevel])
+	var newWorlg = GenerateMap(Levels[CurrentLevel])
+	if CurrentLevel!=0{
+		if !(len(Levels) == CurrentLevel){
+			//last level was finished
+			menu.Menu(menu.WinLevelMenuImage, "Level solved, continue ...", pixel.V(100,100),true, music.SOUND_EFFECT_WIN_GAME)
+		}else{
+			//game was finished
+			menu.Menu(menu.FinishedGameImage, "You WIN, keep playing ....", pixel.V(100,100),true, music.SOUND_EFFECT_WIN_GAME)
+		}
+	}
+	return newWorlg
 }
 
 // RestartLevel reinitializes the current level

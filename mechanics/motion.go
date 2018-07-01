@@ -55,27 +55,35 @@ func (gm *Mechanics) movePlayer(player *tiles.SpriteWithPosition, getNextPositio
 		for n, mov := range gm.world.Movables {
 			if mov.Position.X == nextPlayerPosition.X && mov.Position.Y == nextPlayerPosition.Y {
 				// There's a movable in that position
-				auxPos := getNextPosition(nextPlayerPosition)
-				for _, obstacleTile := range gm.world.Obstacles {
-					if obstacleTile.Position.X == auxPos.X && obstacleTile.Position.Y == auxPos.Y {
+				movableNextPosition := getNextPosition(nextPlayerPosition)
+				for _, playerTile := range gm.world.Players {
+					if playerTile.Position.X == movableNextPosition.X &&
+						playerTile.Position.Y == movableNextPosition.Y {
 						canPlayerMove = false
 					}
 				}
-				for _, obstacleTile := range gm.world.Movables {
-					if obstacleTile.Position.X == auxPos.X && obstacleTile.Position.Y == auxPos.Y {
+				for _, obstacleTile := range gm.world.Obstacles {
+					if obstacleTile.Position.X == movableNextPosition.X &&
+						obstacleTile.Position.Y == movableNextPosition.Y {
+						canPlayerMove = false
+					}
+				}
+				for _, movableTile := range gm.world.Movables {
+					if movableTile.Position.X == movableNextPosition.X &&
+						movableTile.Position.Y == movableNextPosition.Y {
 						canPlayerMove = false
 					}
 				}
 				for _, winStarTile := range gm.world.WinStars {
-					if winStarTile.Position.X == auxPos.X && winStarTile.Position.Y == auxPos.Y {
+					if winStarTile.Position.X == movableNextPosition.X && winStarTile.Position.Y == movableNextPosition.Y {
 						player.HasWon = true
 					}
 				}
 				if canPlayerMove {
-					gm.world.Movables[n].Position = auxPos
+					gm.world.Movables[n].Position = movableNextPosition
 				}
 				for h, holeTile := range gm.world.Holes {
-					if holeTile.Position.X == auxPos.X && holeTile.Position.Y == auxPos.Y {
+					if holeTile.Position.X == movableNextPosition.X && holeTile.Position.Y == movableNextPosition.Y {
 						// remove both obj (hole and movable)
 						gm.world.Movables[n].Position.X = -100
 						gm.world.Holes[h].Position.X = -100
