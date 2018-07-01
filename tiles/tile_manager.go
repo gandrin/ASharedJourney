@@ -4,6 +4,8 @@ import (
 	"errors"
 	"image"
 	"os"
+	"path"
+	"runtime"
 
 	"github.com/gandrin/ASharedJourney/shared"
 
@@ -20,6 +22,7 @@ import (
 
 // Level names
 const (
+	bonhommeMap          string = "bonhomme"
 	splashScreen         string = "orgyIsland"
 	veryEasyLevel        string = "veryEasy"
 	mazeLevel            string = "maze"
@@ -35,12 +38,12 @@ const (
 var CurrentLevel = -1
 
 // Levels list
-var Levels = [...]string{veryEasyLevel, mazeLevel, theLongCorridorLevel, amazeingLevel, theLittlePigLevel, myLittlePonyLevel, forestLevel}
+var Levels = [...]string{veryEasyLevel, amazeingLevel, mazeLevel, forestLevel, theLongCorridorLevel, theLittlePigLevel, bonhommeMap, myLittlePonyLevel}
 
 // Uncomment this for testing :)
 // var Levels = [...]string{biggerLevel}
 
-const tilesPath = "/tiles/map.png" // path to your tileset
+const tilesPath = "/map.png" // path to your tileset
 
 // TileSize tile in pixels of squares
 var TileSize int
@@ -150,12 +153,13 @@ func RestartLevel() World {
 // GenerateMap generates the map from a .tmx file
 func GenerateMap(levelFileName string) World {
 	//added support for relative file addressing
-	rootDirectory, err := os.Getwd()
-	if err != nil {
+	// rootDirectory, err := os.Getwd()
+	_, rootName, _, ok := runtime.Caller(1)
+	if !ok {
 		log.Fatal("error loading called")
 	}
-	filemap := rootDirectory + "/tiles/" + levelFileName + ".tmx"
-	filetile := rootDirectory + tilesPath
+	filemap := path.Join(path.Dir(rootName), "/"+levelFileName+".tmx")
+	filetile := path.Join(path.Dir(rootName), tilesPath)
 	gameMap, err := tiled.LoadFromFile(filemap)
 	if err != nil {
 		log.Fatal(err)
