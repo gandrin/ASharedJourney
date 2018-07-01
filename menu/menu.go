@@ -1,12 +1,13 @@
 package menu
 
 import (
+	"bytes"
 	"fmt"
 	"image"
 	"log"
-	"os"
-	"path"
 	"time"
+
+	"github.com/gandrin/ASharedJourney/assets_manager"
 
 	"github.com/faiface/pixel"
 	"github.com/faiface/pixel/pixelgl"
@@ -17,7 +18,6 @@ import (
 	"golang.org/x/image/font/basicfont"
 )
 
-
 //level image names
 const MainMenuImage string = "menu.png"
 const WinLevelMenuImage string = "win.png"
@@ -25,9 +25,8 @@ const FinishedGameImage string = "end.png"
 const DrownedGameImage string = "win.png"
 const RulesMenuImage string = "splashScreen.png"
 
-
 //draw menu to screen while player while player hasn't pressed enter
-func Menu(pictureName string, menuText string,positionText pixel.Vec, blocking bool, exitSoundEffect music.SoundEffect) {
+func Menu(pictureName string, menuText string, positionText pixel.Vec, blocking bool, exitSoundEffect music.SoundEffect) {
 
 	basicAtlas := text.NewAtlas(basicfont.Face7x13, text.ASCII)
 	basicTxt := text.New(positionText, basicAtlas)
@@ -35,8 +34,7 @@ func Menu(pictureName string, menuText string,positionText pixel.Vec, blocking b
 	fmt.Fprintln(basicTxt, menuText)
 
 	//get picture
-	menupicture := path.Join(".", "assets",pictureName)
-	pic, err := loadPicture(menupicture)
+	pic, err := loadPicture(pictureName)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -66,14 +64,14 @@ func Menu(pictureName string, menuText string,positionText pixel.Vec, blocking b
 }
 
 func loadPicture(path string) (pixel.Picture, error) {
-	file, err := os.Open(path)
+	byteImage, err := assetsManager.Asset("assets/" + path)
 	if err != nil {
 		return nil, err
 	}
-	defer file.Close()
-	img, _, err := image.Decode(file)
+	img, _, err := image.Decode(bytes.NewReader(byteImage))
 	if err != nil {
 		return nil, err
 	}
+
 	return pixel.PictureDataFromImage(img), nil
 }
