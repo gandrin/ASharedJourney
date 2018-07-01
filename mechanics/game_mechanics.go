@@ -44,8 +44,6 @@ func Start(
 func (mechanics *Mechanics) muxChannel() *supervisor.GameEvent {
 	select {
 	case nextGameEvent, ok := <-mechanics.gameEventChannel:
-		fmt.Println("HERE")
-		fmt.Println(nextGameEvent)
 		if !ok {
 			fmt.Println("Channel  closed!")
 			log.Fatal()
