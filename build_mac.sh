@@ -1,11 +1,12 @@
 #!/bin/bash
 
+SOURCE="./build/Template.app"
 DESTINATION="./build/ASharedJourney.app"
 
 make build_assets
 go build main.go
 chmod +x main
-mkdir -p $DESTINATION/Contents/MacOS/
+cp -r $SOURCE $DESTINATION
 cp main $DESTINATION/Contents/MacOS/ASharedJourney
 
 echo "Built!"
