@@ -6,25 +6,18 @@ import (
 	"github.com/gandrin/ASharedJourney/tiles"
 )
 
-func (gm *Mechanics) handlePlayerWon(nextPos1 pixel.Vec) {
-	for _, winStartTile := range gm.world.WinStars {
-		if winStartTile.Position.X == nextPos1.X && winStartTile.Position.Y == nextPos1.Y {
-			gm.world.Players[0].HasWon = true
-		}
-	}
-}
-
 //move function recives as input the data from a player direction channel
 func (gm *Mechanics) Move(playDir *supervisor.PlayerDirections) *tiles.World {
 	//log.Printf("Move called")
 
-	if gm.world.Players[0].HasWon {
+	if gm.world.Players[0].HasWon && gm.world.Players[1].HasWon {
 		gm.world = tiles.NextLevel()
 	}
 
-	if gm.world.Players[0].InTheWater && gm.world.Players[1].InTheWater {
-		gm.world = tiles.GenerateMap("forest") // TODO same game RESTART
+	if gm.world.Players[0].InTheWater || gm.world.Players[1].InTheWater {
+		gm.world = tiles.RestartLevel()
 	}
+
 	if playDir.Player1.X != 0 || playDir.Player1.Y != 0 {
 		gm.movePlayer(&gm.world.Players[0], playDir.Player1.Next)
 		gm.movePlayer(&gm.world.Players[1], playDir.Player2.Next)
@@ -36,11 +29,6 @@ func (gm *Mechanics) Move(playDir *supervisor.PlayerDirections) *tiles.World {
 func (gm *Mechanics) movePlayer(player *tiles.SpriteWithPosition, getNextPosition func(pixel.Vec) pixel.Vec) {
 	var canPlayerMove = true
 	nextPlayerPosition := getNextPosition(player.Position)
-
-	// In the water
-	if player.InTheWater {
-		return
-	}
 
 	/// In the hole
 	if player.InTheHole {
@@ -73,7 +61,7 @@ func (gm *Mechanics) movePlayer(player *tiles.SpriteWithPosition, getNextPositio
 				}
 				for _, winStarTile := range gm.world.WinStars {
 					if winStarTile.Position.X == auxPos.X && winStarTile.Position.Y == auxPos.Y {
-						gm.world.Players[0].HasWon = true
+						player.HasWon = true
 					}
 				}
 				if canPlayerMove {
@@ -106,7 +94,13 @@ func (gm *Mechanics) movePlayer(player *tiles.SpriteWithPosition, getNextPositio
 				player.InTheHole = true
 			}
 		}
-		gm.handlePlayerWon(player.Position)
+
+		// Winning rule
+		for _, winStartTile := range gm.world.WinStars {
+			if winStartTile.Position.X == nextPlayerPosition.X && winStartTile.Position.Y == nextPlayerPosition.Y {
+				player.HasWon = true
+			}
+		}
 	}
 }
 
