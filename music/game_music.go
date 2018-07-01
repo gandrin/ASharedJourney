@@ -44,12 +44,16 @@ func (m *musicStreamers) loadMainTheam() beep.Format {
 
 func (m *musicStreamers) Play() {
 	m.streamControl.Paused = false
-	m.playMainTheme()
+	go m.playMainTheme()
 }
 
-func (m *musicStreamers) playMainTheme() {
-	log.Print("Starting music")
-	speaker.Play(m.streamControl.Streamer)
+func (m *musicStreamers) playMainTheme(){
+
+			log.Print("Starting music")
+			speaker.Play(m.streamControl.Streamer)
+
+			log.Print("Music finished")
+
 }
 
 func getfilename(fileName string) string {
