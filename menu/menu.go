@@ -24,7 +24,7 @@ const menuTextPosY float64 = 100
 //level image names
 const MainMenuImage string = "menu.png"
 const WinLevelMenuImage string = "win.png"
-const FinishedGameImage string = "win.png"
+const FinishedGameImage string = "end.png"
 
 //draw menu to screen while player while player hasn't pressed enter
 func Menu(pictureName string, menuText string, positionText pixel.Vec, blocking bool, exitSoundEffect music.SoundEffect) {
@@ -35,7 +35,7 @@ func Menu(pictureName string, menuText string, positionText pixel.Vec, blocking 
 	fmt.Fprintln(basicTxt, menuText)
 
 	//get picture
-	pic, err := loadPicture(MainMenuImage)
+	pic, err := loadPicture(pictureName)
 	if err != nil {
 		log.Fatal(err)
 	}

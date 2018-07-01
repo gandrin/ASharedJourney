@@ -34,6 +34,7 @@ const (
 	forestLevel          string = "forest"
 	myLittlePonyLevel    string = "myLittlePony"
 	theLittlePigLevel    string = "theLittlePig"
+	theStruggleLevel     string = "theStruggle"
 	inTheHoleTileID      int    = 61
 )
 
@@ -41,7 +42,17 @@ const (
 var CurrentLevel = -1
 
 // Levels list
-var Levels = [...]string{veryEasyLevel, amazeingLevel, mazeLevel, forestLevel, theLongCorridorLevel, theLittlePigLevel, bonhommeMap, myLittlePonyLevel}
+var Levels = [...]string{
+	veryEasyLevel,
+	amazeingLevel,
+	mazeLevel,
+	forestLevel,
+	theLongCorridorLevel,
+	theLittlePigLevel,
+	bonhommeMap,
+	myLittlePonyLevel,
+	theStruggleLevel,
+}
 
 // Uncomment this for testing :)
 // var Levels = [...]string{biggerLevel}
@@ -66,11 +77,12 @@ type World struct {
 
 //SpriteWithPosition holds the sprite and its position into the window
 type SpriteWithPosition struct {
-	Sprite     *pixel.Sprite
-	Position   pixel.Vec
-	InTheWater bool
-	InTheHole  bool
-	HasWon     bool
+	Sprite          *pixel.Sprite
+	Position        pixel.Vec
+	InTheWater      bool
+	InTheHole       bool
+	HasWon          bool
+	WinningPosition pixel.Vec
 }
 
 // loadMap load the map
@@ -150,10 +162,12 @@ func NextLevel() World {
 	if CurrentLevel!=0{
 		if !(len(Levels) == CurrentLevel){
 			//last level was finished
-			menu.Menu(menu.WinLevelMenuImage, "Level solved, continue ...", pixel.V(100,100),true, music.SOUND_EFFECT_WIN_GAME)
+
+			menu.Menu(menu.WinLevelMenuImage, "Level solved, continue ...", pixel.V(150,200),true, music.SOUND_EFFECT_WIN_GAME)
+
 		}else{
 			//game was finished
-			menu.Menu(menu.FinishedGameImage, "You WIN, keep playing ....", pixel.V(100,100),true, music.SOUND_EFFECT_WIN_GAME)
+			menu.Menu(menu.FinishedGameImage, "You WIN, keep playing ....", pixel.V(150,150),true, music.SOUND_EFFECT_WIN_GAME)
 		}
 	}
 	return newWorlg
