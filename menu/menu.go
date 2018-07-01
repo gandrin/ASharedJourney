@@ -6,7 +6,6 @@ import (
 	"log"
 	"os"
 	"path"
-	"runtime"
 	"time"
 
 	"github.com/faiface/pixel"
@@ -21,7 +20,7 @@ import (
 const menuText string = "Press ENTER to PLAY"
 const menuTextPosX float64 = 200
 const menuTextPosY float64 = 100
-const menuPicName string = "tiles/menu.png"
+const menuPicName string = "menu.png"
 
 //draw menu to screen while player while player hasn't pressed enter
 func Menu() {
@@ -32,11 +31,7 @@ func Menu() {
 	fmt.Fprintln(basicTxt, menuText)
 
 	//get picture
-	_, filename, _, ok := runtime.Caller(1)
-	if !ok {
-		log.Fatal("error loading called")
-	}
-	menupicture := path.Join(path.Dir(filename), menuPicName)
+	menupicture := path.Join(".", "assets", menuPicName)
 	pic, err := loadPicture(menupicture)
 	if err != nil {
 		log.Fatal(err)

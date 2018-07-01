@@ -5,7 +5,6 @@ import (
 	"image"
 	"os"
 	"path"
-	"runtime"
 
 	"github.com/gandrin/ASharedJourney/shared"
 
@@ -152,21 +151,8 @@ func RestartLevel() World {
 // GenerateMap generates the map from a .tmx file
 func GenerateMap(levelFileName string) World {
 	//added support for relative file addressing
-	// rootDirectory, err := os.Getwd()
-	_, rootName, _, ok := runtime.Caller(1)
-	// f, err := os.OpenFile("/Users/Pierpo/ASharedJourneyLogs", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
-	// if err != nil {
-	// 	log.Fatalf("error opening file: %v", err)
-	// }
-	// defer f.Close()
-
-	// log.SetOutput(f)
-	// log.Println("rootName " + rootName)
-	if !ok {
-		log.Fatal("error loading called")
-	}
-	filemap := path.Join(path.Dir(rootName), "/"+levelFileName+".tmx")
-	filetile := path.Join(path.Dir(rootName), tilesPath)
+	filemap := path.Join(".", "assets", levelFileName+".tmx")
+	filetile := path.Join(".", "assets", tilesPath)
 	gameMap, err := tiled.LoadFromFile(filemap)
 	if err != nil {
 		log.Fatal(err)

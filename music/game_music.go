@@ -5,7 +5,6 @@ import (
 	"os"
 	"path"
 	"path/filepath"
-	"runtime"
 	"time"
 
 	"github.com/faiface/beep"
@@ -59,20 +58,7 @@ func (m *musicStreamers) playMainTheme() {
 }
 
 func getfilename(fileName string) string {
-	_, rootName, _, _ := runtime.Caller(1)
-	f, err := os.OpenFile("/Users/Pierpo/ASharedJourneyLogs", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
-	if err != nil {
-		log.Fatalf("error opening file: %v", err)
-	}
-	defer f.Close()
-
-	log.SetOutput(f)
-	log.Println("rootName " + rootName)
-	if !ok {
-		log.Fatal("error loading called")
-	}
-	path := path.Join(path.Dir(rootName), fileName)
-	return path
+	return path.Join(".", "assets", fileName)
 }
 
 func getStream(filename string) (beep.StreamCloser, beep.Format) {
