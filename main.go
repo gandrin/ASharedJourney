@@ -12,8 +12,8 @@ import (
 
 	"github.com/gandrin/ASharedJourney/mechanics"
 	"github.com/gandrin/ASharedJourney/menu"
-	"github.com/gandrin/ASharedJourney/shared"
 	"github.com/gandrin/ASharedJourney/music"
+	"github.com/gandrin/ASharedJourney/shared"
 )
 
 const frameRate = 60
