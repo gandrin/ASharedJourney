@@ -18,13 +18,12 @@ import (
 	"golang.org/x/image/font/basicfont"
 )
 
-const menuTextPosX float64 = 200
-const menuTextPosY float64 = 100
-
 //level image names
 const MainMenuImage string = "menu.png"
 const WinLevelMenuImage string = "win.png"
 const FinishedGameImage string = "end.png"
+const DrownedGameImage string = "oops.png"
+const RulesMenuImage string = "splashScreen.png"
 
 //draw menu to screen while player while player hasn't pressed enter
 func Menu(pictureName string, menuText string, positionText pixel.Vec, blocking bool, exitSoundEffect music.SoundEffect) {
@@ -64,8 +63,8 @@ func Menu(pictureName string, menuText string, positionText pixel.Vec, blocking 
 
 }
 
-func loadPicture(pictureName string) (pixel.Picture, error) {
-	byteImage, err := assetsManager.Asset("assets/" + pictureName)
+func loadPicture(path string) (pixel.Picture, error) {
+	byteImage, err := assetsManager.Asset("assets/" + path)
 	if err != nil {
 		return nil, err
 	}
@@ -73,5 +72,6 @@ func loadPicture(pictureName string) (pixel.Picture, error) {
 	if err != nil {
 		return nil, err
 	}
+
 	return pixel.PictureDataFromImage(img), nil
 }

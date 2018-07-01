@@ -12,6 +12,8 @@ const (
 
 	SOUND_EFFECT_WIN_GAME SoundEffect = "win2.mp3"
 
+	SOUND_EFFECT_WIN_FINAL_GAME SoundEffect = "win.mp3"
+
 	SOUND_EFFECT_LOSE_GAME SoundEffect = "lose2.mp3"
 
 	SOUND_EFFECT_WATER SoundEffect = "Acid_Bubble.mp3"
@@ -53,4 +55,7 @@ func (m *musicStreamers) loadEffects() {
 	m.gameEffects[SOUND_EFFECT_WATER] = beep.NewBuffer(format3)
 	m.gameEffects[SOUND_EFFECT_WATER].Append(stream3)
 
+	stream4, format4 := getStream(string(SOUND_EFFECT_WIN_FINAL_GAME))
+	m.gameEffects[SOUND_EFFECT_WIN_FINAL_GAME] = beep.NewBuffer(format4)
+	m.gameEffects[SOUND_EFFECT_WIN_FINAL_GAME].Append(stream4)
 }

@@ -7,6 +7,7 @@ import (
 	"github.com/gandrin/ASharedJourney/music"
 	"github.com/gandrin/ASharedJourney/supervisor"
 	"github.com/gandrin/ASharedJourney/tiles"
+	"github.com/gandrin/ASharedJourney/menu"
 )
 
 //move function recives as input the data from a player direction channel
@@ -20,6 +21,7 @@ func (gm *Mechanics) Move(playDir *supervisor.PlayerDirections) *tiles.World {
 	}
 
 	if gm.world.Players[0].InTheWater || gm.world.Players[1].InTheWater {
+		menu.Menu(menu.DrownedGameImage, "Oops ....", pixel.V(300,150),true, music.SOUND_EFFECT_LOSE_GAME)
 		gm.world = tiles.RestartLevel()
 	}
 

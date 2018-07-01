@@ -1,7 +1,7 @@
-# ASharedJourney
+﻿# ASharedJourney
 GameJam SFR 2018 Julia - Pierre - Gabriel - Aurore - Fabio
 
-Theme: Si j'étais toi et que tu étais moi (If I was you and you was me)
+Theme: Si j'étais toi et que tu étais moi (If I were you and you were me)
 
 ## Getting Started
 
@@ -13,9 +13,32 @@ Theme: Si j'étais toi et que tu étais moi (If I was you and you was me)
 
 ## Building and running
 
+### Installation
+
+- First, install the game and its dependencies
+
+```bash
+go get -u github.com/gandrin/ASharedJourney
 ```
-go run main.go
-make build_assets
+
+- You will also need the `go-bindata` program to build the assets into the binary file
+
+```bash
+go get -u github.com/jteeuwen/go-bindata/...
+```
+
+> Make sure your `$GOPATH` is set :wink:
+
+### Run
+
+```
+make run
+```
+
+### Releasing
+
+```
+make build_mac
 ```
 
 ## License
