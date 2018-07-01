@@ -35,8 +35,8 @@ func run() {
 
 	music.Music.Start()
 
-	<- music.MusicLoaded
-	menu.Menu(menu.MenuPicName, "Press ENTER to PLAY ...",true, music.SOUND_EFFECT_START_GAME)
+	<-music.MusicLoaded
+	menu.Menu(menu.MenuPicName, "Press ENTER to PLAY ...", true, music.SOUND_EFFECT_START_GAME)
 
 	world := tiles.NextLevel()
 

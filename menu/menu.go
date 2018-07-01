@@ -6,20 +6,20 @@ import (
 	"log"
 	"os"
 	"path"
-	"runtime"
+	"time"
+
 	"github.com/faiface/pixel"
+	"github.com/faiface/pixel/pixelgl"
 	"github.com/faiface/pixel/text"
+	"github.com/gandrin/ASharedJourney/music"
 	"github.com/gandrin/ASharedJourney/shared"
 	"golang.org/x/image/colornames"
 	"golang.org/x/image/font/basicfont"
-	"github.com/faiface/pixel/pixelgl"
-	"time"
-	"github.com/gandrin/ASharedJourney/music"
 )
 
 const menuTextPosX float64 = 200
 const menuTextPosY float64 = 100
-const MenuPicName string = "tiles/menu.png"
+const MenuPicName string = "menu.png"
 
 //draw menu to screen while player while player hasn't pressed enter
 func Menu(pictureName string, menuText string, blocking bool, exitSoundEffect music.SoundEffect) {
@@ -30,11 +30,7 @@ func Menu(pictureName string, menuText string, blocking bool, exitSoundEffect mu
 	fmt.Fprintln(basicTxt, menuText)
 
 	//get picture
-	_, filename, _, ok := runtime.Caller(1)
-	if !ok {
-		log.Fatal("error loading called")
-	}
-	menupicture := path.Join(path.Dir(filename), pictureName)
+	menupicture := path.Join(".", "assets", MenuPicName)
 	pic, err := loadPicture(menupicture)
 	if err != nil {
 		log.Fatal(err)
@@ -54,14 +50,13 @@ func Menu(pictureName string, menuText string, blocking bool, exitSoundEffect mu
 	shared.Win.Update()
 
 	//menu loop
-	if blocking{
+	if blocking {
 		for !shared.Win.JustPressed(pixelgl.KeyEnter) && !shared.Win.Closed() {
 			time.Sleep(50 * time.Millisecond)
 			shared.Win.Update()
 		}
 		music.Music.PlayEffect(exitSoundEffect)
 	}
-
 
 }
 
