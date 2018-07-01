@@ -33,6 +33,12 @@ go get -u github.com/jteeuwen/go-bindata/...
 make run
 ```
 
+### Releasing
+
+```
+make build_mac
+```
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
