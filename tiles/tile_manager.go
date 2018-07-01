@@ -64,11 +64,12 @@ type World struct {
 
 //SpriteWithPosition holds the sprite and its position into the window
 type SpriteWithPosition struct {
-	Sprite     *pixel.Sprite
-	Position   pixel.Vec
-	InTheWater bool
-	InTheHole  bool
-	HasWon     bool
+	Sprite          *pixel.Sprite
+	Position        pixel.Vec
+	InTheWater      bool
+	InTheHole       bool
+	HasWon          bool
+	WinningPosition pixel.Vec
 }
 
 // loadPicture load the picture
