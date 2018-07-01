@@ -4,10 +4,10 @@ import (
 	"reflect"
 
 	"github.com/faiface/pixel"
+	"github.com/gandrin/ASharedJourney/menu"
 	"github.com/gandrin/ASharedJourney/music"
 	"github.com/gandrin/ASharedJourney/supervisor"
 	"github.com/gandrin/ASharedJourney/tiles"
-	"github.com/gandrin/ASharedJourney/menu"
 )
 
 //move function recives as input the data from a player direction channel
@@ -21,7 +21,7 @@ func (gm *Mechanics) Move(playDir *supervisor.PlayerDirections) *tiles.World {
 	}
 
 	if gm.world.Players[0].InTheWater || gm.world.Players[1].InTheWater {
-		menu.Menu(menu.DrownedGameImage, "Oops ....", pixel.V(300,150),true, music.SOUND_EFFECT_LOSE_GAME)
+		menu.Menu(menu.DrownedGameImage, "Oops ....", pixel.V(300, 150), true, music.SOUND_EFFECT_LOSE_GAME)
 		gm.world = tiles.RestartLevel()
 	}
 
@@ -117,6 +117,7 @@ func (gm *Mechanics) movePlayer(player *tiles.SpriteWithPosition, getNextPositio
 			if holeTile.Position.X == nextPlayerPosition.X && holeTile.Position.Y == nextPlayerPosition.Y {
 				player.InTheHole = true
 				gm.world.Holes[len(gm.world.Holes)-1].Position = nextPlayerPosition
+				music.Music.PlayEffect(music.SOUND_EFFECT_SNORE)
 			}
 		}
 
