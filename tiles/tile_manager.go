@@ -20,6 +20,7 @@ import (
 
 // Level names
 const (
+	bonhommeMap          string = "bonhomme"
 	splashScreen         string = "orgyIsland"
 	veryEasyLevel        string = "veryEasy"
 	mazeLevel            string = "maze"
@@ -35,7 +36,7 @@ const (
 var CurrentLevel = -1
 
 // Levels list
-var Levels = [...]string{veryEasyLevel, mazeLevel, theLongCorridorLevel, amazeingLevel, theLittlePigLevel, myLittlePonyLevel, forestLevel}
+var Levels = [...]string{theLittlePigLevel, forestLevel, veryEasyLevel, mazeLevel, theLongCorridorLevel, amazeingLevel, theLittlePigLevel, bonhommeMap, myLittlePonyLevel}
 
 // Uncomment this for testing :)
 // var Levels = [...]string{biggerLevel}
