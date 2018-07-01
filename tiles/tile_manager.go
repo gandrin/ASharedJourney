@@ -1,10 +1,12 @@
 package tiles
 
 import (
+	"bytes"
 	"errors"
 	"image"
 	"os"
-	"path"
+
+	"github.com/gandrin/ASharedJourney/assets_manager"
 
 	"github.com/gandrin/ASharedJourney/shared"
 
@@ -55,7 +57,7 @@ var Levels = [...]string{
 // Uncomment this for testing :)
 // var Levels = [...]string{biggerLevel}
 
-const tilesPath = "/map.png" // path to your tileset
+const tilesPath = "map.png" // path to your tileset
 
 // TileSize tile in pixels of squares
 var TileSize int
@@ -83,17 +85,18 @@ type SpriteWithPosition struct {
 	WinningPosition pixel.Vec
 }
 
-// loadPicture load the picture
-func loadPicture(path string) (pixel.Picture, error) {
-	file, err := os.Open(path)
+// loadMap load the map
+func loadMap() (pixel.Picture, error) {
+
+	byteImage, err := assetsManager.Asset("assets/" + tilesPath)
 	if err != nil {
 		return nil, err
 	}
-	defer file.Close()
-	img, _, err := image.Decode(file)
+	img, _, err := image.Decode(bytes.NewReader(byteImage))
 	if err != nil {
 		return nil, err
 	}
+
 	return pixel.PictureDataFromImage(img), nil
 }
 
@@ -178,9 +181,9 @@ func RestartLevel() World {
 // GenerateMap generates the map from a .tmx file
 func GenerateMap(levelFileName string) World {
 	//added support for relative file addressing
-	filemap := path.Join(".", "assets", levelFileName+".tmx")
-	filetile := path.Join(".", "assets", tilesPath)
-	gameMap, err := tiled.LoadFromFile(filemap)
+	byteTiledMap, _ := assetsManager.Asset("assets/" + levelFileName + ".tmx")
+	gameMap, err := tiled.LoadFromReader("", bytes.NewReader(byteTiledMap))
+
 	if err != nil {
 		log.Fatal(err)
 		fmt.Println("Error parsing map")
@@ -190,7 +193,7 @@ func GenerateMap(levelFileName string) World {
 	mapHeight = gameMap.Height
 	TileSize = gameMap.TileHeight
 
-	spritesheet, err := loadPicture(filetile)
+	spritesheet, err := loadMap()
 	if err != nil {
 		panic(err)
 	}
