@@ -14,13 +14,15 @@ import (
 func (gm *Mechanics) Move(playDir *supervisor.PlayerDirections) *tiles.World {
 	//log.Printf("Move called")
 
-	if gm.world.Players[0].InTheWater || gm.world.Players[1].InTheWater {
-		menu.Menu(menu.DrownedGameImage, "Oops ....", pixel.V(300,150),true, music.SOUND_EFFECT_LOSE_GAME)
-		gm.world = tiles.RestartLevel()
-	} else if gm.world.Players[0].HasWon && gm.world.Players[1].HasWon &&
+	if gm.world.Players[0].HasWon && gm.world.Players[1].HasWon &&
 		!reflect.DeepEqual(gm.world.Players[0].WinningPosition, gm.world.Players[1].WinningPosition) {
 		music.Music.PlayEffect(music.SOUND_EFFECT_WIN_GAME)
 		gm.world = tiles.NextLevel()
+	}
+
+	if gm.world.Players[0].InTheWater || gm.world.Players[1].InTheWater {
+		menu.Menu(menu.DrownedGameImage, "Oops ....", pixel.V(300,150),true, music.SOUND_EFFECT_LOSE_GAME)
+		gm.world = tiles.RestartLevel()
 	}
 
 	if playDir.Player1.X != 0 || playDir.Player1.Y != 0 {
@@ -30,6 +32,8 @@ func (gm *Mechanics) Move(playDir *supervisor.PlayerDirections) *tiles.World {
 
 		gm.movePlayer(&gm.world.Players[0], playDir.Player1.Next)
 		gm.movePlayer(&gm.world.Players[1], playDir.Player2.Next)
+
+		music.Music.PlayEffect(music.SOUND_EFFECT_SNORE)
 	}
 
 	return gm.copyToNewWorld()

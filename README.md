@@ -1,5 +1,6 @@
 ﻿# ASharedJourney
 GameJam SFR 2018 Julia - Pierre - Gabriel - Aurore - Fabio
+Music: Thibault
 
 Theme: Si j'étais toi et que tu étais moi (If I were you and you were me)
 
