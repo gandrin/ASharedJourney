@@ -9,8 +9,7 @@ type PlayerManager struct {
 }
 
 type playerMechanics struct {
-	PType       PlayerType
-	OldPos      shared.Position
-	NewPos      shared.Position
-	PlayerEvent *Event
+	PType  PlayerType
+	OldPos shared.Position
+	NewPos shared.Position
 }
