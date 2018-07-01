@@ -19,6 +19,10 @@ func (gm *Mechanics) Move(playDir *supervisor.PlayerDirections) *tiles.World {
 	}
 
 	if playDir.Player1.X != 0 || playDir.Player1.Y != 0 {
+		// Zz tile... c'est moche mais bon...
+		gm.world.Holes[len(gm.world.Holes)-1].Position.X = -100
+		gm.world.Holes[len(gm.world.Holes)-1].Position.Y = -100
+
 		gm.movePlayer(&gm.world.Players[0], playDir.Player1.Next)
 		gm.movePlayer(&gm.world.Players[1], playDir.Player2.Next)
 	}
@@ -33,6 +37,7 @@ func (gm *Mechanics) movePlayer(player *tiles.SpriteWithPosition, getNextPositio
 	/// In the hole
 	if player.InTheHole {
 		player.InTheHole = false
+		gm.world.Holes[len(gm.world.Holes)-1].Position = player.Position
 		return
 	}
 
@@ -92,6 +97,7 @@ func (gm *Mechanics) movePlayer(player *tiles.SpriteWithPosition, getNextPositio
 		for _, holeTile := range gm.world.Holes {
 			if holeTile.Position.X == nextPlayerPosition.X && holeTile.Position.Y == nextPlayerPosition.Y {
 				player.InTheHole = true
+				gm.world.Holes[len(gm.world.Holes)-1].Position = nextPlayerPosition
 			}
 		}
 

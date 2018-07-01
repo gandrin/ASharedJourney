@@ -27,6 +27,7 @@ const (
 	forestLevel       string = "forest"
 	myLittlePonyLevel string = "myLittlePony"
 	theLittlePigLevel string = "theLittlePig"
+	inTheHoleTileID   int    = 61 // ou 62
 )
 
 // CurrentLevel played
@@ -218,6 +219,14 @@ func GenerateMap(levelFileName string) World {
 	if len(winStars) == 0 {
 		panic(errors.New("no win star tile was placed"))
 	}
+
+	// Zz special tile
+	sprite := pixel.NewSprite(spritesheet, tilesFrames[inTheHoleTileID])
+	spritePosition := pixel.V(-100, -100)
+	holes = append(holes, SpriteWithPosition{
+		Sprite:   sprite,
+		Position: spritePosition,
+	})
 
 	world := World{
 		BackgroundTiles: background,
