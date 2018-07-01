@@ -43,7 +43,6 @@ var CurrentLevel = -1
 
 // Levels list
 var Levels = [...]string{
-	theStruggleLevel,
 	veryEasyLevel,
 	amazeingLevel,
 	mazeLevel,
@@ -51,6 +50,7 @@ var Levels = [...]string{
 	theLongCorridorLevel,
 	theLittlePigLevel,
 	bonhommeMap,
+	theStruggleLevel,
 	myLittlePonyLevel,
 }
 
