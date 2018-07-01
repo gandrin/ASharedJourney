@@ -10,13 +10,13 @@ import (
 type soundEffect string
 
 const (
-	SOUND_EFFECT_START_GAME soundEffect = "/music/MenuEffect.wav"
+	SOUND_EFFECT_START_GAME soundEffect = "/MenuEffect.wav"
 
-	SOUND_EFFECT_WIN_GAME soundEffect = "/music/win2.mp3"
+	SOUND_EFFECT_WIN_GAME soundEffect = "/win2.mp3"
 
-	SOUND_EFFECT_LOSE_GAME soundEffect = "/music/lose2.mp3"
+	SOUND_EFFECT_LOSE_GAME soundEffect = "/lose2.mp3"
 
-	SOUND_EFFECT_WATER soundEffect = "/music/Acid_Bubble.mp3"
+	SOUND_EFFECT_WATER soundEffect = "/Acid_Bubble.mp3"
 )
 
 func (m *musicStreamers) PlayEffect(effectType soundEffect) {

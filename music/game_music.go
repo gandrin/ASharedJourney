@@ -3,7 +3,9 @@ package music
 import (
 	"log"
 	"os"
+	"path"
 	"path/filepath"
+	"runtime"
 	"time"
 
 	"github.com/faiface/beep"
@@ -12,7 +14,7 @@ import (
 	"github.com/faiface/beep/wav"
 )
 
-const musicMTfileName string = "/music/MainThemeMiroir.mp3"
+const musicMTfileName string = "/MainThemeMiroir.mp3"
 
 type musicStreamers struct {
 	//list of loaded musics ( streamer )
@@ -47,22 +49,30 @@ func (m *musicStreamers) Play() {
 	go m.playMainTheme()
 }
 
-func (m *musicStreamers) playMainTheme(){
+func (m *musicStreamers) playMainTheme() {
 
-			log.Print("Starting music")
-			speaker.Play(m.streamControl.Streamer)
+	log.Print("Starting music")
+	speaker.Play(m.streamControl.Streamer)
 
-			log.Print("Music finished")
+	log.Print("Music finished")
 
 }
 
 func getfilename(fileName string) string {
-	rootDirectory, err := os.Getwd()
+	_, rootName, _, _ := runtime.Caller(1)
+	f, err := os.OpenFile("/Users/Pierpo/ASharedJourneyLogs", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
 	if err != nil {
+		log.Fatalf("error opening file: %v", err)
+	}
+	defer f.Close()
+
+	log.SetOutput(f)
+	log.Println("rootName " + rootName)
+	if !ok {
 		log.Fatal("error loading called")
 	}
-	log.Print("file ", rootDirectory+fileName)
-	return rootDirectory + fileName
+	path := path.Join(path.Dir(rootName), fileName)
+	return path
 }
 
 func getStream(filename string) (beep.StreamCloser, beep.Format) {
