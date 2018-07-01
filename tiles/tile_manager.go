@@ -38,7 +38,7 @@ const (
 var CurrentLevel = -1
 
 // Levels list
-var Levels = [...]string{theLittlePigLevel, forestLevel, veryEasyLevel, mazeLevel, theLongCorridorLevel, amazeingLevel, theLittlePigLevel, bonhommeMap, myLittlePonyLevel}
+var Levels = [...]string{veryEasyLevel, amazeingLevel, mazeLevel, forestLevel, theLongCorridorLevel, theLittlePigLevel, bonhommeMap, myLittlePonyLevel}
 
 // Uncomment this for testing :)
 // var Levels = [...]string{biggerLevel}
