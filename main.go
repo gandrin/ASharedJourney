@@ -37,7 +37,7 @@ func run() {
 
 	<-music.MusicLoaded
 	menu.Menu(menu.MainMenuImage, "Press ENTER to PLAY ...", pixel.V(180,150),true, music.SOUND_EFFECT_START_GAME)
-	menu.Menu(menu.RulesMenuImage, "PLAY", pixel.V(180,150),true, music.SOUND_EFFECT_START_GAME)
+	menu.Menu(menu.RulesMenuImage, "Prese ENTER to START", pixel.V(180,150),true, music.SOUND_EFFECT_START_GAME)
 
 	world := tiles.NextLevel()
 

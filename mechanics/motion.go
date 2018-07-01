@@ -33,7 +33,6 @@ func (gm *Mechanics) Move(playDir *supervisor.PlayerDirections) *tiles.World {
 		gm.movePlayer(&gm.world.Players[0], playDir.Player1.Next)
 		gm.movePlayer(&gm.world.Players[1], playDir.Player2.Next)
 
-		music.Music.PlayEffect(music.SOUND_EFFECT_SNORE)
 	}
 
 	return gm.copyToNewWorld()
@@ -95,6 +94,7 @@ func (gm *Mechanics) movePlayer(player *tiles.SpriteWithPosition, getNextPositio
 						// remove both obj (hole and movable)
 						gm.world.Movables[n].Position.X = -100
 						gm.world.Holes[h].Position.X = -100
+						music.Music.PlayEffect(music.SOUND_EFFECT_SNORE)
 					}
 				}
 			}
