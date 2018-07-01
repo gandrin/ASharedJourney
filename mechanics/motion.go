@@ -12,6 +12,7 @@ func (gm *Mechanics) Move(playDir *supervisor.PlayerDirections) *tiles.World {
 	//log.Printf("Move called")
 
 	if gm.world.Players[0].HasWon && gm.world.Players[1].HasWon {
+		music.Music.PlayEffect(music.SOUND_EFFECT_WIN_GAME)
 		gm.world = tiles.NextLevel()
 	}
 
