@@ -22,7 +22,7 @@ const menuTextPosY float64 = 100
 //level image names
 const MainMenuImage string = "menu.png"
 const WinLevelMenuImage string = "win.png"
-const FinishedGameImage string = "win.png"
+const FinishedGameImage string = "end.png"
 
 
 //draw menu to screen while player while player hasn't pressed enter
