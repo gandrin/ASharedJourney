@@ -20,6 +20,7 @@ import (
 
 // Level names
 const (
+	splashScreen      string = "orgyIsland"
 	amazeingLevel     string = "amazeing"
 	forestLevel       string = "forest"
 	myLittlePonyLevel string = "myLittlePony"
@@ -30,13 +31,16 @@ const (
 var CurrentLevel = -1
 
 // Levels list
-var Levels = [...]string{amazeingLevel, forestLevel, myLittlePonyLevel, theLittlePigLevel}
+var Levels = [...]string{splashScreen, amazeingLevel, forestLevel, myLittlePonyLevel, theLittlePigLevel}
 
 const tilesPath = "/tiles/map.png" // path to your tileset
-var TileSize int = 32
+
+// TileSize tile in pixels of squares
+var TileSize int
 var mapWidth int
 var mapHeight int
 
+// World struct with global tiles and obj positions
 type World struct {
 	BackgroundTiles []SpriteWithPosition
 	Players         []SpriteWithPosition
@@ -153,6 +157,7 @@ func GenerateMap(levelFileName string) World {
 	}
 	mapWidth = gameMap.Width
 	mapHeight = gameMap.Height
+	TileSize = gameMap.TileHeight
 
 	spritesheet, err := loadPicture(filetile)
 	if err != nil {
@@ -163,51 +168,54 @@ func GenerateMap(levelFileName string) World {
 
 	originPosition := getOrigin(shared.Win)
 
-	backgroundLayerIndex, err := findLayerIndex("background", gameMap.Layers)
-	if err != nil {
-		panic(err)
+	var background []SpriteWithPosition
+	var players []SpriteWithPosition
+	var obstacles []SpriteWithPosition
+	var movables []SpriteWithPosition
+	var water []SpriteWithPosition
+	var winStars []SpriteWithPosition
+	var holes []SpriteWithPosition
+
+	backgoundIndex, err := findLayerIndex("background", gameMap.Layers)
+	if err == nil {
+		background = extractAndPlaceSprites(gameMap.Layers[backgoundIndex].Tiles, spritesheet, tilesFrames, originPosition)
 	}
 	playersLayerIndex, err := findLayerIndex("animals", gameMap.Layers)
-	if err != nil {
-		panic(err)
+	if err == nil {
+		players = extractAndPlaceSprites(gameMap.Layers[playersLayerIndex].Tiles, spritesheet, tilesFrames, originPosition)
 	}
 	obstaclesLayerIndex, err := findLayerIndex("obstacles", gameMap.Layers)
-	if err != nil {
-		panic(err)
+	if err == nil {
+		obstacles = extractAndPlaceSprites(gameMap.Layers[obstaclesLayerIndex].Tiles, spritesheet, tilesFrames, originPosition)
 	}
 	movablesLayerIndex, err := findLayerIndex("movables", gameMap.Layers)
-	if err != nil {
-		panic(err)
+	if err == nil {
+		movables = extractAndPlaceSprites(gameMap.Layers[movablesLayerIndex].Tiles, spritesheet, tilesFrames, originPosition)
 	}
 	waterLayerIndex, err := findLayerIndex("water", gameMap.Layers)
-	if err != nil {
-		panic(err)
+	if err == nil {
+		water = extractAndPlaceSprites(gameMap.Layers[waterLayerIndex].Tiles, spritesheet, tilesFrames, originPosition)
 	}
 	winStarsLayerIndex, err := findLayerIndex("win", gameMap.Layers)
-	if err != nil {
-		panic(err)
+	if err == nil {
+		winStars = extractAndPlaceSprites(gameMap.Layers[winStarsLayerIndex].Tiles, spritesheet, tilesFrames, originPosition)
 	}
 	holesLayerIndex, err := findLayerIndex("holes", gameMap.Layers)
-	if err != nil {
-		panic(err)
+	if err == nil {
+		holes = extractAndPlaceSprites(gameMap.Layers[holesLayerIndex].Tiles, spritesheet, tilesFrames, originPosition)
 	}
 
-	backgroundSprite := extractAndPlaceSprites(gameMap.Layers[backgroundLayerIndex].Tiles, spritesheet, tilesFrames, originPosition)
-	players := extractAndPlaceSprites(gameMap.Layers[playersLayerIndex].Tiles, spritesheet, tilesFrames, originPosition)
+	// Playable checks
 	if len(players) == 0 {
 		panic(errors.New("no animal tile was placed"))
 	}
-	obstacles := extractAndPlaceSprites(gameMap.Layers[obstaclesLayerIndex].Tiles, spritesheet, tilesFrames, originPosition)
-	movables := extractAndPlaceSprites(gameMap.Layers[movablesLayerIndex].Tiles, spritesheet, tilesFrames, originPosition)
-	water := extractAndPlaceSprites(gameMap.Layers[waterLayerIndex].Tiles, spritesheet, tilesFrames, originPosition)
-	holes := extractAndPlaceSprites(gameMap.Layers[holesLayerIndex].Tiles, spritesheet, tilesFrames, originPosition)
-	winStars := extractAndPlaceSprites(gameMap.Layers[winStarsLayerIndex].Tiles, spritesheet, tilesFrames, originPosition)
+
 	if len(winStars) == 0 {
 		panic(errors.New("no win star tile was placed"))
 	}
 
 	world := World{
-		BackgroundTiles: backgroundSprite,
+		BackgroundTiles: background,
 		Players:         players,
 		Movables:        movables,
 		Obstacles:       obstacles,
