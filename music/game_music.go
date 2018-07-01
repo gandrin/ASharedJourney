@@ -1,17 +1,25 @@
 package music
 
 import (
+	"bytes"
+	"io"
 	"log"
-	"os"
-	"path"
 	"path/filepath"
 	"time"
+
+	"github.com/gandrin/ASharedJourney/assets_manager"
 
 	"github.com/faiface/beep"
 	"github.com/faiface/beep/mp3"
 	"github.com/faiface/beep/speaker"
 	"github.com/faiface/beep/wav"
 )
+
+type nopCloser struct {
+	io.Reader
+}
+
+func (nopCloser) Close() error { return nil }
 
 //global synchronization channel
 var MusicLoaded chan int
@@ -75,7 +83,7 @@ func (m *musicStreamers) playMainTheme() {
 }
 
 func getfilename(fileName string) string {
-	return path.Join(".", "assets", fileName)
+	return "assets/" + fileName
 }
 
 func getStream(filename string) (beep.StreamCloser, beep.Format) {
@@ -84,15 +92,17 @@ func getStream(filename string) (beep.StreamCloser, beep.Format) {
 	var newStreamer beep.StreamCloser
 	var format beep.Format
 	var err error
-	file, err := os.Open(absfilepath)
+
+	byteSound, err := assetsManager.Asset(absfilepath)
 	if err != nil {
 		log.Fatal("Music file  ", err)
 	}
 	ext := filepath.Ext(filename)
+	nopCloser := nopCloser{bytes.NewReader(byteSound)}
 	if ext == ".mp3" {
-		newStreamer, format, err = mp3.Decode(file)
+		newStreamer, format, err = mp3.Decode(nopCloser)
 	} else if ext == ".wav" {
-		newStreamer, format, err = wav.Decode(file)
+		newStreamer, format, err = wav.Decode(nopCloser)
 	}
 
 	if err != nil {

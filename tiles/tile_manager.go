@@ -7,6 +7,7 @@ import (
 	"os"
 
 	"github.com/gandrin/ASharedJourney/assets_manager"
+	tiled "github.com/lafriks/go-tiled"
 
 	"github.com/gandrin/ASharedJourney/shared"
 
@@ -18,10 +19,8 @@ import (
 
 	"github.com/faiface/pixel"
 	"github.com/faiface/pixel/pixelgl"
-	"github.com/lafriks/go-tiled"
 	"github.com/gandrin/ASharedJourney/menu"
 	"github.com/gandrin/ASharedJourney/music"
-
 )
 
 // Level names
@@ -51,8 +50,8 @@ var Levels = [...]string{
 	theLongCorridorLevel,
 	theLittlePigLevel,
 	bonhommeMap,
-	myLittlePonyLevel,
 	theStruggleLevel,
+	myLittlePonyLevel,
 }
 
 // Uncomment this for testing :)
@@ -156,22 +155,31 @@ func findLayerIndex(layerName string, layers []*tiled.Layer) (layerIndex int, er
 	return -1, errors.New("Expected to find layer with name " + layerName)
 }
 
+// SetNextLevel called before NextLevel if you want to select it
+func SetNexLevel(nextMapLevel int) {
+	if nextMapLevel == 0 {
+		CurrentLevel = len(Levels)
+	} else {
+		CurrentLevel = nextMapLevel - 1
+	}
+}
+
 // NextLevel goes to next level
 func NextLevel() World {
 	CurrentLevel = (CurrentLevel + 1) % len(Levels)
 	var newWorlg = GenerateMap(Levels[CurrentLevel])
-	if CurrentLevel!=0{
+	if CurrentLevel != 0 {
 		//if !(len(Levels) == CurrentLevel){
-		if !(len(Levels) == CurrentLevel){
+		if !(len(Levels) == CurrentLevel) {
 			//last level was finished
-			menu.Menu(menu.WinLevelMenuImage, "Level solved, continue ...", pixel.V(150,200),true, music.SOUND_EFFECT_WIN_GAME)
+			menu.Menu(menu.WinLevelMenuImage, "Level solved, continue ...", pixel.V(150, 200), true, music.SOUND_EFFECT_WIN_GAME)
 
-		}else{
+		} else {
 			//game was finished
 			music.Music.PlayEffect(music.SOUND_EFFECT_WIN_FINAL_GAME)
-			menu.Menu(menu.FinishedGameImage, "You WIN", pixel.V(300,140),true, music.SOUND_EFFECT_WIN_GAME)
+			menu.Menu(menu.FinishedGameImage, "You WIN", pixel.V(300, 140), true, music.SOUND_EFFECT_WIN_GAME)
 			//reload main menu
-			menu.Menu(menu.MainMenuImage, "Press ENTER to PLAY ...", pixel.V(180,150),true, music.SOUND_EFFECT_START_GAME)
+			menu.Menu(menu.MainMenuImage, "Press ENTER to PLAY ...", pixel.V(180, 150), true, music.SOUND_EFFECT_START_GAME)
 
 		}
 	}

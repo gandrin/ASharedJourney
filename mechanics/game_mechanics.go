@@ -82,6 +82,47 @@ func (mechanics *Mechanics) handleGameEvent(event *supervisor.Event) {
 	case "RESTART":
 		mechanics.world = tiles.RestartLevel()
 		break
+	case "KEY0":
+		tiles.SetNexLevel(0)
+		mechanics.world = tiles.NextLevel()
+		break
+	case "KEY1":
+		tiles.SetNexLevel(1)
+		mechanics.world = tiles.NextLevel()
+		break
+	case "KEY2":
+		tiles.SetNexLevel(2)
+		mechanics.world = tiles.NextLevel()
+		break
+	case "KEY3":
+		tiles.SetNexLevel(3)
+		mechanics.world = tiles.NextLevel()
+		break
+	case "KEY4":
+		tiles.SetNexLevel(4)
+		mechanics.world = tiles.NextLevel()
+		break
+	case "KEY5":
+		tiles.SetNexLevel(5)
+		mechanics.world = tiles.NextLevel()
+		break
+	case "KEY6":
+		tiles.SetNexLevel(6)
+		mechanics.world = tiles.NextLevel()
+		break
+	case "KEY7":
+		tiles.SetNexLevel(7)
+		mechanics.world = tiles.NextLevel()
+		break
+	case "KEY8":
+		tiles.SetNexLevel(8)
+		mechanics.world = tiles.NextLevel()
+		break
+	case "KEY9":
+		tiles.SetNexLevel(9)
+		mechanics.world = tiles.NextLevel()
+		break
+
 	default:
 		//No event
 	}
