@@ -1,4 +1,4 @@
-ASharedJourney.app/
+build/ASharedJourney.app/Contents/MacOS/ASharedJourney
 main
 .DS_Store
 .idea
