@@ -2,6 +2,6 @@
 
 go build main.go
 chmod +x main
-mkdir -p ./ASharedJourney.app/Contents/MacOS/
-cp main ./ASharedJourney.app/Contents/MacOS/ASharedJourney
-cp -r ./assets ./ASharedJourney.app/Contents/MacOS/
+mkdir -p ./build/ASharedJourney.app/Contents/MacOS/
+cp main ./build/ASharedJourney.app/Contents/MacOS/ASharedJourney
+cp -r ./assets ./build/ASharedJourney.app/Contents/MacOS/
