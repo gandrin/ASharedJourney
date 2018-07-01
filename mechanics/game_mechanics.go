@@ -2,9 +2,8 @@
 package mechanics
 
 import (
-	"log"
-
 	"fmt"
+	"log"
 	"time"
 
 	"github.com/gandrin/ASharedJourney/shared"
@@ -16,25 +15,25 @@ type Mechanics struct {
 	world tiles.World
 	//communication channel to animator
 	toAnime chan *tiles.World
-
 	//communication channel from supervisor
-	playerDirectionsFromSupervisor chan *supervisor.PlayerDirections
-
-	//all data relative to game status ( score , nb actions , ect ... ) is in game_status : call by func
+	gameEventChannel chan *supervisor.GameEvent
 }
 
 //game mechanincs stringleton
 var Mecha *Mechanics
 
 //initialise the game mechanics structure
-func Start(fromSup chan *supervisor.PlayerDirections, baseWorld tiles.World) chan *tiles.World {
+func Start(
+	gameEventChannel chan *supervisor.GameEvent,
+	baseWorld tiles.World,
+) chan *tiles.World {
 	Mecha = new(Mechanics)
 	//build return channel to animator
 	var toAnim chan *tiles.World
 	toAnim = make(chan *tiles.World, 1)
 
 	Mecha.toAnime = toAnim
-	Mecha.playerDirectionsFromSupervisor = fromSup
+	Mecha.gameEventChannel = gameEventChannel
 	Mecha.world = baseWorld
 
 	//log.Print("Mecanics loaded")
@@ -42,39 +41,50 @@ func Start(fromSup chan *supervisor.PlayerDirections, baseWorld tiles.World) cha
 }
 
 //synchronisation objects
-func (motion *Mechanics) muxChannel() *supervisor.PlayerDirections {
-	var nextMotion *supervisor.PlayerDirections
+func (mechanics *Mechanics) muxChannel() *supervisor.GameEvent {
 	select {
-	case motion, ok := <-motion.playerDirectionsFromSupervisor:
-		if ok {
-			nextMotion = motion
-		} else {
-			fmt.Println("Channel closed!")
+	case nextGameEvent, ok := <-mechanics.gameEventChannel:
+		fmt.Println("HERE")
+		fmt.Println(nextGameEvent)
+		if !ok {
+			fmt.Println("Channel  closed!")
 			log.Fatal()
 		}
+		return nextGameEvent
 	default:
+		nextEvent := supervisor.Event("NONE")
+		nextGameEvent := new(supervisor.GameEvent)
+		nextGameEvent.PlayerDirections = new(supervisor.PlayerDirections)
+		nextGameEvent.PlayerDirections.Player1.X = 0
+		nextGameEvent.PlayerDirections.Player1.Y = 0
+		nextGameEvent.PlayerDirections.Player2.X = 0
+		nextGameEvent.PlayerDirections.Player2.Y = 0
+		nextGameEvent.Event = &nextEvent
 		fmt.Println("No player direction mecha is faster than supervisor ")
+		return nextGameEvent
 		//set motion to default values
-		nextMotion = new(supervisor.PlayerDirections)
-		nextMotion.Player1.X = 0
-		nextMotion.Player1.Y = 0
-		nextMotion.Player2.X = 0
-		nextMotion.Player2.Y = 0
-
 	}
-	return nextMotion
 }
 
 //call mechanics
-func (m *Mechanics) Play() {
+func (mechanics *Mechanics) Play() {
 
 	for play := true; play; play = shared.Continue() {
 		//delay to not call and overload cpu
 		time.Sleep(shared.MechanicsRefreshDelay_ms * time.Millisecond)
 
-		playDir := m.muxChannel()
-		//log.Printf("Got direction ", playDir)
+		gameEvent := mechanics.muxChannel()
+		mechanics.toAnime <- mechanics.Move(gameEvent.PlayerDirections)
+		mechanics.handleGameEvent(gameEvent.Event)
+	}
+}
 
-		m.toAnime <- m.Move(playDir)
+func (mechanics *Mechanics) handleGameEvent(event *supervisor.Event) {
+	switch *event {
+	case "RESTART":
+		mechanics.world = tiles.RestartLevel()
+		break
+	default:
+		//No event
 	}
 }

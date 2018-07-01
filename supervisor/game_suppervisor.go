@@ -11,36 +11,43 @@ type PlayerDirections struct {
 	Player1 Direction
 	Player2 Direction
 }
+
+type GameEvent struct {
+	PlayerDirections *PlayerDirections
+	Event            *Event
+}
+
 type GameSupervisor struct {
-	DirectionChannel chan *PlayerDirections
+	GameEventsChannel chan *GameEvent
 }
 
 var Sup *GameSupervisor
 
 //Start inits the game and specify the game mode
-func Start() chan *PlayerDirections {
+func Start() chan *GameEvent {
 	Sup = new(GameSupervisor)
-	Sup.DirectionChannel = make(chan *PlayerDirections, 1)
-	return Sup.DirectionChannel
+	Sup.GameEventsChannel = make(chan *GameEvent, 1)
+	return Sup.GameEventsChannel
 }
 
 //Play launches game supervisor (should be lauched last)
 
 func (gameSupervisor *GameSupervisor) Play() {
 	var nextMove *PlayerDirections
+	var nextEvent *Event
+	nextGameEvent := new(GameEvent)
 	for play := true; play; play = shared.Continue() {
-
 		time.Sleep(shared.KeyPressedDelay_ms * time.Millisecond)
 
+		nextEvent = catchEvent()
 		//get the players key move
 		nextMove = Move()
-		if( nextMove.Player1.X != 0 || nextMove.Player1.Y!= 0 ){
+		if nextMove.Player1.X != 0 || nextMove.Player1.Y != 0 {
 			//new move
 			shared.AddAction()
 		}
-
-
-		gameSupervisor.DirectionChannel <- nextMove
-
+		nextGameEvent.PlayerDirections = nextMove
+		nextGameEvent.Event = nextEvent
+		gameSupervisor.GameEventsChannel <- nextGameEvent
 	}
 }

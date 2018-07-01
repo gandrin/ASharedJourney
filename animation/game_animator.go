@@ -45,8 +45,7 @@ func (anim *Animator) muxChannel() *mechanics.Motion {
 		if ok {
 			nextMotion = m
 		} else {
-			fmt.Println("Channel closed!")
-			log.Fatal()
+			log.Fatal("Channel closed!")
 		}
 	default:
 		fmt.Println("No value ready, moving on.")

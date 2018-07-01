@@ -37,9 +37,9 @@ func run() {
 
 	fps := time.Tick(time.Second / frameRate)
 
-	playerDirectionChannel := supervisor.Start()
+	gameEventsChannel := supervisor.Start()
 
-	newWorldChannel := mechanics.Start(playerDirectionChannel, world)
+	newWorldChannel := mechanics.Start(gameEventsChannel, world)
 
 	for !win.Closed() {
 		win.Clear(colornames.Black)

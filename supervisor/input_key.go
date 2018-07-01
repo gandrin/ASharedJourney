@@ -19,12 +19,12 @@ var interty int
 func key() Direction {
 	var pressed pixelgl.Button
 
-	var newDir Direction = Direction{
+	var newDir = Direction{
 		X: 0,
 		Y: 0,
 	}
-	//check if key was just pressed
 
+	//check if key was just pressed
 	if shared.Win.Pressed(pixelgl.KeyLeft) {
 		pressed = pixelgl.KeyLeft
 		newDir.X = -1
