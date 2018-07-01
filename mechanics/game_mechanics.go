@@ -17,12 +17,6 @@ type Mechanics struct {
 	Player1 PlayerManager
 	Player2 PlayerManager
 
-	hitMap [][]TileRules
-	//location of event that can be trigged on the map
-	eventMap [][]*EventType
-
-	dynamicObject [][]*Object
-
 	world tiles.World
 	//communication channel to animator
 	toAnime chan *tiles.World
