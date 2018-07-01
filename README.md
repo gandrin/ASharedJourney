@@ -13,14 +13,24 @@ Theme: Si j'étais toi et que tu étais moi (If I was you and you was me)
 
 ## Building and running
 
-Get the project and download all additional packages.
+### Installation
+
+- First, install the game and its dependencies
+
 ```bash
-go get -u -v github.com/gandrin/ASharedJourney
+go get -u github.com/gandrin/ASharedJourney
 ```
 
-Build and run the game.
-```bash 
-go run main.go
+- You will also need the `go-bindata` program to build the assets into the binary file
+
+```bash
+go get -u github.com/jteeuwen/go-bindata/...
+```
+
+### Run
+
+```
+make run
 ```
 
 ## License
