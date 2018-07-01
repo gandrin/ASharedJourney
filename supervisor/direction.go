@@ -1,21 +1,15 @@
 package supervisor
 
 import (
-	"log"
-
 	"github.com/faiface/pixel"
 	"github.com/gandrin/ASharedJourney/tiles"
 )
 
 //call motion
-func (mode GameMode) Move() *PlayerDirections{
-	var newDir *PlayerDirections = new(PlayerDirections)
-	if mode == OnePlayer {
-		newDir.Player1 = key()
-		newDir.mirror()
-	} else {
-		log.Fatal("Unknown mode")
-	}
+func Move() *PlayerDirections {
+	newDir := new(PlayerDirections)
+	newDir.Player1 = key()
+	newDir.mirror()
 	return newDir
 }
 

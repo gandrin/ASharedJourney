@@ -11,13 +11,26 @@ import (
 
 	"log"
 
+	"fmt"
+
 	"github.com/faiface/pixel"
 	"github.com/faiface/pixel/pixelgl"
 	"github.com/lafriks/go-tiled"
-	"fmt"
-	"runtime"
-	"path"
 )
+
+// Level names
+const (
+	amazeingLevel     string = "amazeing"
+	forestLevel       string = "forest"
+	myLittlePonyLevel string = "myLittlePony"
+	theLittlePigLevel string = "theLittlePig"
+)
+
+// CurrentLevel played
+var CurrentLevel = -1
+
+// Levels list
+var Levels = [...]string{amazeingLevel, forestLevel, myLittlePonyLevel, theLittlePigLevel}
 
 const tilesPath = "/tiles/map.png" // path to your tileset
 var TileSize int = 32
@@ -40,6 +53,7 @@ type SpriteWithPosition struct {
 	Position   pixel.Vec
 	InTheWater bool
 	InTheHole  bool
+	HasWon     bool
 }
 
 // loadPicture load the picture
@@ -111,15 +125,26 @@ func findLayerIndex(layerName string, layers []*tiled.Layer) (layerIndex int, er
 	return -1, errors.New("Expected to find layer with name " + layerName)
 }
 
+// NextLevel goes to next level
+func NextLevel() World {
+	CurrentLevel = (CurrentLevel + 1) % len(Levels)
+	return GenerateMap(Levels[CurrentLevel])
+}
+
+// RestartLevel reinitializes the current level
+func RestartLevel() World {
+	return GenerateMap(Levels[CurrentLevel])
+}
+
 // GenerateMap generates the map from a .tmx file
 func GenerateMap(levelFileName string) World {
 	//added support for relative file addressing
-	_, rootName, _, ok := runtime.Caller(1)
-	if !ok {
+	rootDirectory, err := os.Getwd()
+	if err != nil {
 		log.Fatal("error loading called")
 	}
-	filemap:= path.Join(path.Dir(rootName),  "/tiles/" + levelFileName + ".tmx")
-	filetile:= path.Join(path.Dir(rootName),  tilesPath)
+	filemap := rootDirectory + "/tiles/" + levelFileName + ".tmx"
+	filetile := rootDirectory + tilesPath
 	gameMap, err := tiled.LoadFromFile(filemap)
 	if err != nil {
 		log.Fatal(err)
@@ -128,8 +153,6 @@ func GenerateMap(levelFileName string) World {
 	}
 	mapWidth = gameMap.Width
 	mapHeight = gameMap.Height
-
-
 
 	spritesheet, err := loadPicture(filetile)
 	if err != nil {
@@ -157,6 +180,9 @@ func GenerateMap(levelFileName string) World {
 		panic(err)
 	}
 	waterLayerIndex, err := findLayerIndex("water", gameMap.Layers)
+	if err != nil {
+		panic(err)
+	}
 	winStarsLayerIndex, err := findLayerIndex("win", gameMap.Layers)
 	if err != nil {
 		panic(err)

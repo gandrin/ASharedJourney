@@ -15,13 +15,6 @@ import (
 	"github.com/gandrin/ASharedJourney/shared"
 )
 
-const (
-	AMAZEING_LEVEL       string = "amazeing"
-	FOREST_LEVEL         string = "forest"
-	MY_LITTLE_PONY_LEVEL string = "myLittlePony"
-	THE_LITTLE_PIG_LEVEL string = "theLittlePig"
-)
-
 const frameRate = 60
 
 func run() {
@@ -39,11 +32,11 @@ func run() {
 
 	menu.Menu()
 
-	world := tiles.GenerateMap(AMAZEING_LEVEL)
+	world := tiles.NextLevel()
 
 	fps := time.Tick(time.Second / frameRate)
 
-	playerDirectionChannel := supervisor.Start(supervisor.OnePlayer)
+	playerDirectionChannel := supervisor.Start()
 
 	newWorldChannel := mechanics.Start(playerDirectionChannel, world)
 
@@ -54,9 +47,9 @@ func run() {
 		upToDateWorld := <-newWorldChannel
 		tiles.DrawMap(upToDateWorld.BackgroundTiles)
 		tiles.DrawMap(upToDateWorld.Obstacles)
+		tiles.DrawMap(upToDateWorld.WinStars)
 		tiles.DrawMap(upToDateWorld.Water)
 		tiles.DrawMap(upToDateWorld.Movables)
-		tiles.DrawMap(upToDateWorld.WinStars)
 		tiles.DrawMap(upToDateWorld.Players)
 		tiles.DrawMap(upToDateWorld.Holes)
 		win.Update()
