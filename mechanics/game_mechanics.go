@@ -13,10 +13,6 @@ import (
 )
 
 type Mechanics struct {
-	//player data
-	Player1 PlayerManager
-	Player2 PlayerManager
-
 	world tiles.World
 	//communication channel to animator
 	toAnime chan *tiles.World
