@@ -46,3 +46,7 @@ make build_mac
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+
+### Acknowledgements
+
+Thibault A. - Sound designer 
