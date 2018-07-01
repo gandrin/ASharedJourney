@@ -59,7 +59,7 @@ func run() {
 }
 
 func main() {
-	music.Music.Start()
-	music.Music.Play()
+	go music.Music.Start()
+
 	pixelgl.Run(run)
 }

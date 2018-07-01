@@ -17,6 +17,7 @@ const musicMTfileName string = "/music/MainThemeMiroir.mp3"
 type musicStreamers struct {
 	//list of loaded musics ( streamer )
 	mainTheamStreamer beep.Streamer
+	backgroundMusic   *beep.Buffer
 	gameEffects       map[soundEffect]*beep.Buffer
 	streamControl     beep.Ctrl
 }
@@ -28,31 +29,34 @@ func (m *musicStreamers) Start() {
 	var format beep.Format
 
 	format = m.loadMainTheam()
+
 	err := speaker.Init(format.SampleRate, format.SampleRate.N(time.Second/10))
 	if err != nil {
 		log.Fatal(err)
 	}
 	m.streamControl.Streamer = m.mainTheamStreamer
+	go m.playMainTheme()
 	m.loadEffects()
 }
 
 func (m *musicStreamers) loadMainTheam() beep.Format {
 	var format beep.Format
 	m.mainTheamStreamer, format = getStream(musicMTfileName)
+	m.backgroundMusic = beep.NewBuffer(format)
+	m.backgroundMusic.Append(m.mainTheamStreamer)
+	m.streamControl.Paused = false
 	return format
 }
 
-func (m *musicStreamers) Play() {
-	m.streamControl.Paused = false
-	go m.playMainTheme()
-}
 
-func (m *musicStreamers) playMainTheme(){
+func (m *musicStreamers) playMainTheme() {
 
-			log.Print("Starting music")
-			speaker.Play(m.streamControl.Streamer)
+	log.Print("Starting music")
+	var streamer = m.backgroundMusic.Streamer(0,m.backgroundMusic.Len())
+	loopedaudio := beep.Loop(5,streamer)
+	speaker.Play(beep.Seq(loopedaudio))
 
-			log.Print("Music finished")
+	log.Print("Music finished")
 
 }
 

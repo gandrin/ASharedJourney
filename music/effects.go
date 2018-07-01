@@ -10,7 +10,7 @@ import (
 type soundEffect string
 
 const (
-	SOUND_EFFECT_START_GAME soundEffect = "/music/MenuEffect.wav"
+	SOUND_EFFECT_START_GAME soundEffect = "/music/MenuEffect.mp3"
 
 	SOUND_EFFECT_WIN_GAME soundEffect = "/music/win2.mp3"
 
@@ -21,31 +21,20 @@ const (
 
 func (m *musicStreamers) PlayEffect(effectType soundEffect) {
 
-	go func(m *musicStreamers, effectType soundEffect) {
-		//play the sound effect
 		es, ok := m.gameEffects[effectType]
 		if ok {
 			speaker.Lock()
 			m.streamControl.Paused = true
 			speaker.Unlock()
 			log.Print("Creating new stream entry")
-			done := make(chan struct{})
-			//effect exists -> play
-			speaker.Play(beep.Seq(
-				,
-				beep.Callback(func() {
-					close(done)
-				}),
-			))
+			loopedaudio := beep.Loop(1, es.Streamer(0, es.Len()))
+			speaker.Play(beep.Seq(loopedaudio)) //effect exists -> play
 			log.Print("finished playing effect ")
 			speaker.Lock()
 			m.streamControl.Paused = false
 			speaker.Unlock()
-			<-done
-
 			log.Print("stream of sound finished")
 		}
-	}(m, effectType)
 
 }
 
