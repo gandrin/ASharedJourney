@@ -36,7 +36,7 @@ func run() {
 
 	fps := time.Tick(time.Second / frameRate)
 
-	playerDirectionChannel := supervisor.Start(supervisor.OnePlayer)
+	playerDirectionChannel := supervisor.Start()
 
 	newWorldChannel := mechanics.Start(playerDirectionChannel, world)
 
