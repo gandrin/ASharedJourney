@@ -16,7 +16,7 @@ const (
 
 	SOUND_EFFECT_LOSE_GAME soundEffect = "/music/lose2.mp3"
 
-	SOUND_EFFECT_WATER soundEffect = "/music/Acid_Bubble.wav"
+	SOUND_EFFECT_WATER soundEffect = "/music/Acid_Bubble.mp3"
 )
 
 func (m *musicStreamers) PlayEffect(effectType soundEffect) {
@@ -54,4 +54,5 @@ func (m *musicStreamers) loadEffects() {
 	m.gameEffects[SOUND_EFFECT_START_GAME], _ = getStream(string(SOUND_EFFECT_START_GAME))
 	m.gameEffects[SOUND_EFFECT_LOSE_GAME], _ = getStream(string(SOUND_EFFECT_WIN_GAME))
 	m.gameEffects[SOUND_EFFECT_LOSE_GAME], _ = getStream(string(SOUND_EFFECT_LOSE_GAME))
+	m.gameEffects[SOUND_EFFECT_WATER], _ = getStream(string(SOUND_EFFECT_WATER))
 }

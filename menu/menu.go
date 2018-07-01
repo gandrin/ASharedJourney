@@ -1,29 +1,30 @@
 package menu
 
 import (
+	"fmt"
+	"image"
+	"log"
+	"os"
+	"path"
+	"runtime"
+	"time"
+
+	"github.com/faiface/pixel"
 	"github.com/faiface/pixel/pixelgl"
 	"github.com/faiface/pixel/text"
-	"golang.org/x/image/font/basicfont"
-	"github.com/faiface/pixel"
-	"fmt"
-	"golang.org/x/image/colornames"
-	"github.com/gandrin/ASharedJourney/shared"
-	"os"
-	"image"
-	"runtime"
-	"log"
-	"path"
-	"time"
 	"github.com/gandrin/ASharedJourney/music"
+	"github.com/gandrin/ASharedJourney/shared"
+	"golang.org/x/image/colornames"
+	"golang.org/x/image/font/basicfont"
 )
 
 const menuText string = "Press ENTER to PLAY"
 const menuTextPosX float64 = 200
 const menuTextPosY float64 = 100
-const menuPicName 	string = "tiles/menu.png"
+const menuPicName string = "tiles/menu.png"
 
 //draw menu to screen while player while player hasn't pressed enter
-func Menu(){
+func Menu() {
 
 	basicAtlas := text.NewAtlas(basicfont.Face7x13, text.ASCII)
 	basicTxt := text.New(pixel.V(menuTextPosX, menuTextPosY), basicAtlas)
@@ -35,9 +36,9 @@ func Menu(){
 	if !ok {
 		log.Fatal("error loading called")
 	}
-	menupicture:= path.Join(path.Dir(filename), menuPicName)
-	pic , err := loadPicture(menupicture)
-	if err != nil{
+	menupicture := path.Join(path.Dir(filename), menuPicName)
+	pic, err := loadPicture(menupicture)
+	if err != nil {
 		log.Fatal(err)
 	}
 	sprite := pixel.NewSprite(pic, pic.Bounds())
@@ -54,19 +55,7 @@ func Menu(){
 	basicTxt.Draw(shared.Win, pixel.IM.Scaled(basicTxt.Orig, 3))
 
 	//menu loop
-	var i int = 0
 	for !shared.Win.JustPressed(pixelgl.KeyEnter) && !shared.Win.Closed() {
-
-		if i == 0 {
-			basicTxt.Color = colornames.Black
-			basicTxt.Draw(shared.Win, pixel.IM.Scaled(basicTxt.Orig, 3))
-			}else if i == 10{
-			basicTxt.Color = colornames.White
-			basicTxt.Draw(shared.Win, pixel.IM.Scaled(basicTxt.Orig, 3))
-		}else if i == 20 {
-			i = 0
-		}
-		i++
 		time.Sleep(50 * time.Millisecond)
 		shared.Win.Update()
 	}
