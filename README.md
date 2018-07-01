@@ -13,9 +13,15 @@ Theme: Si j'étais toi et que tu étais moi (If I was you and you was me)
 
 ## Building and running
 
-'''
+Get the project and download all additional packages.
+```bash
+go get -u -v github.com/gandrin/ASharedJourney
+```
+
+Build and run the game.
+```bash 
 go run main.go
-'''
+```
 
 ## License
 
