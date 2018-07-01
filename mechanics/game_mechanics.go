@@ -9,6 +9,10 @@ import (
 	"github.com/gandrin/ASharedJourney/shared"
 	"github.com/gandrin/ASharedJourney/supervisor"
 	"github.com/gandrin/ASharedJourney/tiles"
+	"github.com/gandrin/ASharedJourney/menu"
+	"github.com/faiface/pixel"
+	"github.com/gandrin/ASharedJourney/music"
+	"image/color"
 )
 
 type Mechanics struct {
@@ -81,6 +85,8 @@ func (mechanics *Mechanics) handleGameEvent(event *supervisor.Event) {
 	switch *event {
 	case "RESTART":
 		mechanics.world = tiles.RestartLevel()
+		menu.Menu(menu.WinLevelMenuImage, "Reloading level ...", pixel.V(180, 150), true, music.SOUND_EFFECT_START_GAME)
+		shared.Win.Clear(color.Black)
 		break
 	case "KEY0":
 		tiles.SetNexLevel(0)
