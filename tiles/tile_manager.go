@@ -20,24 +20,25 @@ import (
 
 // Level names
 const (
-	splashScreen      string = "orgyIsland"
-	veryEasyLevel     string = "veryEasy"
-	mazeLevel         string = "maze"
-	amazeingLevel     string = "amazeing"
-	forestLevel       string = "forest"
-	myLittlePonyLevel string = "myLittlePony"
-	theLittlePigLevel string = "theLittlePig"
-	inTheHoleTileID   int    = 61
+	splashScreen         string = "orgyIsland"
+	veryEasyLevel        string = "veryEasy"
+	mazeLevel            string = "maze"
+	theLongCorridorLevel string = "theLongCorridor"
+	amazeingLevel        string = "amazeing"
+	forestLevel          string = "forest"
+	myLittlePonyLevel    string = "myLittlePony"
+	theLittlePigLevel    string = "theLittlePig"
+	inTheHoleTileID      int    = 61
 )
 
 // CurrentLevel played
 var CurrentLevel = -1
 
 // Levels list
-var Levels = [...]string{veryEasyLevel, mazeLevel, amazeingLevel, theLittlePigLevel, myLittlePonyLevel, forestLevel}
+var Levels = [...]string{veryEasyLevel, mazeLevel, theLongCorridorLevel, amazeingLevel, theLittlePigLevel, myLittlePonyLevel, forestLevel}
 
 // Uncomment this for testing :)
-// var Levels = [...]string{forestLevel}
+// var Levels = [...]string{biggerLevel}
 
 const tilesPath = "/tiles/map.png" // path to your tileset
 
