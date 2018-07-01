@@ -1,7 +1,7 @@
-# ASharedJourney
+﻿# ASharedJourney
 GameJam SFR 2018 Julia - Pierre - Gabriel - Aurore - Fabio
 
-Theme: Si j'étais toi et que tu étais moi (If I was you and you was me)
+Theme: Si j'étais toi et que tu étais moi (If I were you and you were me)
 
 ## Getting Started
 
