@@ -43,7 +43,6 @@ var CurrentLevel = -1
 
 // Levels list
 var Levels = [...]string{
-	theStruggleLevel,
 	veryEasyLevel,
 	amazeingLevel,
 	mazeLevel,
@@ -51,6 +50,7 @@ var Levels = [...]string{
 	theLongCorridorLevel,
 	theLittlePigLevel,
 	bonhommeMap,
+	theStruggleLevel,
 	myLittlePonyLevel,
 }
 
@@ -170,7 +170,7 @@ func NextLevel() World {
 	var newWorlg = GenerateMap(Levels[CurrentLevel])
 	if CurrentLevel != 0 {
 		//if !(len(Levels) == CurrentLevel){
-		if !(len(Levels) == CurrentLevel) {
+		if !(len(Levels)-1 == CurrentLevel) {
 			//last level was finished
 			menu.Menu(menu.WinLevelMenuImage, "Level solved, continue ...", pixel.V(150, 200), true, music.SOUND_EFFECT_WIN_GAME)
 
