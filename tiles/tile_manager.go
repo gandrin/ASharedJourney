@@ -21,6 +21,7 @@ import (
 	"github.com/lafriks/go-tiled"
 	"github.com/gandrin/ASharedJourney/menu"
 	"github.com/gandrin/ASharedJourney/music"
+
 )
 
 // Level names
@@ -160,14 +161,18 @@ func NextLevel() World {
 	CurrentLevel = (CurrentLevel + 1) % len(Levels)
 	var newWorlg = GenerateMap(Levels[CurrentLevel])
 	if CurrentLevel!=0{
+		//if !(len(Levels) == CurrentLevel){
 		if !(len(Levels) == CurrentLevel){
 			//last level was finished
-
 			menu.Menu(menu.WinLevelMenuImage, "Level solved, continue ...", pixel.V(150,200),true, music.SOUND_EFFECT_WIN_GAME)
 
 		}else{
 			//game was finished
-			menu.Menu(menu.FinishedGameImage, "You WIN, keep playing ....", pixel.V(150,150),true, music.SOUND_EFFECT_WIN_GAME)
+			music.Music.PlayEffect(music.SOUND_EFFECT_WIN_FINAL_GAME)
+			menu.Menu(menu.FinishedGameImage, "You WIN", pixel.V(300,140),true, music.SOUND_EFFECT_WIN_GAME)
+			//reload main menu
+			menu.Menu(menu.MainMenuImage, "Press ENTER to PLAY ...", pixel.V(180,150),true, music.SOUND_EFFECT_START_GAME)
+
 		}
 	}
 	return newWorlg
