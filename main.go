@@ -31,7 +31,12 @@ func run() {
 
 	shared.Win = win
 
-	menu.Menu()
+	menu.Menu(menu.MenuPicName, "    Loading ...", false, music.SOUND_NONE)
+
+	music.Music.Start()
+
+	<- music.MusicLoaded
+	menu.Menu(menu.MenuPicName, "Press ENTER to PLAY ...",true, music.SOUND_EFFECT_START_GAME)
 
 	world := tiles.NextLevel()
 
@@ -59,7 +64,6 @@ func run() {
 }
 
 func main() {
-	go music.Music.Start()
 
 	pixelgl.Run(run)
 }

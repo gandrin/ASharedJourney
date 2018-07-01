@@ -7,19 +7,21 @@ import (
 	"github.com/faiface/beep/speaker"
 )
 
-type soundEffect string
+type SoundEffect string
 
 const (
-	SOUND_EFFECT_START_GAME soundEffect = "/music/MenuEffect.mp3"
+	SOUND_EFFECT_START_GAME SoundEffect = "/music/MenuEffect.mp3"
 
-	SOUND_EFFECT_WIN_GAME soundEffect = "/music/win2.mp3"
+	SOUND_EFFECT_WIN_GAME SoundEffect = "/music/win2.mp3"
 
-	SOUND_EFFECT_LOSE_GAME soundEffect = "/music/lose2.mp3"
+	SOUND_EFFECT_LOSE_GAME SoundEffect = "/music/lose2.mp3"
 
-	SOUND_EFFECT_WATER soundEffect = "/music/Acid_Bubble.mp3"
+	SOUND_EFFECT_WATER SoundEffect = "/music/Acid_Bubble.mp3"
+
+	SOUND_NONE SoundEffect = "/music/Acid_Bubble.mp3"
 )
 
-func (m *musicStreamers) PlayEffect(effectType soundEffect) {
+func (m *musicStreamers) PlayEffect(effectType SoundEffect) {
 
 		es, ok := m.gameEffects[effectType]
 		if ok {
@@ -39,7 +41,7 @@ func (m *musicStreamers) PlayEffect(effectType soundEffect) {
 }
 
 func (m *musicStreamers) loadEffects() {
-	m.gameEffects = make(map[soundEffect]*beep.Buffer, 0)
+	m.gameEffects = make(map[SoundEffect]*beep.Buffer, 0)
 	//make new buffers and add to buffer
 	stream1,format1 := getStream(string(SOUND_EFFECT_START_GAME))
 	m.gameEffects[SOUND_EFFECT_START_GAME]= beep.NewBuffer(format1)

@@ -4,21 +4,26 @@ import (
 	"log"
 	"os"
 	"path/filepath"
-	"time"
-
 	"github.com/faiface/beep"
 	"github.com/faiface/beep/mp3"
 	"github.com/faiface/beep/speaker"
 	"github.com/faiface/beep/wav"
+	"time"
 )
 
+//global synchronization channel
+var MusicLoaded chan int
+
+func init()  {
+	MusicLoaded = make(chan  int , 0)
+}
 const musicMTfileName string = "/music/MainThemeMiroir.mp3"
 
 type musicStreamers struct {
 	//list of loaded musics ( streamer )
 	mainTheamStreamer beep.Streamer
 	backgroundMusic   *beep.Buffer
-	gameEffects       map[soundEffect]*beep.Buffer
+	gameEffects       map[SoundEffect]*beep.Buffer
 	streamControl     beep.Ctrl
 }
 
@@ -28,15 +33,20 @@ var Music musicStreamers
 func (m *musicStreamers) Start() {
 	var format beep.Format
 
-	format = m.loadMainTheam()
+	go func() {
+		format = m.loadMainTheam()
 
-	err := speaker.Init(format.SampleRate, format.SampleRate.N(time.Second/10))
-	if err != nil {
-		log.Fatal(err)
-	}
-	m.streamControl.Streamer = m.mainTheamStreamer
-	go m.playMainTheme()
-	m.loadEffects()
+		err := speaker.Init(format.SampleRate, format.SampleRate.N(time.Second/10))
+		if err != nil {
+			log.Fatal(err)
+		}
+		m.streamControl.Streamer = m.mainTheamStreamer
+		m.playMainTheme()
+	}()
+
+	go m.loadEffects()
+
+	log.Print("Music loaded")
 }
 
 func (m *musicStreamers) loadMainTheam() beep.Format {
@@ -54,9 +64,11 @@ func (m *musicStreamers) playMainTheme() {
 	log.Print("Starting music")
 	var streamer = m.backgroundMusic.Streamer(0,m.backgroundMusic.Len())
 	loopedaudio := beep.Loop(5,streamer)
-	speaker.Play(beep.Seq(loopedaudio))
+	go speaker.Play(beep.Seq(loopedaudio))
 
 	log.Print("Music finished")
+
+	MusicLoaded <- 1
 
 }
 
