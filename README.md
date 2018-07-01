@@ -27,6 +27,8 @@ go get -u github.com/gandrin/ASharedJourney
 go get -u github.com/jteeuwen/go-bindata/...
 ```
 
+> Make sure your `$GOPATH` is set :wink:
+
 ### Run
 
 ```
