@@ -2,6 +2,7 @@
 
 DESTINATION="./build/ASharedJourney.app"
 
+make build_assets
 go build main.go
 chmod +x main
 mkdir -p $DESTINATION/Contents/MacOS/
