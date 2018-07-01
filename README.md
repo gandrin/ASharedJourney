@@ -13,9 +13,10 @@ Theme: Si j'étais toi et que tu étais moi (If I was you and you was me)
 
 ## Building and running
 
-'''
+```
 go run main.go
-'''
+make build_assets
+```
 
 ## License
 
