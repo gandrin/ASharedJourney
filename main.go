@@ -31,14 +31,15 @@ func run() {
 
 	shared.Win = win
 
-	menu.Menu(menu.MenuPicName, "    Loading ...", false, music.SOUND_NONE)
+	menu.Menu(menu.MainMenuImage, "    Loading ...",pixel.V(200,100), false, music.SOUND_NONE)
 
 	music.Music.Start()
 
 	<-music.MusicLoaded
-	menu.Menu(menu.MenuPicName, "Press ENTER to PLAY ...", true, music.SOUND_EFFECT_START_GAME)
+	menu.Menu(menu.MainMenuImage, "Press ENTER to PLAY ...", pixel.V(200,100),true, music.SOUND_EFFECT_START_GAME)
 
 	world := tiles.NextLevel()
+
 
 	fps := time.Tick(time.Second / frameRate)
 
