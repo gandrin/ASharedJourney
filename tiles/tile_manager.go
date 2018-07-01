@@ -32,6 +32,7 @@ const (
 	forestLevel          string = "forest"
 	myLittlePonyLevel    string = "myLittlePony"
 	theLittlePigLevel    string = "theLittlePig"
+	theStruggleLevel     string = "theStruggle"
 	inTheHoleTileID      int    = 61
 )
 
@@ -39,7 +40,17 @@ const (
 var CurrentLevel = -1
 
 // Levels list
-var Levels = [...]string{veryEasyLevel, amazeingLevel, mazeLevel, forestLevel, theLongCorridorLevel, theLittlePigLevel, bonhommeMap, myLittlePonyLevel}
+var Levels = [...]string{
+	veryEasyLevel,
+	amazeingLevel,
+	mazeLevel,
+	forestLevel,
+	theLongCorridorLevel,
+	theLittlePigLevel,
+	bonhommeMap,
+	myLittlePonyLevel,
+	theStruggleLevel,
+}
 
 // Uncomment this for testing :)
 // var Levels = [...]string{biggerLevel}
@@ -64,11 +75,12 @@ type World struct {
 
 //SpriteWithPosition holds the sprite and its position into the window
 type SpriteWithPosition struct {
-	Sprite     *pixel.Sprite
-	Position   pixel.Vec
-	InTheWater bool
-	InTheHole  bool
-	HasWon     bool
+	Sprite          *pixel.Sprite
+	Position        pixel.Vec
+	InTheWater      bool
+	InTheHole       bool
+	HasWon          bool
+	WinningPosition pixel.Vec
 }
 
 // loadPicture load the picture

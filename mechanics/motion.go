@@ -1,6 +1,8 @@
 package mechanics
 
 import (
+	"reflect"
+
 	"github.com/faiface/pixel"
 	"github.com/gandrin/ASharedJourney/music"
 	"github.com/gandrin/ASharedJourney/supervisor"
@@ -11,7 +13,8 @@ import (
 func (gm *Mechanics) Move(playDir *supervisor.PlayerDirections) *tiles.World {
 	//log.Printf("Move called")
 
-	if gm.world.Players[0].HasWon && gm.world.Players[1].HasWon {
+	if gm.world.Players[0].HasWon && gm.world.Players[1].HasWon &&
+		!reflect.DeepEqual(gm.world.Players[0].WinningPosition, gm.world.Players[1].WinningPosition) {
 		music.Music.PlayEffect(music.SOUND_EFFECT_WIN_GAME)
 		gm.world = tiles.NextLevel()
 	}
@@ -77,6 +80,7 @@ func (gm *Mechanics) movePlayer(player *tiles.SpriteWithPosition, getNextPositio
 				for _, winStarTile := range gm.world.WinStars {
 					if winStarTile.Position.X == movableNextPosition.X && winStarTile.Position.Y == movableNextPosition.Y {
 						player.HasWon = true
+						player.WinningPosition = pixel.V(winStarTile.Position.X, winStarTile.Position.Y)
 					}
 				}
 				if canPlayerMove {
@@ -115,9 +119,10 @@ func (gm *Mechanics) movePlayer(player *tiles.SpriteWithPosition, getNextPositio
 		player.HasWon = false
 
 		// Winning rule
-		for _, winStartTile := range gm.world.WinStars {
-			if winStartTile.Position.X == nextPlayerPosition.X && winStartTile.Position.Y == nextPlayerPosition.Y {
+		for _, winStarTile := range gm.world.WinStars {
+			if winStarTile.Position.X == nextPlayerPosition.X && winStarTile.Position.Y == nextPlayerPosition.Y {
 				player.HasWon = true
+				player.WinningPosition = pixel.V(winStarTile.Position.X, winStarTile.Position.Y)
 			}
 		}
 	}
