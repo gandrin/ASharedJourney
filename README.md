@@ -12,6 +12,14 @@ Theme: Si j'étais toi et que tu étais moi (If I were you and you were me)
 * [Visual Code](https://code.visualstudio.com) - Light and useful IDE (Linux, MacOS, Win)
 * [GOLand] (https://www.jetbrains.com/go/) - An alternative IDE
 
+## Adding/editing levels
+
+You need the awesome [Tiled](https://www.mapeditor.org/) editor :blush: (free & open-source).
+
+To add your level to the game, you need to add it to the levels list in the tile manager file and re-build the assets (done when making `make run`).
+
+I'd recommend copying an existing level to make sure you have a proper file structure.
+
 
 ## Building and running
 
